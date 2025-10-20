@@ -1,0 +1,9 @@
+/* 圖片 hover 放大（可重用） */
+.product-card .img-wrap .img-link{ display:block; cursor:zoom-in; }
+.product-card .img-wrap:hover img,
+.product-card .img-wrap:focus-within img{ transform:scale(1.06); }
+
+/* 偏好減少動態者：移除轉場 */
+@media (prefers-reduced-motion: reduce){
+  .product-card .img-wrap img{ transition:none; }
+}

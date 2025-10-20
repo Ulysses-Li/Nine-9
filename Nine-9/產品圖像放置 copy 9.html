@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第九版</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/product-card.css">
+  <link rel="stylesheet" href="css/hover-effects.css">
+  <link rel="stylesheet" href="css/footer.css" />
+</head>
+
+<body>
+
+  <!-- ——— Header / Navbar ——— -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" aria-label="主選單">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#" aria-label="Home">
+        <img src="https://nine9.jic-tools.com.tw/themes/nine9/images/logo.png" alt="Nine9">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#" data-i18n="nav.sol">Solutions</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-i18n="nav.prod">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-i18n="nav.dl">Downloads</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          <button class="icon-btn" aria-label="Search">
+            <!-- 放大鏡圖示（SVG）。此按鈕可綁定你的搜尋開啟行為。 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16"
+              aria-hidden="true">
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z" />
+            </svg>
+          </button>
+
+          <!-- 語言／地區大型下拉選單（Mega Menu） -->
+          <div class="dropdown dropdown-hover">
+            <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button"
+              id="langMenuBtn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="me-2"
+                viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M0 8a8 8 0 1 0 16 0A8 8 0 0 0 0 8m8-7a7 7 0 0 1 6.468 4H8zM1.532 5A7 7 0 0 1 8 1v4zM7 6v4H1.07A6.97 6.97 0 0 1 1 8c0-.69.099-1.356.284-1.988zM8 11v4a7 7 0 0 1-6.468-4zM9 11h5.93A6.97 6.97 0 0 1 15 8c0-.69-.099-1.356-.284-1.988H9zM15 8a7 7 0 0 1-6 6.93V10z" />
+              </svg>
+              <span data-i18n="nav.lang">Language/Region</span>
+            </button>
+
+            <div class="dropdown-menu mega dropdown-menu-end shadow" aria-labelledby="langMenuBtn">
+              <div class="container-fluid px-2">
+                <div class="row g-3">
+                  <div class="col-12 col-lg-3 country-col">
+                    <h6>Americas</h6>
+                    <a class="country-item" href="#" data-lang="en-US"><img class="country-flag"
+                        src="https://flagcdn.com/us.svg" alt="USA flag"><span>USA</span></a>
+                    <!-- 語系代碼 en-US：英語（美國）；常用於美國/美洲預設內容。 -->
+                    <a class="country-item" href="#" data-lang="es-MX"><img class="country-flag"
+                        src="https://flagcdn.com/mx.svg" alt="Mexico flag"><span>México</span></a>
+                    <!-- 語系代碼 es-MX：西班牙語（墨西哥）；拉美西語內容。 -->
+                    <a class="country-item" href="#" data-lang="pt-BR"><img class="country-flag"
+                        src="https://flagcdn.com/br.svg" alt="Brazil flag"><span>Brazil</span></a>
+                    <!-- 語系代碼 pt-BR：葡萄牙語（巴西）。 -->
+                    <a class="country-item" href="#" data-lang="en-CA"><img class="country-flag"
+                        src="https://flagcdn.com/ca.svg" alt="Canada flag"><span>Canada</span></a>
+                    <!-- 語系代碼 en-CA：英語（加拿大）；可視需求另增 fr-CA。 -->
+                  </div>
+
+                  <div class="col-12 col-lg-3 country-col">
+                    <h6>Europe</h6>
+                    <a class="country-item" href="#" data-lang="de-DE"><img class="country-flag"
+                        src="https://flagcdn.com/de.svg" alt="Germany flag"><span>Deutschland</span></a>
+                    <!-- 語系代碼 de-DE：德語（德國）。 -->
+                    <a class="country-item" href="#" data-lang="fr-FR"><img class="country-flag"
+                        src="https://flagcdn.com/fr.svg" alt="France flag"><span>France</span></a>
+                    <!-- 語系代碼 fr-FR：法語（法國）。 -->
+                    <a class="country-item" href="#" data-lang="it-IT"><img class="country-flag"
+                        src="https://flagcdn.com/it.svg" alt="Italy flag"><span>Italia</span></a>
+                    <!-- 語系代碼 it-IT：義大利語（義大利）。 -->
+                    <a class="country-item" href="#" data-lang="en-GB"><img class="country-flag"
+                        src="https://flagcdn.com/gb.svg" alt="UK flag"><span>United Kingdom</span></a>
+                    <!-- 語系代碼 en-GB：英語（英國）；英式拼字與格式。 -->
+                    <a class="country-item" href="#" data-lang="es-ES"><img class="country-flag"
+                        src="https://flagcdn.com/es.svg" alt="Spain flag"><span>España</span></a>
+                    <!-- 語系代碼 es-ES：西班牙語（西班牙）。 -->
+                  </div>
+
+                  <div class="col-12 col-lg-3 country-col">
+                    <h6>Asia Pacific</h6>
+                    <a class="country-item" href="#" data-lang="zh-TW"><img class="country-flag"
+                        src="https://flagcdn.com/tw.svg" alt="Taiwan flag"><span>台灣（繁體中文）</span></a>
+                    <!-- 語系代碼 zh-TW：繁體中文（台灣）；本專案預設語言。 -->
+                    <a class="country-item disabled" href="#" data-lang="zh-CN" aria-disabled="true" title="暫不提供"><img
+                        class="country-flag" src="https://flagcdn.com/cn.svg" alt="China flag"><span>中国（简体中文）</span></a>
+                    <!-- 語系代碼 zh-CN：簡體中文（中國）；目前標示停用，僅做佈局預留。 -->
+                    <a class="country-item" href="#" data-lang="ja-JP"><img class="country-flag"
+                        src="https://flagcdn.com/jp.svg" alt="Japan flag"><span>日本</span></a>
+                    <!-- 語系代碼 ja-JP：日語（日本）。 -->
+                    <a class="country-item" href="#" data-lang="ko-KR"><img class="country-flag"
+                        src="https://flagcdn.com/kr.svg" alt="Korea flag"><span>대한민국</span></a>
+                    <!-- 語系代碼 ko-KR：韓語（韓國）。 -->
+                  </div>
+
+                  <div class="col-12 col-lg-3 country-col">
+                    <h6>Middle East & Others</h6>
+                    <a class="country-item" href="#" data-lang="tr-TR"><img class="country-flag"
+                        src="https://flagcdn.com/tr.svg" alt="Türkiye flag"><span>Türkiye</span></a>
+                    <!-- 語系代碼 tr-TR：土耳其語（土耳其）。 -->
+                    <a class="country-item" href="#" data-lang="ru-RU"><img class="country-flag"
+                        src="https://flagcdn.com/ru.svg" alt="Russia flag"><span>Россия</span></a>
+                    <!-- 語系代碼 ru-RU：俄語（俄羅斯）。 -->
+                    <a class="country-item" href="#" data-lang="pt-PT"><img class="country-flag"
+                        src="https://flagcdn.com/pt.svg" alt="Portugal flag"><span>Portugal</span></a>
+                    <!-- 語系代碼 pt-PT：葡萄牙語（葡萄牙）。 -->
+                    <a class="country-item" href="#" data-lang="in"><img class="country-flag"
+                        src="https://flagcdn.com/in.svg" alt="India flag"><span>India</span></a>
+                    <!-- 地區標記 in：印度（示例）；建議實際用語系碼如 en-IN 或 hi-IN。 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ／語言／地區大型下拉選單（Mega Menu） -->
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="bg-mint">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-12 col-lg-5">
+          <div class="card product-card text-center h-100 bg-transparent border-0">
+            <div class="img-wrap mb-2">
+              <a class="img-link" href="/Thread Milling/Thread Milling.html">
+                <img src="/img/MCC_Threading_Mill (1).jpg" alt="Thread Milling"> </a>
+            </div>
+            <span class="badge-new d-inline-block mb-1" data-i18n="tm.badge">全新</span>
+            <h3 class="product-title mb-2" data-i18n="tm.title">Thread Milling</h3>
+            <p class="text-muted mb-3" data-i18n="tm.desc">專為工程師設計的智慧螺紋銑削工具...</p> <a
+              href="/Thread Milling/Thread Milling.html" class="btn btn-primary mt-auto"
+              data-i18n="tm.cta.learn">進一步了解</a>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+          <div class="d-flex flex-column gap-3">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded-3 shadow-sm bg-light h-100 text-center">
+                  <h4 class="mb-3">Nine-9
+                    <hr>MCC Mill 新版目錄
+                  </h4>
+                  <p class="text-muted mb-4">可下載完整的 Nine-9 MCC Mill 新版目錄。</p> <a href="/PDF/MCCMill.pdf"
+                    class="btn btn-danger px-4 mt-auto">下載 PDF</a>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded-3 shadow-sm bg-light h-100 text-center">
+                  <h4 class="mb-3">MCC Mill
+                    <hr>60° Parallel Thread Datas
+                  </h4>
+                  <p class="text-muted mb-4">可下載完整的 MCC Mill- 60° Thread Milling 表單。</p> <a href="/PDF/ThreadInsert.pdf"
+                    class="btn btn-danger px-4 mt-auto">下載 PDF</a>
+                </div>
+              </div>
+            </div>
+            <div class="ratio ratio-16x9 rounded-3 shadow-sm overflow-hidden">
+              <iframe src="https://www.youtube.com/embed/_-nE3bd_qII" title="YouTube video player" frameborder="0"
+                allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-sky">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+
+        <div class="col-12 col-lg-7">
+          <div class="d-flex flex-column gap-3">
+            <div class="p-3 border rounded-3 shadow-sm bg-light text-center">
+              <h4 class="mb-3">Nine-9
+                <hr>NC Helix Drill 新版目錄
+              </h4>
+              <p class="text-muted mb-4">可下載完整的 Nine-9 NC Helix Drill 新版目錄。</p> <a href="/PDF/Helix.pdf"
+                class="btn btn-danger px-4">下載 PDF</a>
+            </div>
+            <div class="ratio ratio-16x9 rounded-3 shadow-sm overflow-hidden">
+              <iframe src="https://www.youtube.com/embed/VI3k_dA1PKk" title="YouTube video player" frameborder="0"
+                allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <div class="card product-card text-center h-100 bg-transparent border-0">
+            <div class="img-wrap mb-2">
+              <a class="img-link" href="/Helix/Helix.html">
+                <img src="/img/Helix.jpg" alt="NC Helix Drill"> </a>
+            </div>
+            <span class="badge-new d-inline-block mb-1">全新</span>
+            <h3 class="product-title mb-2">NC Helix Drill</h3>
+            <p class="text-muted mb-3">適用於多種材料的高效螺旋鑽孔刀具...</p> <a href="/Helix/Helix.html"
+              class="btn btn-primary mt-auto">進一步了解</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- footer -->
+  <footer class="site-footer mt-5">
+    <div class="footer-topbar"></div>
+    <div class="container py-5">
+      <div class="row gy-4 align-items-start">
+        <div class="col-12 col-md-6 col-lg-3 text-center">
+          <img src="https://nine9.jic-tools.com.tw/upload_files/technology/NC_Program/Jimmore_footer_logo.png"
+            alt="JIMMORE" class="footer-logo mb-3 mx-auto d-block">
+          <div class="badge-row mb-3">
+            <img src="https://nine9.jic-tools.com.tw/upload_files/technology/NC_Program/Jimmore_footer-iso_01.png"
+              alt="SGS">
+            <img src="https://nine9.jic-tools.com.tw/upload_files/technology/NC_Program/Jimmore_footer-iso_02.png"
+              alt="SGS">
+            <img src="https://nine9.jic-tools.com.tw/upload_files/technology/NC_Program/Jimmore_footer-iso_03.png"
+              alt="UKAS">
+          </div>
+          <a href="#" target="_blank" rel="noopener">
+            <img src="https://www.jic-tools.com.tw/themes/jictools2/images/Jimmore-footer-iso_2.png"
+              alt="D-U-N-S Certified" class="duns-img">
+          </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="footer-underline"></div>
+          <address class="mb-0 small lh-lg">
+            No.120-2, Sec-2 Fusing Rd., South District,<br>Taichung City 402014, Taiwan
+          </address>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="footer-underline"></div>
+          <p class="small mb-2">
+            TEL: <a href="tel:+886422605352" class="link-light text-decoration-none">+886-4-22605352</a><br>
+            FAX: +886-4-22608765<br>
+            E-mail:
+            <a href="mailto:trade@jimmore.com.tw" class="link-light text-decoration-none">trade@jimmore.com.tw</a>
+          </p>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="footer-underline"></div>
+          <p class="small mb-2">
+            Copyright © <span id="year"></span> Jimmore International Corp.<br>
+            All Rights Reserved.
+          </p>
+          <ul class="list-unstyled small mb-0"></ul>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.getElementById('year').textContent = (new Date()).getFullYear();
+    </script>
+  </footer>
+
+  <button type="button" class="btn btn-dark btn-lg rounded-circle" id="backToTopBtn" title="回到頂部">
+    <svg xmlns="http://www.w.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-up"
+      viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+        d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+    </svg>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/lang-control.js"></script>
+  <script src="js/interactive.js"></script>
+</body>
+
+</html>
