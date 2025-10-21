@@ -1,0 +1,23 @@
+/* Logo 高度 */
+.navbar-brand img{ height:56px; }
+@media (min-width:768px){ .navbar-brand img{ height:72px; } }
+@media (min-width:1200px){ .navbar-brand img{ height:88px; } }
+
+/* Mega Menu */
+.dropdown-menu.mega{ --bs-dropdown-min-width:680px; padding:1rem 1.25rem; }
+@media (min-width:1400px){ .dropdown-menu.mega{ --bs-dropdown-min-width:820px; } }
+
+/* 國家清單 */
+.country-item{ display:flex; align-items:center; gap:.5rem; padding:.35rem .5rem; border-radius:.5rem; }
+.country-item:hover{ background:rgba(0,0,0,.05); }
+.country-flag{ width:24px; height:18px; border-radius:2px; object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.1); }
+.country-col h6{ font-size:.875rem; margin:.35rem .25rem; }
+.country-item.disabled{ opacity:.55; pointer-events:none; }
+.country-item.disabled span{ text-decoration:line-through; }
+.country-item.disabled .country-flag{ filter:grayscale(1); }
+
+/* 桌機 hover 展開 */
+@media (min-width:992px){
+  .dropdown-hover:hover>.dropdown-menu{ display:block; }
+  .dropdown-hover>.dropdown-toggle:focus{ outline:none; }
+}

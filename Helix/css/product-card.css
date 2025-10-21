@@ -1,0 +1,17 @@
+.product-card{ border:0; }
+
+/* 圖片容器：留圓角、裁切、背景 */
+.product-card .img-wrap{
+  position:relative; overflow:hidden; border-radius:1.25rem; background:#f5f6f8;
+}
+
+/* 圖片：用比例容器控制高度 → 這裡改用 height:auto，避免跑版 */
+.product-card .img-wrap img{
+  width:100%; height:auto; display:block; object-fit:cover;
+  transform:scale(1); transition:transform .45s ease; will-change:transform;
+}
+
+/* 卡片標題等 */
+.badge-new{ font-size:.75rem; color:#c35; letter-spacing:.08em; }
+.product-title{ font-size:1.75rem; font-weight:700; }
+@media (min-width:992px){ .product-title{ font-size:2rem; } }

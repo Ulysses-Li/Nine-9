@@ -1,0 +1,5 @@
+/* 全站微調 */
+.nav-link{ font-weight:600; }
+.icon-btn{ border:none; background:transparent; padding:.5rem; }
+/* sticky navbar 陰影 */
+.navbar.sticky-top{ box-shadow:0 1px 0 rgba(0,0,0,.06); }
