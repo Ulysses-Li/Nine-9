@@ -33,12 +33,13 @@ window.VIDEO_DB = [
         url: "https://www.youtube.com/embed/Oag-AwSQDgY"
       },  
       {
-        series: "5",
-        name: "影片名稱5",
+        series: "6",
+        name: "影片名稱6",
         date: "",
         url: "https://www.youtube.com/embed/Oag-AwSQDgY"
       },  
 
 
 ];
+
 
