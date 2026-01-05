@@ -10,31 +10,25 @@ window.VIDEO_DB = [
       },
       {
         series: "2",
-        name: "影片名稱2",
+        name: "Unboxing the INSANE Göltenbodt Tooling System",
         date: "",
         url: "https://www.youtube.com/embed/CTO734Y5eEU"
       },
       {
         series: "3",
-        name: "影片名稱3",
+        name: "ISCAR TECH-TALK - WHISPERLINE Anti-Vibration Holder",
         date: "",
-        url: "https://www.youtube.com/embed/HREEbCnDXWM?start=2"
+        url: "https://www.youtube.com/embed/HREEbCnDXWM?start"
       },
       {
         series: "4",
-        name: "影片名稱4",
+        name: "ISCAR TECH-TALK - CUT-V-GRIP Multi-Functional V-Shape Inserts",
         date: "",
         url: "https://www.youtube.com/embed/Oag-AwSQDgY"
       },  
       {
         series: "5",
-        name: "影片名稱5",
-        date: "",
-        url: "https://www.youtube.com/embed/Oag-AwSQDgY"
-      },  
-      {
-        series: "6",
-        name: "影片名稱6",
+        name: "Aircraft Camera Mount - Machining",
         date: "",
         url: "https://youtu.be/EDFEOYW0MFY?si=iiEMtAaGUvhBhMQl"
       },  
