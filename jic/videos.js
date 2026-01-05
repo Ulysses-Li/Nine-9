@@ -41,6 +41,3 @@ window.VIDEO_DB = [
 
 
 ];
-
-
-
