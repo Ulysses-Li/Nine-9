@@ -85,8 +85,6 @@ window.VIDEO_DB = [
     name: "Chip Thinning & High-Feed Machining",
     date: "",
     url: "https://youtu.be/hBQRAclNSuo?si=aAvLltnbBsO4ap6I"
-  }
-  
-
-
+  },
 ];
+
