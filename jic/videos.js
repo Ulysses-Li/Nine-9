@@ -35,7 +35,7 @@ window.VIDEO_DB = [
   {
     series: "6",
     name: "HoCNC Milling Job Shop Work – Custom Dovetail Fixturing for High Production",
-    date: "",
+    date: "2026-01-19",
     url: "https://youtu.be/q7zEOxLzx4U?si=o7eZotMF83Euz1uD"
   },
   {
@@ -87,4 +87,3 @@ window.VIDEO_DB = [
     url: "https://youtu.be/hBQRAclNSuo?si=aAvLltnbBsO4ap6I"
   },
 ];
-
