@@ -66,7 +66,7 @@ window.VIDEO_DB = [
     series: "11",
     name: "CNC Machining an aluminum part | Hermle C400 | SolidCAM | iMachining",
     date: "",
-    url: "https://youtu.be/Djb-Akfz21g?si=Uyn1P7Nns4X84tCh" 
+    url: "https://youtu.be/Djb-Akfz21g?si=Uyn1P7Nns4X84tCh"
   },
   {
     series: "12",
@@ -77,7 +77,7 @@ window.VIDEO_DB = [
   {
     series: "13",
     name: "Feed Adjustments",
-    date: "",
+    date: "2026-01-26",
     url: "https://youtu.be/Cdv0TJXl928?si=nxZGkOw0au4EQ0fC"
   },
   {
@@ -85,5 +85,11 @@ window.VIDEO_DB = [
     name: "Chip Thinning & High-Feed Machining",
     date: "",
     url: "https://youtu.be/hBQRAclNSuo?si=aAvLltnbBsO4ap6I"
+  },
+  {
+    series: "15",
+    name: "CNC Drilling & Spotting: Pro Techniques",
+    date: "2026-01-26",
+    url: "https://youtu.be/rEnvGdy_zzE?si=G1uOgk-bApTIO394"
   },
 ];
