@@ -8,62 +8,110 @@
   <link rel="icon" href="./Jimmore_logo.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-  <style>
-    /* =========================
-       (A) 月曆外觀樣式
-       用意：讓月曆可讀、星期有顏色、今天高亮
-       ========================= */
-    .calendar th,
-    .calendar td {
-      text-align: center;
-      height: 110px;
-      vertical-align: top;
-    }
+ <style>
+  /* =========================
+     (A) 月曆外觀樣式
+     用意：讓月曆可讀、星期有顏色、今天高亮
+     ========================= */
 
-    .sun {
-      color: #dc3545;
-    }
+  /* ✅ 關鍵：固定月曆每欄寬度，避免被文字撐開 */
+  table.calendar {
+    width: 100%;
+    table-layout: fixed; /* ← 防跑版核心 */
+  }
 
-    .sat {
-      color: #0d6efd;
-    }
+  .calendar th,
+  .calendar td {
+    text-align: center;
+    height: 110px;
+    vertical-align: top;
+    overflow: hidden; /* 不讓內容撐開 cell */
+  }
 
-    .today {
-      background: #fff3cd;
-      border-radius: 10px;
-    }
+  .sun {
+    color: #dc3545;
+  }
 
-    .cal-btn {
-      min-width: 110px;
-    }
+  .sat {
+    color: #0d6efd;
+  }
 
-    .day-cell {
-      cursor: pointer;
-    }
+  .today {
+    background: #fff3cd;
+    border-radius: 10px;
+  }
 
-    .day-num {
-      font-weight: 700;
-    }
+  .cal-btn {
+    min-width: 110px;
+  }
 
-    .event-text {
-      margin-top: 6px;
-      font-size: 0.85rem;
-      text-align: left;
-      background: #f1f3f5;
-      border-radius: 6px;
-      padding: 6px;
-      white-space: pre-wrap;
-      overflow: hidden;
-      max-height: 70px;
-    }
-  </style>
+  .day-cell {
+    cursor: pointer;
+  }
+
+  .day-num {
+    font-weight: 700;
+  }
+
+  /* =========================
+     (B) 影片摘要區塊（灰底）
+     用意：
+     - 最多顯示 2 行
+     - 長英文 / 沒空白字串也不會撐版
+     ========================= */
+  .event-text {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    text-align: left;
+    background: #f1f3f5;
+    border-radius: 6px;
+    padding: 6px;
+
+    /* ✅ 防跑版設定 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* -webkit-line-clamp: 2;   顯示最多 2 行 */
+    overflow: hidden;
+
+    white-space: normal;     /* 允許換行 */
+    word-break: break-word; /* 強制斷長字 */
+    overflow-wrap: anywhere;
+  }
+
+  /* =========================
+     (C) 行事曆備註（藍底）
+     用意：
+     - 與影片一致，不撐格子
+     - 顯示例如「Q4季會（休息）」
+     ========================= */
+  .note-text {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    text-align: left;
+    background: #e7f1ff;
+    border: 1px solid #b6d4fe;
+    border-radius: 6px;
+    padding: 6px;
+
+    /* ✅ 防跑版設定 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* -webkit-line-clamp: 2; */
+    overflow: hidden;
+
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+</style>
+
 </head>
 
 <body class="bg-light">
   <div class="container my-4">
     <!-- =========================
          (B) 月曆掛載位置
-         用意：只顯示「已填 date」的影片
+         用意：只顯示「有 date 的影片」+「行事曆備註」
          ========================= -->
     <div id="calendarMount"></div>
   </div>
@@ -77,57 +125,32 @@
   <div class="container my-5" id="trainingSection">
     <h2 class="mb-4 fw-bold">📺 每週訓練影片（未排日期）</h2>
 
-
     <!-- JS 會把未排日期影片自動渲染在這裡 -->
     <div id="trainingList" class="row g-3"></div>
-
-
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- =========================================================
-       (1) 影片資料庫（未來可外部化成 videos.js）
+       (1) 影片資料庫（外部檔案）
        用意：
-       - date 有值：代表你已經看過/已排日期 → 顯示在月曆
-       - date 空字串：代表未排/還在看的清單 → 顯示在 (D) 區 iframe
+       - date 有值：代表你已排日期 → 顯示在月曆
+       - date 空字串：代表未排 → 顯示在 (D) 區 iframe
        ========================================================= -->
   <script src="./videos.js"></script>
 
+  <!-- =========================================================
+       (1-2) 行事曆備註資料庫（非影片）
+       用意：
+       - 讓你可以在指定日期塞「會議/休假/提醒」
+       - 例如：2026-01-12 顯示「Q4季會（休息）」
+       ========================================================= -->
   <!-- <script>
-    window.VIDEO_DB = [
-      {
-        series: "1",
-        name: "Most Shops Don’t Use Tool Holders the Same Way",
-        date: "2026-01-05",
-        url: "https://youtu.be/z4_EGRBNhGc?si=azr1vtaUmLL8chpT"
-      },
-      {
-        series: "2",
-        name: "影片名稱2",
-        date: "",
-        url: "https://www.youtube.com/embed/CTO734Y5eEU"
-      },
-      {
-        series: "3",
-        name: "影片名稱3",
-        date: "",
-        url: "https://www.youtube.com/embed/HREEbCnDXWM?start=2"
-      },
-      {
-        series: "4",
-        name: "影片名稱4",
-        date: "",
-        url: "https://www.youtube.com/embed/Oag-AwSQDgY"
-      },  
-      {
-        series: "5",
-        name: "影片名稱5",
-        date: "",
-        url: "https://www.youtube.com/embed/Oag-AwSQDgY"
-      },  
-      
-    ];
+    window.CALENDAR_NOTES = {
+      "2026-01-12": "Q4季會（休息）",
+      "2026-01-13": "Q4季會（休息）"
+
+    };
   </script> -->
 
   <!-- =========================================================
@@ -161,7 +184,6 @@
       // embed -> watch
       const embedMatch = s.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
       if (embedMatch) {
-        // 保留 query（例如 start=2）就算不保留也沒差，這裡簡化
         return `https://www.youtube.com/watch?v=${embedMatch[1]}`;
       }
 
@@ -199,7 +221,7 @@
   </script>
 
   <!-- =========================================================
-       (3) 依 date 分組（只收有 date 的）
+       (3) 依 date 分組（只收有 date 的影片）
        用意：月曆只顯示「已排日期」影片
        ========================================================= -->
   <script>
@@ -207,9 +229,38 @@
       const byDate = {};
       for (const v of db) {
         if (!v.date) continue;               // 沒日期 => 不進月曆
-        (byDate[v.date] ||= []).push(v);
+        (byDate[v.date] ||= []).push(v);     // 影片物件 그대로放入
       }
       return byDate;
+    }
+  </script>
+
+  <!-- =========================================================
+       (3-2) 依 date 分組（備註）
+       用意：
+       - 把 window.CALENDAR_NOTES 轉成 byDate 結構
+       - 並標記 type="note" 讓月曆渲染時可以用藍色樣式
+       ========================================================= -->
+  <script>
+    function groupNotesByDate(notesObj) {
+      const byDate = {};
+      const notes = notesObj || {};
+
+      for (const dateKey in notes) {
+        (byDate[dateKey] ||= []).push({
+          type: "note",
+          text: String(notes[dateKey] || "")
+        });
+      }
+      return byDate;
+    }
+
+    function mergeByDate(a, b) {
+      const out = { ...(a || {}) };
+      for (const k in (b || {})) {
+        out[k] = (out[k] || []).concat(b[k]);
+      }
+      return out;
     }
   </script>
 
@@ -249,10 +300,10 @@
   </script>
 
   <!-- =========================================================
-       (5) 月曆渲染：畫日期格 + 顯示當天影片摘要
+       (5) 月曆渲染：畫日期格 + 顯示「影片摘要 + 藍色備註」
        用意：
-       - 修正你原本 summary 空 div 的 bug
-       - 顯示最多 2 部影片 + more
+       - 影片：最多 2 行 + more
+       - 備註：藍色區塊顯示（例如 Q4季會休息）
        ========================================================= -->
   <script>
     function renderCalendar({ year, month, byDate, realToday }) {
@@ -284,15 +335,28 @@
         const key = toKey(year, month, day);
         const list = byDate[key] || [];
 
+        // ✅ 分開：影片 vs 備註
+        const videos = list.filter(x => x.type !== "note");
+        const notes = list.filter(x => x.type === "note");
+
         let summary = "";
-        if (list.length) {
-          const names = list
+
+        // ✅ 影片摘要（灰底）
+        if (videos.length) {
+          const names = videos
             .slice(0, 2)
-            .map(v => `▶ ${escapeHtml(v.name)}`)
+            // .map(v => `▶ ${escapeHtml(v.name)}`)
+            .map(v => `▶`)
             .join("\n");
 
-          // ✅ 修正：原本你這裡是空 div，所以永遠看不到名字
-          summary = `<div class="event-text"></div>`;
+          const more = videos.length > 2 ? `\n…還有 ${videos.length - 2} 部` : "";
+          summary += `<div class="event-text">${names}${more}</div>`;
+        }
+
+        // ✅ 行事曆備註（藍底）
+        if (notes.length) {
+          const noteText = notes.map(n => `🟦 ${escapeHtml(n.text)}`).join("\n");
+          summary += `<div class="note-text">${noteText}</div>`;
         }
 
         html += `
@@ -314,10 +378,11 @@
   </script>
 
   <!-- =========================================================
-       (6) 點日期：開啟當天影片
+       (6) 點日期：先顯示備註，再開影片
        用意：
-       - 1 部直接開
-       - 多部用 prompt 選
+       - 有備註：先 alert 顯示（例如 Q4季會休息）
+       - 1 部影片：直接開
+       - 多部影片：prompt 選擇
        ========================================================= -->
   <script>
     function bindDayClick({ getByDate }) {
@@ -331,17 +396,27 @@
         const list = (getByDate()[key] || []);
         if (!list.length) return;
 
-        if (list.length === 1) {
-          window.open(normalizeToWatchUrl(list[0].url), "_blank");
+        // ✅ 如果有備註：先顯示
+        const notes = list.filter(x => x.type === "note");
+        if (notes.length) {
+          alert(`${key}\n\n${notes.map(n => n.text).join("\n")}`);
+        }
+
+        // ✅ 只針對影片開啟（備註不開）
+        const videos = list.filter(x => x.type !== "note");
+        if (!videos.length) return;
+
+        if (videos.length === 1) {
+          window.open(normalizeToWatchUrl(videos[0].url), "_blank");
           return;
         }
 
-        const msg = list.map((v, i) => `${i + 1}. ${v.name}`).join("\n");
-        const pick = prompt(`${key} 有 ${list.length} 部影片：\n\n${msg}\n\n輸入數字開啟（例如 1）`);
+        const msg = videos.map((v, i) => `${i + 1}. ${v.name}`).join("\n");
+        const pick = prompt(`${key} 有 ${videos.length} 部影片：\n\n${msg}\n\n輸入數字開啟（例如 1）`);
         const idx = Number(pick) - 1;
 
-        if (!Number.isFinite(idx) || idx < 0 || idx >= list.length) return;
-        window.open(normalizeToWatchUrl(list[idx].url), "_blank");
+        if (!Number.isFinite(idx) || idx < 0 || idx >= videos.length) return;
+        window.open(normalizeToWatchUrl(videos[idx].url), "_blank");
       });
     }
   </script>
@@ -349,13 +424,12 @@
   <!-- =========================================================
        (7) 渲染「每週訓練影片區」：只放 date 為空的影片
        用意：
-       - 你不想排程、不想選日期
-       - 你日後只要把 date 補上，這支影片就會自動「從這裡消失」並出現在月曆
+       - 不排日期的影片集中放這裡
+       - 你日後只要把 date 補上，它就會自動進月曆
        ========================================================= -->
   <script>
     function renderTrainingSection(db) {
       const listEl = document.getElementById("trainingList");
-
       const unDated = db.filter(v => !v.date);
 
       if (!unDated.length) {
@@ -366,17 +440,16 @@
       listEl.innerHTML = unDated.map((v, idx) => {
         const embed = normalizeToEmbedUrl(v.url);
         return `
-    <div class="col-12 col-md-6 fw-bold">
-      <h5 class="fw-semibold mb-3">(${escapeHtml(v.series)}) ${escapeHtml(v.name)}</h5>
-      <div class="ratio ratio-16x9 shadow rounded overflow-hidden">
-        <iframe src="${escapeHtml(embed)}" title="Training video ${idx + 1}"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
-      </div>
-    </div>
-  `;
+          <div class="col-12 col-md-6 fw-bold">
+            <h5 class="fw-semibold mb-3">(${escapeHtml(v.series)}) ${escapeHtml(v.name)}</h5>
+            <div class="ratio ratio-16x9 shadow rounded overflow-hidden">
+              <iframe src="${escapeHtml(embed)}" title="Training video ${idx + 1}"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            </div>
+          </div>
+        `;
       }).join("");
-
     }
   </script>
 
@@ -416,8 +489,9 @@
        (9) 初始化入口
        用意：
        - 建立骨架
-       - 先渲染月曆（只顯示有 date）
-       - 再渲染訓練區（只顯示沒 date）
+       - byDate = 影片(date有) + 備註
+       - 渲染月曆（顯示有 date 的影片 + 備註）
+       - 渲染訓練區（顯示沒 date 的影片）
        - 綁定點擊與切月按鈕
        ========================================================= -->
   <script>
@@ -426,6 +500,7 @@
       buildCalendarSkeleton(root);
 
       const db = window.VIDEO_DB || [];
+      const notesObj = window.CALENDAR_NOTES || {};
 
       const realToday = new Date();
       let state = {
@@ -434,11 +509,18 @@
         realToday
       };
 
-      // byDate 會依 db 重新分組（如果你日後改了 date，刷新頁面就會更新）
-      let byDate = groupVideosByDate(db);
+      let byDate = {};
 
       function rerender() {
-        byDate = groupVideosByDate(db);
+        // ✅ 影片（有 date）分組
+        const videoByDate = groupVideosByDate(db);
+
+        // ✅ 備註分組（例如 2026-01-12）
+        const noteByDate = groupNotesByDate(notesObj);
+
+        // ✅ 合併到同一個 byDate 結構，renderCalendar 才能一起顯示
+        byDate = mergeByDate(videoByDate, noteByDate);
+
         renderCalendar({
           year: state.year,
           month: state.month,
@@ -453,7 +535,7 @@
       // 初次渲染每週訓練影片（未排日期）
       renderTrainingSection(db);
 
-      // 點日期開影片
+      // 點日期：先顯示備註，再開影片
       bindDayClick({ getByDate: () => byDate });
 
       // 上下月 / 回到今天
