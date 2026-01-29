@@ -133,11 +133,59 @@ window.VIDEO_DB = [
     date: "2026-01-26",
     url: "https://youtu.be/rEnvGdy_zzE?si=G1uOgk-bApTIO394"
   },
-   {
+  {
     series: "16",
     name: "3 Tools 3 Strategies 3 Results | Swarf vs. Barrel vs. Ball",
     date: "",
     url: "https://youtu.be/8sjAFeJQpLY?si=tfKs91XG578S7NGf"
+  },
+  {
+    series: "17",
+    name: "20年經驗職人 vs AI 科技！決定人類命運の加工對決！",
+    date: "",
+    url: "https://youtu.be/ZF7z_D0r7JE?si=o1spsou3gqFl22gJ"
+  },
+  {
+    series: "18",
+    name: "看不見的「公差」，精品的關鍵！一口氣了解尺寸公差、幾何公差、配合公差",
+    date: "",
+    url: "https://youtu.be/6FB3MYw5w4E?si=1OCRYtwSwKGykmz-"
+  },
+  {
+    series: "19",
+    name: "Understanding GD&T",
+    date: "",
+    url: "https://youtu.be/G7wnGeR_69k?si=2OTp2M9PnxSxN59W"
+  },
+  {
+    series: "20",
+    name: "Holier than Thou: Precision Holes by Drilling, Boring, and Reaming",
+    date: "",
+    url: "https://youtu.be/Qs_kXVsTQPE?si=zEOT-Ew8oV6by_nO"
+  },
+  {
+    series: "21",
+    name: "How to Design Parts for CNC Machining",
+    date: "",
+    url: "https://youtu.be/qx_qqVmjCc0?si=ao1WMlu65SYl6QaW"
+  },
+  {
+    series: "22",
+    name: "CNC machines - The Types of CNC Machines Explained (3 and 5 axis)",
+    date: "",
+    url: "https://youtu.be/mdRTq2_qI9Y?si=CzG1gFlnI4-_bcOY"
+  },
+  {
+    series: "23",
+    name: "5-Axis VERSUS 3-Axis - Which Would You Choose? UMC-500SS or VF-4SS - Haas Automation, Inc.",
+    date: "",
+    url: "https://youtu.be/oFvBe7cqxOE?si=ZNbPRmTP3ikWCBcW"
+  },
+    {
+    series: "24",
+    name: "Poor Man’s Anti-Vibration Boring Bar Holder– Cutting Down on Resonance!",
+    date: "",
+    url: "https://youtu.be/lRb1z9edaYU?si=lHgoy9r6yz68rJq3"
   },
 ];
 
