@@ -133,6 +133,12 @@ window.VIDEO_DB = [
     date: "2026-01-26",
     url: "https://youtu.be/rEnvGdy_zzE?si=G1uOgk-bApTIO394"
   },
+   {
+    series: "16",
+    name: "3 Tools 3 Strategies 3 Results | Swarf vs. Barrel vs. Ball",
+    date: "",
+    url: "https://youtu.be/8sjAFeJQpLY?si=tfKs91XG578S7NGf"
+  },
 ];
 
 // 註解與用意：
