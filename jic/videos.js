@@ -142,13 +142,13 @@ window.VIDEO_DB = [
   {
     series: "17",
     name: "20年經驗職人 vs AI 科技！決定人類命運の加工對決！",
-    date: "",
+    date: "2026-02-02",
     url: "https://youtu.be/ZF7z_D0r7JE?si=o1spsou3gqFl22gJ"
   },
   {
     series: "18",
     name: "看不見的「公差」，精品的關鍵！一口氣了解尺寸公差、幾何公差、配合公差",
-    date: "",
+    date: "2026-02-02",
     url: "https://youtu.be/6FB3MYw5w4E?si=1OCRYtwSwKGykmz-"
   },
   {
@@ -186,6 +186,12 @@ window.VIDEO_DB = [
     name: "Poor Man’s Anti-Vibration Boring Bar Holder– Cutting Down on Resonance!",
     date: "",
     url: "https://youtu.be/lRb1z9edaYU?si=lHgoy9r6yz68rJq3"
+  },
+  {
+    series: "25",
+    name: "快速搞懂齒輪！這 8 種你都該認識",
+    date: "2026-02-02",
+    url: "https://youtu.be/o4qY2HVwBJM?si=RJ2OLLRwuy4648Y2"
   },
 ];
 
