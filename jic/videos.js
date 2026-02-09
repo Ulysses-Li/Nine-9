@@ -10,12 +10,10 @@ window.CALENDAR_NOTES = {
   "2026-04-08": "Q1季會（休息）",
   "2026-07-13": "Q2季會（休息）",
   "2026-10-12": "Q3季會（休息）",
-
   "2026-06-29": "盤點及內稽（休息）",
   "2026-06-30": "盤點及內稽（休息）",
   "2026-12-28": "盤點及內稽（休息）",
   "2026-12-29": "盤點及內稽（休息）",
-
   "2026-02-14": "春節假日",
   "2026-02-15": "春節假日",
   "2026-02-16": "春節假日（除夕）",
@@ -26,7 +24,6 @@ window.CALENDAR_NOTES = {
   "2026-02-21": "春節假日（初五）",
   "2026-02-22": "春節假日（初六）",
   "2026-02-23": "開工大吉！",
-
   "2026-01-01": "元旦假期",
   "2026-01-02": "公司假期",
   "2026-02-27": "和平紀念日(補假)",
@@ -39,7 +36,6 @@ window.CALENDAR_NOTES = {
   "2026-10-09": "國慶日(補假)",
   "2026-10-09": "光復節(補假)",
   "2026-12-25": "行憲紀念日"
-
 };
 
 window.VIDEO_DB = [
@@ -181,10 +177,10 @@ window.VIDEO_DB = [
     date: "",
     url: "https://youtu.be/oFvBe7cqxOE?si=ZNbPRmTP3ikWCBcW"
   },
-    {
+  {
     series: "24",
     name: "Poor Man’s Anti-Vibration Boring Bar Holder– Cutting Down on Resonance!",
-    date: "",
+    date: "2026-02-09",
     url: "https://youtu.be/lRb1z9edaYU?si=lHgoy9r6yz68rJq3"
   },
   {
@@ -193,6 +189,66 @@ window.VIDEO_DB = [
     date: "2026-02-02",
     url: "https://youtu.be/o4qY2HVwBJM?si=RJ2OLLRwuy4648Y2"
   },
+  {
+    "series": "26",
+    "name": "How I Set Up a Swiss Lathe for a Real Production Job | The Lathe Lab Ep.15",
+    "date": "",
+    "url": "https://youtu.be/sFdzjVHg3AA?si=EbcHy5Y754iLW1Wa"
+  },
+  {
+    "series": "27",
+    "name": "続々登場！出来ない…が出来る!に変わる工具！　マンヨーツール",
+    "date": "",
+    "url": "https://youtu.be/lO5tQhhGxPQ?si=F0kqs45_lRrf9haL"
+  },
+  {
+    "series": "28",
+    "name": "CNC fail compilation – lessons in every crash. (懂加工看到都會嚇到的影片)",
+    "date": "",
+    "url": "https://youtu.be/LIDmjodj_oQ?si=e0B-bqOimcjwuYCc"
+  },
+  {
+    "series": "29",
+    "name": "認識CNC基礎教學!開箱德國上億元神獸級CNC！ 台中精機【隱形工廠】What's CNC?",
+    "date": "",
+    "url": "https://youtu.be/KZ0lIzlYHw4?si=CVNPoUqsHyaeNBKb"
+  },
+  {
+    "series": "30",
+    "name": "SY2-42E / Swiss-type / 走心式車床",
+    "date": "",
+    "url": "https://youtu.be/cxrU0N7TxAU?si=0fIAg-0eOs9jWz5P"
+  },
+  {
+    "series": "31",
+    "name": "CITIZEN Cincom L20-XII with ATC (Automatic Tool Changer) www.citizenmachinery.co.uk",
+    "date": "",
+    "url": "https://youtu.be/H4FujlzFNfI?si=09V_aq347NFtgdfl"
+  },
+  {
+    "series": "32",
+    "name": "Making a Chessboard with Chess Pieces - CNC Milling and Turning - Machining",
+    "date": "",
+    "url": "https://youtu.be/7iKmTnZvA34?si=O30rHvcVDIDLu7rn"
+  },
+  {
+    "series": "33",
+    "name": "到瑞士拍手錶工廠 機械錶製作曝光 你從沒想過的真實製造過程 我們全拍到了！【超認真少年】Switzerland Watch & Tourbillon Factory Horage",
+    "date": "",
+    "url": "https://youtu.be/sWyxd79_zrE?si=MggxT5zx1ARQej1t"
+  },
+  {
+    "series": "34",
+    "name": "驚人的鑄造技術！八旬匠人累積的技藝",
+    "date": "",
+    "url": "https://youtu.be/BIO2cWTA2oM?si=Myo8G6NVPwqnnPp_"
+  },
+  {
+    "series": "35",
+    "name": "批量生產活塞零件的製程。在日本用 6000 噸壓力機鍛造曲軸",
+    "date": "",
+    "url": "https://youtu.be/4NTKbSLObM8?si=xUMyNR-IcZh9y9kR"
+  }
 ];
 
 // 註解與用意：
