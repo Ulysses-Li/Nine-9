@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>庫存查詢工具｜Google Apps Script 版</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --line: #dbe3ee;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --success: #059669;
+      --warn: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .hero {
+      border: 1px solid #dbeafe;
+      background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%, #eefaf5 100%);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-ui {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr auto;
+      gap: 12px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fff 0%, #f9fbff 100%);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .table-responsive {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: auto;
+    }
+
+    table {
+      margin-bottom: 0 !important;
+      min-width: 1200px;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f8fafc !important;
+      font-size: 12px;
+      color: #475569;
+      white-space: nowrap;
+    }
+
+    td {
+      vertical-align: middle;
+      font-size: 13px;
+    }
+
+    tbody tr:hover td {
+      background: #f8fbff;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #eef2ff;
+      color: #3730a3;
+      white-space: nowrap;
+    }
+
+    .stock-ok { color: var(--success); font-weight: 700; }
+    .stock-low { color: var(--warn); font-weight: 700; }
+    .stock-zero { color: var(--danger); font-weight: 700; }
+
+    .loading-mask {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(2px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-mask.show {
+      display: flex;
+    }
+
+    .loading-box {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .empty-row {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px !important;
+    }
+
+    @media (max-width: 1200px) {
+      .toolbar-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .toolbar-grid,
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-mask" id="loadingMask">
+    <div class="loading-box">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <div>資料讀取中...</div>
+    </div>
+  </div>
+
+  <div class="container-fluid py-4 px-3 px-lg-4">
+    <section class="hero p-4 mb-4">
+      <h1 class="mb-2">庫存查詢工具</h1>
+      <div class="text-secondary lh-lg">
+        這個版本會直接連你的 Google Apps Script Web App，自動抓 Google Sheet 資料，不需要再手動貼上。<br>
+        你只要把 <strong>GAS Web App URL</strong> 放進設定，就可以查詢產品編號、品名、類別、庫存、成本與總成本。
+      </div>
+    </section>
+
+    <section class="card-ui p-4 mb-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-lg-9">
+          <label for="apiUrl" class="form-label fw-bold">Google Apps Script Web App URL</label>
+          <input type="text" id="apiUrl" class="form-control" placeholder="請貼上你的 GAS Web App URL，例如：https://script.google.com/macros/s/xxx/exec">
+          <div class="form-text">第一次輸入後會暫存在瀏覽器 localStorage，下次開啟會自動帶入。</div>
+        </div>
+        <div class="col-12 col-lg-3 d-grid">
+          <button class="btn btn-primary" id="btnLoadApi">讀取 Google Sheet 資料</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-ui p-4 mb-4">
+      <div class="stats-grid mb-4">
+        <div class="stat-box">
+          <div class="stat-label">總筆數</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">目前顯示</div>
+          <div class="stat-value" id="statFiltered">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">實際在庫總量</div>
+          <div class="stat-value" id="statStock">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">總成本</div>
+          <div class="stat-value" id="statCost">0</div>
+        </div>
+      </div>
+
+      <div class="toolbar-grid mb-4">
+        <div>
+          <label class="form-label">關鍵字搜尋</label>
+          <input id="keyword" type="text" class="form-control" placeholder="輸入產品編號 / 品名 / 類別">
+        </div>
+        <div>
+          <label class="form-label">類別篩選</label>
+          <select id="categoryFilter" class="form-select">
+            <option value="">全部類別</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">庫存條件</label>
+          <select id="stockFilter" class="form-select">
+            <option value="all">全部</option>
+            <option value="in">有庫存</option>
+            <option value="zero">零庫存</option>
+            <option value="low">低庫存（<= 10）</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">排序方式</label>
+          <select id="sortBy" class="form-select">
+            <option value="codeAsc">產品編號 A → Z</option>
+            <option value="stockDesc">實際在庫量 高 → 低</option>
+            <option value="stockAsc">實際在庫量 低 → 高</option>
+            <option value="costDesc">總成本 高 → 低</option>
+            <option value="costAsc">總成本 低 → 高</option>
+          </select>
+        </div>
+        <div class="d-grid align-self-end">
+          <button class="btn btn-outline-secondary" id="btnExport">匯出 CSV</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>產品編號</th>
+              <th>品名規格</th>
+              <th>類別</th>
+              <th>數量</th>
+              <th>借出</th>
+              <th>借入</th>
+              <th>實際在庫量</th>
+              <th>單位</th>
+              <th>成本</th>
+              <th>總成本</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="10" class="empty-row">請先輸入 GAS Web App URL 並讀取資料</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+<!-- 
+    <section class="card-ui p-4">
+      <h5 class="mb-3">Google Apps Script 範例（後端 API）</h5>
+      <p class="text-secondary mb-3">把下面程式碼貼到 Apps Script，部署成 Web App 後，把網址貼到上面的欄位即可。</p>
+      <pre class="bg-light border rounded p-3 mb-0" style="white-space: pre-wrap; font-size: 13px; line-height: 1.6;">const SHEET_NAME = '工作表1';
+
+function doGet() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const values = sheet.getDataRange().getValues();
+
+  const headers = values[0];
+  const rows = values.slice(1)
+    .filter(r =&gt; String(r[0] || '').trim() !== '' &amp;&amp; String(r[0] || '').trim() !== '總計:')
+    .map(r =&gt; ({
+      code: r[0] || '',
+      name: r[1] || '',
+      category: r[2] || '',
+      qty: Number(r[3] || 0),
+      outQty: Number(r[4] || 0),
+      inQty: Number(r[5] || 0),
+      actualQty: Number(r[6] || 0),
+      unit: r[7] || '',
+      cost: Number(String(r[8] || 0).toString().replace(/,/g, '')),
+      totalCost: Number(String(r[9] || 0).toString().replace(/,/g, ''))
+    }));
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ success: true, rows }))
+    .setMimeType(ContentService.MimeType.JSON);
+}</pre>
+    </section> -->
+  </div>
+
+  <script>
+    const state = {
+      rows: [],
+      filtered: []
+    };
+
+    const els = {
+      apiUrl: document.getElementById('apiUrl'),
+      btnLoadApi: document.getElementById('btnLoadApi'),
+      keyword: document.getElementById('keyword'),
+      categoryFilter: document.getElementById('categoryFilter'),
+      stockFilter: document.getElementById('stockFilter'),
+      sortBy: document.getElementById('sortBy'),
+      btnExport: document.getElementById('btnExport'),
+      tableBody: document.getElementById('tableBody'),
+      statTotal: document.getElementById('statTotal'),
+      statFiltered: document.getElementById('statFiltered'),
+      statStock: document.getElementById('statStock'),
+      statCost: document.getElementById('statCost'),
+      loadingMask: document.getElementById('loadingMask')
+    };
+
+    const STORAGE_KEY = 'inventory_gas_webapp_url';
+
+    function showLoading(show) {
+      els.loadingMask.classList.toggle('show', !!show);
+    }
+
+    function parseNumber(value) {
+      if (value === undefined || value === null) return 0;
+      const cleaned = String(value).replace(/,/g, '').trim();
+      const num = Number(cleaned);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function formatNumber(num) {
+      return new Intl.NumberFormat('zh-TW').format(num || 0);
+    }
+
+    function formatMoney(num) {
+      return new Intl.NumberFormat('zh-TW', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }).format(num || 0);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getStockClass(qty) {
+      if (qty <= 0) return 'stock-zero';
+      if (qty <= 10) return 'stock-low';
+      return 'stock-ok';
+    }
+
+    function fillCategoryOptions(rows) {
+      const categories = [...new Set(rows.map(r => r.category).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+      els.categoryFilter.innerHTML = '<option value="">全部類別</option>';
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        els.categoryFilter.appendChild(option);
+      });
+    }
+
+    function renderTable() {
+      if (!state.filtered.length) {
+        els.tableBody.innerHTML = '<tr><td colspan="10" class="empty-row">查無資料</td></tr>';
+        return;
+      }
+
+      els.tableBody.innerHTML = state.filtered.map(r => `
+        <tr>
+          <td><strong>${escapeHtml(r.code)}</strong></td>
+          <td>${escapeHtml(r.name)}</td>
+          <td><span class="tag">${escapeHtml(r.category || '-')}</span></td>
+          <td>${formatNumber(r.qty)}</td>
+          <td>${formatNumber(r.outQty)}</td>
+          <td>${formatNumber(r.inQty)}</td>
+          <td class="${getStockClass(r.actualQty)}">${formatNumber(r.actualQty)}</td>
+          <td>${escapeHtml(r.unit || '-')}</td>
+          <td>${formatMoney(r.cost)}</td>
+          <td>${formatMoney(r.totalCost)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderStats() {
+      els.statTotal.textContent = formatNumber(state.rows.length);
+      els.statFiltered.textContent = formatNumber(state.filtered.length);
+      els.statStock.textContent = formatNumber(state.filtered.reduce((s, r) => s + parseNumber(r.actualQty), 0));
+      els.statCost.textContent = formatMoney(state.filtered.reduce((s, r) => s + parseNumber(r.totalCost), 0));
+    }
+
+    function applyFilters() {
+      let data = [...state.rows];
+      const keyword = els.keyword.value.trim().toLowerCase();
+      const category = els.categoryFilter.value;
+      const stockFilter = els.stockFilter.value;
+      const sortBy = els.sortBy.value;
+
+      if (keyword) {
+        data = data.filter(r =>
+          String(r.code).toLowerCase().includes(keyword) ||
+          String(r.name).toLowerCase().includes(keyword) ||
+          String(r.category).toLowerCase().includes(keyword)
+        );
+      }
+
+      if (category) {
+        data = data.filter(r => r.category === category);
+      }
+
+      if (stockFilter === 'in') {
+        data = data.filter(r => parseNumber(r.actualQty) > 0);
+      } else if (stockFilter === 'zero') {
+        data = data.filter(r => parseNumber(r.actualQty) <= 0);
+      } else if (stockFilter === 'low') {
+        data = data.filter(r => parseNumber(r.actualQty) > 0 && parseNumber(r.actualQty) <= 10);
+      }
+
+      switch (sortBy) {
+        case 'stockDesc':
+          data.sort((a, b) => parseNumber(b.actualQty) - parseNumber(a.actualQty));
+          break;
+        case 'stockAsc':
+          data.sort((a, b) => parseNumber(a.actualQty) - parseNumber(b.actualQty));
+          break;
+        case 'costDesc':
+          data.sort((a, b) => parseNumber(b.totalCost) - parseNumber(a.totalCost));
+          break;
+        case 'costAsc':
+          data.sort((a, b) => parseNumber(a.totalCost) - parseNumber(b.totalCost));
+          break;
+        default:
+          data.sort((a, b) => String(a.code).localeCompare(String(b.code)));
+          break;
+      }
+
+      state.filtered = data;
+      renderTable();
+      renderStats();
+    }
+
+    async function loadApiData() {
+      const apiUrl = els.apiUrl.value.trim();
+      if (!apiUrl) {
+        alert('請先輸入 Google Apps Script Web App URL');
+        return;
+      }
+
+      try {
+        showLoading(true);
+        localStorage.setItem(STORAGE_KEY, apiUrl);
+
+        const response = await fetch(apiUrl, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success || !Array.isArray(result.rows)) {
+          throw new Error('API 回傳格式不正確');
+        }
+
+        state.rows = result.rows.map(r => ({
+          code: r.code || '',
+          name: r.name || '',
+          category: r.category || '',
+          qty: parseNumber(r.qty),
+          outQty: parseNumber(r.outQty),
+          inQty: parseNumber(r.inQty),
+          actualQty: parseNumber(r.actualQty),
+          unit: r.unit || '',
+          cost: parseNumber(r.cost),
+          totalCost: parseNumber(r.totalCost)
+        }));
+
+        fillCategoryOptions(state.rows);
+        applyFilters();
+      } catch (error) {
+        console.error(error);
+        alert('讀取失敗，請檢查：\n1. GAS 是否部署為 Web App\n2. 是否允許任何知道連結的人存取\n3. Sheet 欄位順序是否正確\n4. 是否遇到 CORS / 權限問題\n\n錯誤：' + error.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function exportCsv() {
+      if (!state.filtered.length) {
+        alert('目前沒有可匯出的資料');
+        return;
+      }
+
+      const header = ['產品編號', '品名規格', '類別', '數量', '借出數量', '借入數量', '實際在庫量', '單位', '成本', '總成本'];
+      const rows = state.filtered.map(r => [
+        r.code, r.name, r.category, r.qty, r.outQty, r.inQty, r.actualQty, r.unit, r.cost, r.totalCost
+      ]);
+
+      const csv = [header, ...rows]
+        .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+        .join('\n');
+
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'inventory_search_result.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function init() {
+      const savedUrl = localStorage.getItem(STORAGE_KEY);
+      if (savedUrl) els.apiUrl.value = savedUrl;
+
+      els.btnLoadApi.addEventListener('click', loadApiData);
+      els.btnExport.addEventListener('click', exportCsv);
+      [els.keyword, els.categoryFilter, els.stockFilter, els.sortBy].forEach(el => {
+        el.addEventListener('input', applyFilters);
+        el.addEventListener('change', applyFilters);
+      });
+
+      renderStats();
+    }
+
+    init();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
