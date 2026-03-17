@@ -188,7 +188,7 @@
     </section>
 
     <section class="card-ui p-4 mb-4">
-      <div class="stats-grid mb-4">
+      <!-- <div class="stats-grid mb-4">
         <div class="stat-box">
           <div class="stat-label">總筆數</div>
           <div class="stat-value" id="statTotal">0</div>
@@ -205,7 +205,7 @@
           <div class="stat-label">總成本</div>
           <div class="stat-value" id="statCost">0</div>
         </div>
-      </div>
+      </div> -->
 
       <div class="toolbar-grid mb-4">
         <div>
@@ -250,12 +250,12 @@
               <th>品名規格</th>
               <th>類別</th>
               <th>數量</th>
-              <th>借出</th>
-              <th>借入</th>
-              <th>實際在庫量</th>
-              <th>單位</th>
-              <th>成本</th>
-              <th>總成本</th>
+              <!-- <th>借出</th> -->
+              <!-- <th>借入</th> -->
+              <!-- <th>實際在庫量</th> -->
+              <!-- <th>單位</th> -->
+              <!-- <th>成本</th> -->
+              <!-- <th>總成本</th> -->
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -312,10 +312,10 @@ function doGet() {
       sortBy: document.getElementById('sortBy'),
       btnExport: document.getElementById('btnExport'),
       tableBody: document.getElementById('tableBody'),
-      statTotal: document.getElementById('statTotal'),
-      statFiltered: document.getElementById('statFiltered'),
-      statStock: document.getElementById('statStock'),
-      statCost: document.getElementById('statCost'),
+      // statTotal: document.getElementById('statTotal'),
+      // statFiltered: document.getElementById('statFiltered'),
+      // statStock: document.getElementById('statStock'),
+      // statCost: document.getElementById('statCost'),
       loadingMask: document.getElementById('loadingMask')
     };
 
@@ -381,21 +381,15 @@ function doGet() {
           <td>${escapeHtml(r.name)}</td>
           <td><span class="tag">${escapeHtml(r.category || '-')}</span></td>
           <td>${formatNumber(r.qty)}</td>
-          <td>${formatNumber(r.outQty)}</td>
-          <td>${formatNumber(r.inQty)}</td>
-          <td class="${getStockClass(r.actualQty)}">${formatNumber(r.actualQty)}</td>
-          <td>${escapeHtml(r.unit || '-')}</td>
-          <td>${formatMoney(r.cost)}</td>
-          <td>${formatMoney(r.totalCost)}</td>
         </tr>
       `).join('');
     }
 
     function renderStats() {
-      els.statTotal.textContent = formatNumber(state.rows.length);
-      els.statFiltered.textContent = formatNumber(state.filtered.length);
-      els.statStock.textContent = formatNumber(state.filtered.reduce((s, r) => s + parseNumber(r.actualQty), 0));
-      els.statCost.textContent = formatMoney(state.filtered.reduce((s, r) => s + parseNumber(r.totalCost), 0));
+      // els.statTotal.textContent = formatNumber(state.rows.length);
+      // els.statFiltered.textContent = formatNumber(state.filtered.length);
+      // els.statStock.textContent = formatNumber(state.filtered.reduce((s, r) => s + parseNumber(r.actualQty), 0));
+      // els.statCost.textContent = formatMoney(state.filtered.reduce((s, r) => s + parseNumber(r.totalCost), 0));
     }
 
     function applyFilters() {
@@ -427,16 +421,16 @@ function doGet() {
 
       switch (sortBy) {
         case 'stockDesc':
-          data.sort((a, b) => parseNumber(b.actualQty) - parseNumber(a.actualQty));
+          // data.sort((a, b) => parseNumber(b.actualQty) - parseNumber(a.actualQty));
           break;
         case 'stockAsc':
-          data.sort((a, b) => parseNumber(a.actualQty) - parseNumber(b.actualQty));
+          // data.sort((a, b) => parseNumber(a.actualQty) - parseNumber(b.actualQty));
           break;
         case 'costDesc':
-          data.sort((a, b) => parseNumber(b.totalCost) - parseNumber(a.totalCost));
+          // data.sort((a, b) => parseNumber(b.totalCost) - parseNumber(a.totalCost));
           break;
         case 'costAsc':
-          data.sort((a, b) => parseNumber(a.totalCost) - parseNumber(b.totalCost));
+          // data.sort((a, b) => parseNumber(a.totalCost) - parseNumber(b.totalCost));
           break;
         default:
           data.sort((a, b) => String(a.code).localeCompare(String(b.code)));
@@ -502,9 +496,9 @@ function doGet() {
         return;
       }
 
-      const header = ['產品編號', '品名規格', '類別', '數量', '借出數量', '借入數量', '實際在庫量', '單位', '成本', '總成本'];
+      const header = ['產品編號', '品名規格', '類別', '數量'];
       const rows = state.filtered.map(r => [
-        r.code, r.name, r.category, r.qty, r.outQty, r.inQty, r.actualQty, r.unit, r.cost, r.totalCost
+        r.code, r.name, r.category, r.qty
       ]);
 
       const csv = [header, ...rows]
