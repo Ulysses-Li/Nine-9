@@ -647,7 +647,7 @@
   </div>
 
   <script>
-    const API_BASE = 'https://script.google.com/macros/s/AKfycbzeRWAEj0R-7RbAN7Izc1dCqUPluXsdHw0-RqQZxz-g0BmSoBwghvSxi2HubwZqKe0j1g/exec';
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbzpN5aASBRkV3HBNtAvRzoVy4ZWlXQ0Q2qoU7rej-HMF10Ww3ut3eK9P14mi76mPMbboQ/exec';
 
     const form = document.getElementById('loginForm');
     const btn = document.getElementById('loginBtn');
@@ -703,6 +703,7 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       if (!validateForm()) return;
 
       btn.disabled = true;
@@ -710,10 +711,15 @@
       setStatus('正在登入中，請稍候。');
 
       try {
+        const ip = await getClientIP();
+        const userAgent = navigator.userAgent || '';
+
         const formData = new URLSearchParams();
         formData.append('action', 'login');
         formData.append('email', email.value.trim());
         formData.append('password', pw.value);
+        formData.append('ip', ip);
+        formData.append('userAgent', userAgent);
 
         const res = await fetch(API_BASE, {
           method: 'POST',
