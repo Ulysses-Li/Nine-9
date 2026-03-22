@@ -1,207 +1,1132 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>建立帳戶</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Smart Support Platform</title>
   <style>
-    body {
-      min-height: 100vh;
-      background: linear-gradient(180deg, rgba(25,135,84,.08), rgba(255,255,255,0));
+    :root {
+      --bg: #eef3fb;
+      --panel: #ffffff;
+      --panel-2: #f7f9fd;
+      --text: #172033;
+      --muted: #6c7892;
+      --line: #dbe4f0;
+      --primary: #2457ff;
+      --primary-2: #153bb8;
+      --success: #16a34a;
+      --shadow: 0 20px 50px rgba(20, 42, 92, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
     }
-    .card { border: 0; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.08); }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(36, 87, 255, .10), transparent 30%),
+        radial-gradient(circle at right 20%, rgba(36, 87, 255, .08), transparent 25%),
+        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 1.02fr 1.18fr;
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      background:
+        radial-gradient(circle at 20% 15%, rgba(91, 136, 255, .40), transparent 20%),
+        radial-gradient(circle at 80% 0%, rgba(48, 94, 255, .38), transparent 22%),
+        linear-gradient(160deg, #0f1730 0%, #13214c 55%, #183276 100%);
+      color: #fff;
+      padding: 42px 34px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .brand::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 240px;
+      height: 240px;
+      background: rgba(255, 255, 255, .06);
+      border-radius: 50%;
+      filter: blur(4px);
+      z-index: -1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .14);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #6fa7ff;
+      box-shadow: 0 0 0 5px rgba(111, 167, 255, .15);
+    }
+
+    .brand h1 {
+      margin: 26px 0 14px;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 17px;
+      line-height: 1.8;
+      max-width: 33ch;
+    }
+
+    .brand-cards {
+      margin-top: 34px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .brand-card {
+      padding: 20px 20px 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .10);
+    }
+
+    .brand-card strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .brand-card span {
+      display: block;
+      color: rgba(255, 255, 255, .72);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .form-wrap {
+      padding: 32px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(250, 252, 255, .98));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: block;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 8px;
+      letter-spacing: .02em;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 40px);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+    }
+
+    .sub {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+      max-width: 52ch;
+    }
+
+    .signin-link {
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0 20px;
+    }
+
+    .step {
+      min-width: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      transition: .25s ease;
+    }
+
+    .step-num {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #7b88a5;
+      background: #eef3fb;
+    }
+
+    .step-title {
+      font-weight: 800;
+      margin: 2px 0 4px;
+      font-size: 15px;
+    }
+
+    .step-desc {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .step.active {
+      border-color: rgba(36, 87, 255, .28);
+      background: linear-gradient(180deg, #f8fbff, #ffffff);
+      box-shadow: 0 10px 22px rgba(36, 87, 255, .10);
+    }
+
+    .step.active .step-num {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #5f82ff);
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+    }
+
+    .step-pane {
+      display: none
+    }
+
+    .step-pane.active {
+      display: block
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -.02em;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      min-width: 0
+    }
+
+    .field.full {
+      grid-column: 1/-1
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #23304c;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0 16px;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .input:focus,
+    .select:focus {
+      border-color: rgba(36, 87, 255, .45);
+      box-shadow: 0 0 0 4px rgba(36, 87, 255, .10);
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap .input {
+      padding-right: 56px;
+    }
+
+    .toggle {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: #61708e;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 12px;
+    }
+
+    .strength {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .strength span {
+      height: 8px;
+      border-radius: 999px;
+      background: #e5ebf5;
+      transition: .2s ease;
+    }
+
+    .strength.low span:nth-child(1) {
+      background: #f59e0b
+    }
+
+    .strength.medium span:nth-child(-n+2) {
+      background: #3b82f6
+    }
+
+    .strength.high span {
+      background: #16a34a
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      position: relative;
+    }
+
+    .chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .chip span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-weight: 700;
+      color: #32405f;
+      cursor: pointer;
+      user-select: none;
+      transition: .18s ease;
+    }
+
+    .chip input:checked+span {
+      border-color: rgba(36, 87, 255, .32);
+      background: rgba(36, 87, 255, .08);
+      color: var(--primary-2);
+      box-shadow: 0 10px 18px rgba(36, 87, 255, .08);
+      transform: translateY(-1px);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #4e74ff);
+      box-shadow: 0 16px 30px rgba(36, 87, 255, .22);
+    }
+
+    .btn.ghost {
+      background: #f8faff;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .success {
+      text-align: center;
+      padding: 22px 10px 8px;
+    }
+
+    .success-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 16px 34px rgba(22, 163, 74, .25);
+    }
+
+    .success h3 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      letter-spacing: -.03em;
+    }
+
+    .success p {
+      margin: 0 auto;
+      max-width: 34ch;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 20px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px dashed #d9e2ef;
+      font-size: 14px;
+    }
+
+    .summary-item:last-child {
+      border-bottom: none
+    }
+
+    .summary-item strong {
+      color: #31405f
+    }
+
+    .summary-item span {
+      color: #6a7895;
+      text-align: right
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        padding: 16px
+      }
+
+      .shell {
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+      }
+
+      .brand {
+        padding: 28px 22px;
+      }
+
+      .brand p {
+        max-width: none
+      }
+
+      .form-wrap {
+        padding: 22px 18px 20px
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px 16px;
+        border-radius: 22px;
+      }
+
+      .brand-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .signin-link {
+        width: 100%;
+        text-align: center;
+      }
+
+      .chip-group {
+        gap: 8px;
+      }
+
+      .chip span {
+        width: 100%;
+        min-width: calc(50% - 4px);
+      }
+
+      .chip {
+        flex: 1 1 calc(50% - 4px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page {
+        padding: 10px
+      }
+
+      .shell {
+        border-radius: 22px
+      }
+
+      .brand {
+        padding: 24px 16px;
+      }
+
+      .brand h1 {
+        font-size: 32px;
+      }
+
+      .form-wrap {
+        padding: 18px 14px 16px;
+      }
+
+      .headline {
+        font-size: 30px;
+      }
+
+      .chip {
+        flex: 1 1 100%;
+      }
+
+      .chip span {
+        min-width: 100%;
+      }
+    }
   </style>
 </head>
 
-<body class="d-flex align-items-center">
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-12 col-sm-10 col-md-8 col-lg-6">
-        <div class="card">
-          <div class="card-body p-4 p-md-5">
-            <h5 class="fw-semibold mb-1 text-center">建立新帳戶</h5>
-            <div class="text-muted small text-center mb-4">請填寫以下資料</div>
+<body>
+  <div class="page">
+    <div class="shell">
+      <aside class="brand">
+        <div class="badge"><span class="badge-dot"></span> Smart Support Platform</div>
+        <h1>建立正式註冊檔案</h1>
+        <p>全新重做版本。乾淨、正式、手機版正常，沒有多餘說明，讓使用者只專注在完成註冊。</p>
 
-            <form id="f" novalidate>
-              <div class="mb-3">
-                <label class="form-label">帳號</label>
-                <input class="form-control" id="username" required minlength="3" autocomplete="username">
-                <div class="invalid-feedback">帳號至少 3 個字。</div>
-              </div>
+        <div class="brand-cards">
+          <div class="brand-card">
+            <strong>快速完成</strong>
+            <span>三個步驟完成註冊，流程清楚，不會一次看到過多資訊。</span>
+          </div>
+          <div class="brand-card">
+            <strong>正式平台感</strong>
+            <span>版面走產品級設計，適合後續延伸登入、會員中心與工具平台。</span>
+          </div>
+          <div class="brand-card">
+            <strong>手機優先</strong>
+            <span>重新安排欄位與按鈕配置，避免你前面遇到的手機版切版異常問題。</span>
+          </div>
+        </div>
+      </aside>
 
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required autocomplete="email">
-                <div class="invalid-feedback">請輸入有效的 Email。</div>
-              </div>
+      <main class="form-wrap">
+        <div class="topbar">
+          <div>
+            <span class="eyebrow">官方註冊</span>
+            <h2 class="headline">智慧技術支援平台註冊</h2>
+            <p class="sub">請完成帳號、公司與技術偏好設定。</p>
+          </div>
+          <a href="./login.html" class="signin-link">已有帳號？登入</a>
+        </div>
 
-              <div class="mb-3">
-                <label class="form-label">密碼</label>
-                <input type="password" class="form-control" id="password" required minlength="6" autocomplete="new-password">
-                <div class="invalid-feedback">密碼至少 6 碼。</div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">確認密碼</label>
-                <input type="password" class="form-control" id="password2" required minlength="6" autocomplete="new-password">
-                <div class="invalid-feedback">請再次輸入密碼。</div>
-              </div>
-
-              <button id="btnSubmit" class="btn btn-success w-100 py-2" type="submit">建立帳戶</button>
-
-              <div class="text-center mt-3 small">
-                已有帳號？ <a href="login.html" class="text-decoration-none">返回登入</a>
-              </div>
-
-              <div id="msg" class="mt-3" role="alert" style="display:none;"></div>
-            </form>
+        <div class="steps" id="stepIndicator">
+          <div class="step active" data-step-indicator="1">
+            <div class="step-num">1</div>
+            <div>
+              <div class="step-title">帳號與安全</div>
+              <div class="step-desc">建立登入資料</div>
+            </div>
+          </div>
+          <div class="step" data-step-indicator="2">
+            <div class="step-num">2</div>
+            <div>
+              <div class="step-title">公司與角色</div>
+              <div class="step-desc">基本身份資訊</div>
+            </div>
+          </div>
+          <div class="step" data-step-indicator="3">
+            <div class="step-num">3</div>
+            <div>
+              <div class="step-title">技術偏好</div>
+              <div class="step-desc">常用控制器與需求</div>
+            </div>
           </div>
         </div>
 
-        <div class="text-center text-muted small mt-3">© <span id="yy"></span> Your Company</div>
-      </div>
+        <form id="registerForm" class="card">
+          <section class="step-pane active" data-step="1">
+            <div class="section-head">
+              <div>
+                <h2>帳號與安全</h2>
+                <p>先建立主要登入資訊。</p>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div class="field full">
+                <label class="label" for="email">Email</label>
+                <input class="input" id="email" type="email" placeholder="your@email.com" required />
+              </div>
+
+              <div class="field">
+                <label class="label" for="password">密碼</label>
+                <div class="password-wrap">
+                  <input class="input" id="password" type="password" placeholder="請輸入密碼" required />
+                  <button class="toggle" type="button" data-toggle="password">顯示</button>
+                </div>
+                <div class="strength" id="strengthBar">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="hint">建議包含英文、數字，長度至少 8 碼。</div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="confirmPassword">確認密碼</label>
+                <div class="password-wrap">
+                  <input class="input" id="confirmPassword" type="password" placeholder="再次輸入密碼" required />
+                  <button class="toggle" type="button" data-toggle="confirmPassword">顯示</button>
+                </div>
+                <div class="hint" id="passwordHint">請再次輸入相同密碼。</div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="name">姓名</label>
+                <input class="input" id="name" type="text" placeholder="請輸入姓名" />
+              </div>
+
+              <div class="field">
+                <label class="label" for="language">語系</label>
+                <select class="select" id="language">
+                  <option value="zh-TW">繁體中文</option>
+                  <option value="en-US">English</option>
+                  <option value="ja-JP">日本語</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn ghost" type="button" disabled>上一步</button>
+              <button class="btn primary" type="button" data-next>下一步</button>
+            </div>
+          </section>
+
+          <section class="step-pane" data-step="2">
+            <div class="section-head">
+              <div>
+                <h2>公司與角色</h2>
+                <p>填寫使用者基本背景。</p>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div class="field full">
+                <label class="label" for="companyName">公司名稱</label>
+                <input class="input" id="companyName" type="text" placeholder="請輸入公司名稱" />
+              </div>
+
+              <div class="field">
+                <label class="label" for="country">國家</label>
+                <input class="input" id="country" type="text" placeholder="例如：Taiwan" />
+              </div>
+
+              <div class="field">
+                <label class="label" for="city">城市</label>
+                <input class="input" id="city" type="text" placeholder="例如：Hsinchu" />
+              </div>
+
+              <div class="field">
+                <label class="label" for="role">角色</label>
+                <select class="select" id="role">
+                  <option value="">請選擇</option>
+                  <option value="engineer">工程師</option>
+                  <option value="operator">操作員</option>
+                  <option value="manager">主管</option>
+                  <option value="buyer">採購</option>
+                  <option value="distributor">代理商</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="label" for="industry">產業</label>
+                <select class="select" id="industry">
+                  <option value="">請選擇</option>
+                  <option value="automotive">汽車</option>
+                  <option value="aerospace">航太</option>
+                  <option value="mold">模具</option>
+                  <option value="medical">醫療</option>
+                  <option value="general">一般加工</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="button" data-prev>上一步</button>
+              <button class="btn primary" type="button" data-next>下一步</button>
+            </div>
+          </section>
+
+          <section class="step-pane" data-step="3">
+            <div class="section-head">
+              <div>
+                <h2>技術偏好</h2>
+                <p>後續可用於推薦工具、FAQ 與 AI 回答。</p>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div class="field">
+                <label class="label" for="controller">常用控制器</label>
+                <select class="select" id="controller">
+                  <option value="">請選擇</option>
+                  <option value="Fanuc">Fanuc</option>
+                  <option value="Siemens">Siemens</option>
+                  <option value="Heidenhain">Heidenhain</option>
+                  <option value="Brother">Brother</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="label" for="skillLevel">技術程度</label>
+                <select class="select" id="skillLevel">
+                  <option value="">請選擇</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label class="label">常用加工需求</label>
+                <div class="chip-group">
+                  <label class="chip"><input type="checkbox" name="useCase" value="螺紋銑削"><span>螺紋銑削</span></label>
+                  <label class="chip"><input type="checkbox" name="useCase" value="倒角"><span>倒角</span></label>
+                  <label class="chip"><input type="checkbox" name="useCase" value="鑽孔"><span>鑽孔</span></label>
+                  <label class="chip"><input type="checkbox" name="useCase" value="去毛刺"><span>去毛刺</span></label>
+                </div>
+              </div>
+
+              <div class="field full">
+                <label class="label">常用材料</label>
+                <div class="chip-group">
+                  <label class="chip"><input type="checkbox" name="material" value="P鋼"><span>P 鋼</span></label>
+                  <label class="chip"><input type="checkbox" name="material" value="M不鏽鋼"><span>M - 不鏽鋼</span></label>
+                  <label class="chip"><input type="checkbox" name="material" value="K鑄鐵"><span>K - 鑄鐵</span></label>
+                  <label class="chip"><input type="checkbox" name="material" value="N鋁"><span>N - 鋁</span></label>
+                  <label class="chip"><input type="checkbox" name="material" value="S鈦"><span>S - 鈦</span></label>
+                  <label class="chip"><input type="checkbox" name="material" value="H硬化"><span>H - 硬化</span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="button" data-prev>上一步</button>
+              <button class="btn primary" type="submit">完成註冊</button>
+            </div>
+          </section>
+
+          <section class="step-pane" data-step="4">
+            <div class="success">
+              <div class="success-icon">✓</div>
+              <h3>註冊資料已整理完成</h3>
+              <p>這是前端正式版畫面示範。你之後可直接把這份資料送到 GAS API 或資料庫。</p>
+
+              <div class="summary" id="summaryBox"></div>
+
+              <div class="actions" style="margin-top:22px">
+                <button class="btn" type="button" id="restartBtn">重新填寫</button>
+                <button class="btn primary" type="button" id="demoSubmitBtn">送出到 API</button>
+              </div>
+            </div>
+          </section>
+        </form>
+
+        <div class="footer-note">正式版 UI 示範｜可再幫你接上 GAS API</div>
+      </main>
     </div>
   </div>
 
   <script>
-    /**
-     * ✅ 你只要改這一行
-     * 1) 先填 Apps Script /exec
-     * 2) 若 GitHub Pages 遇到 CORS，改填 Cloudflare Worker URL（.workers.dev）
-     */
-    const API_URL = "https://script.google.com/macros/s/AKfycbzbjC0eT3XW1RStUf3mkI7EvJD7yZ3_w8MG1Tw8yt7P_UHds4KrhVahHzi3r6djyYiH/exec";
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyxEZ_Moy7_adM6iDJsx2A19NMm4lN9WFEt5nGc83NTz23aJ_E0WWVXqEDr_3N2lAKS/exec';
 
-    // ====== UI refs ======
-    document.getElementById('yy').textContent = new Date().getFullYear();
-    const f = document.getElementById('f');
-    const msg = document.getElementById('msg');
-    const btn = document.getElementById('btnSubmit');
+    const panes = [...document.querySelectorAll('.step-pane')];
+    const indicators = [...document.querySelectorAll('[data-step-indicator]')];
+    const nextButtons = [...document.querySelectorAll('[data-next]')];
+    const prevButtons = [...document.querySelectorAll('[data-prev]')];
+    const form = document.getElementById('registerForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordHint = document.getElementById('passwordHint');
+    const strengthBar = document.getElementById('strengthBar');
+    const summaryBox = document.getElementById('summaryBox');
+    const restartBtn = document.getElementById('restartBtn');
+    const demoSubmitBtn = document.getElementById('demoSubmitBtn');
 
-    // ====== helpers ======
-    function showMsg(type, text) {
-      msg.style.display = "block";
-      msg.className = `mt-3 alert alert-${type}`;
-      msg.textContent = text;
+    let currentStep = 1;
+
+    function showStep(step) {
+      currentStep = step;
+      panes.forEach(pane => {
+        pane.classList.toggle('active', Number(pane.dataset.step) === step);
+      });
+
+      indicators.forEach((item, index) => {
+        const stepNo = index + 1;
+        item.classList.toggle('active', stepNo === Math.min(step, 3));
+      });
     }
 
-    function hideMsg() {
-      msg.style.display = "none";
-      msg.textContent = "";
-      msg.className = "mt-3";
+    function getCheckedValues(name) {
+      return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
     }
 
-    function isLikelyCorsContext() {
-      // GitHub Pages / 本機 file:// 常見 CORS 環境
-      return location.protocol === "file:" || location.hostname.endsWith("github.io");
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    async function callApi(payload, { timeoutMs = 12000 } = {}) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeoutMs);
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
-        });
-
-        // Apps Script 有時會回 200，但內容是 HTML/文字（錯誤頁）
-        const text = await res.text();
-
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch {
-          data = null;
-        }
-
-        // 若 HTTP 非 2xx，也回報原文方便除錯
-        if (!res.ok) {
-          return {
-            ok: false,
-            message: `HTTP ${res.status} ${res.statusText}，回傳：` + (text ? text.slice(0, 200) : "(empty)")
-          };
-        }
-
-        // 不是 JSON 就把原始回傳帶出去
-        if (!data) {
-          return {
-            ok: false,
-            message: "回傳不是 JSON（可能是 Apps Script 錯誤頁 / 權限頁 / CORS）。回傳： " + (text ? text.slice(0, 200) : "(empty)")
-          };
-        }
-
-        return data;
-      } catch (err) {
-        // Abort / network / CORS
-        if (err && err.name === "AbortError") {
-          return { ok: false, message: `連線逾時（>${timeoutMs/1000}s）。可能是網路慢或服務沒回應。` };
-        }
-        return {
-          ok: false,
-          message: "請求失敗：" + (err && err.message ? err.message : err) +
-            (isLikelyCorsContext() ? "（你在 GitHub Pages / 本機環境，若看到 CORS，建議用 Cloudflare Worker 當代理）" : "")
-        };
-      } finally {
-        clearTimeout(timer);
-      }
-    }
-
-    function setBusy(isBusy) {
-      btn.disabled = isBusy;
-      btn.textContent = isBusy ? "建立中…" : "建立帳戶";
-    }
-
-    // ====== submit ======
-    f.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideMsg();
-
-      if (!f.checkValidity()) {
-        f.classList.add('was-validated');
-        showMsg("warning", "請先把表單必填/格式錯誤修正。");
-        return;
-      }
-
-      const username = document.getElementById('username').value.trim();
+    function validateStep1() {
       const email = document.getElementById('email').value.trim();
-      const p1 = document.getElementById('password').value;
-      const p2 = document.getElementById('password2').value;
 
-      if (p1 !== p2) {
-        showMsg("danger", "兩次輸入的密碼不一致。");
-        return;
+      if (!email) {
+        alert('請輸入 Email');
+        document.getElementById('email').focus();
+        return false;
       }
 
-      const payload = { action: "register", username, email, password: p1 };
-
-      setBusy(true);
-      showMsg("info", "送出中…");
-
-      const data = await callApi(payload);
-
-      if (data && data.ok) {
-        showMsg("success", data.message || "建立成功！請返回登入。");
-        // ✅ 建立成功後可自動跳回登入頁（需要就打開）
-        // setTimeout(() => window.location.href = "login.html", 800);
-        f.reset();
-        f.classList.remove('was-validated');
-      } else {
-        showMsg("danger", (data && data.message) ? data.message : "建立失敗。");
+      if (!validateEmail(email)) {
+        alert('Email 格式不正確');
+        document.getElementById('email').focus();
+        return false;
       }
 
-      setBusy(false);
+      if (!password.value) {
+        alert('請輸入密碼');
+        password.focus();
+        return false;
+      }
+
+      if (password.value.length < 8) {
+        alert('密碼至少需要 8 碼');
+        password.focus();
+        return false;
+      }
+
+      if (password.value !== confirmPassword.value) {
+        alert('密碼與確認密碼不一致');
+        confirmPassword.focus();
+        return false;
+      }
+
+      return true;
+    }
+
+    function validateStep2() {
+      return true;
+    }
+
+    function validateStep3() {
+      return true;
+    }
+
+    function validateCurrentStep() {
+      if (currentStep === 1) return validateStep1();
+      if (currentStep === 2) return validateStep2();
+      if (currentStep === 3) return validateStep3();
+      return true;
+    }
+
+    nextButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!validateCurrentStep()) return;
+        showStep(currentStep + 1);
+      });
     });
 
-    /**
-     * 註解（用途）：
-     * - callApi(): 加入 timeout、解析 JSON、把非 JSON 回傳也顯示出來方便除錯
-     * - isLikelyCorsContext(): 偵測 GitHub Pages / file://，提示可能 CORS
-     * - setBusy(): 送出期間鎖住按鈕避免連點
-     */
+    prevButtons.forEach(btn => {
+      btn.addEventListener('click', () => showStep(currentStep - 1));
+    });
+
+    document.querySelectorAll('[data-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.toggle);
+        const isPassword = target.type === 'password';
+        target.type = isPassword ? 'text' : 'password';
+        btn.textContent = isPassword ? '隱藏' : '顯示';
+      });
+    });
+
+    function updateStrength() {
+      const val = password.value;
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val) || /[a-z]/.test(val)) score++;
+      if (/\d/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
+
+      strengthBar.className = 'strength';
+      if (val.length === 0) return;
+      if (score === 1) strengthBar.classList.add('low');
+      if (score === 2) strengthBar.classList.add('medium');
+      if (score >= 3) strengthBar.classList.add('high');
+    }
+
+    function updatePasswordHint() {
+      if (!confirmPassword.value) {
+        passwordHint.textContent = '請再次輸入相同密碼。';
+        passwordHint.style.color = '';
+        return;
+      }
+      if (password.value === confirmPassword.value) {
+        passwordHint.textContent = '密碼一致';
+        passwordHint.style.color = 'var(--success)';
+      } else {
+        passwordHint.textContent = '密碼不一致';
+        passwordHint.style.color = '#dc2626';
+      }
+    }
+
+    password.addEventListener('input', () => {
+      updateStrength();
+      updatePasswordHint();
+    });
+
+    confirmPassword.addEventListener('input', updatePasswordHint);
+
+    function collectFormData() {
+      return {
+        action: 'register',
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        full_name: document.getElementById('name').value.trim(),
+        locale: document.getElementById('language').value,
+        company_name: document.getElementById('companyName').value.trim(),
+        country: document.getElementById('country').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        role: document.getElementById('role').value,
+        industry: document.getElementById('industry').value,
+        controller: document.getElementById('controller').value,
+        skill_level: document.getElementById('skillLevel').value,
+        use_case: getCheckedValues('useCase'),
+        material: getCheckedValues('material')
+      };
+    }
+
+    function renderSummary(data) {
+      const rows = [
+        ['Email', data.email || '-'],
+        ['姓名', data.full_name || '-'],
+        ['公司', data.company_name || '-'],
+        ['國家 / 城市', [data.country, data.city].filter(Boolean).join(' / ') || '-'],
+        ['角色 / 產業', [data.role, data.industry].filter(Boolean).join(' / ') || '-'],
+        ['控制器 / 技術程度', [data.controller, data.skill_level].filter(Boolean).join(' / ') || '-'],
+        ['加工需求', data.use_case.length ? data.use_case.join('、') : '-'],
+        ['常用材料', data.material.length ? data.material.join('、') : '-']
+      ];
+
+      summaryBox.innerHTML = rows.map(([k, v]) => `
+      <div class="summary-item">
+        <strong>${k}</strong>
+        <span>${v}</span>
+      </div>
+    `).join('');
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validateCurrentStep()) return;
+
+      const data = collectFormData();
+      renderSummary(data);
+      window.__REGISTER_SUBMIT_DATA__ = data;
+      showStep(4);
+    });
+
+    restartBtn.addEventListener('click', () => {
+      showStep(1);
+    });
+
+    demoSubmitBtn.addEventListener('click', async () => {
+      const data = window.__REGISTER_SUBMIT_DATA__;
+      if (!data) {
+        alert('沒有可送出的資料');
+        return;
+      }
+
+      if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes('你的 Google Apps Script Web App URL')) {
+        alert('請先設定 GAS_WEB_APP_URL');
+        return;
+      }
+
+      demoSubmitBtn.disabled = true;
+      demoSubmitBtn.textContent = '送出中...';
+
+      try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert(result.message || '註冊成功');
+          window.location.href = 'login.html';
+        } else {
+          alert(result.message || '註冊失敗');
+        }
+      } catch (err) {
+        alert('連線失敗：' + err.message);
+      } finally {
+        demoSubmitBtn.disabled = false;
+        demoSubmitBtn.textContent = '送出到 API';
+      }
+    });
   </script>
 </body>
+
 </html>

@@ -1,115 +1,759 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>登入</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Smart Support Platform</title>
   <style>
+    :root {
+      --bg: #eef3fb;
+      --panel: #ffffff;
+      --panel-2: #f7f9fd;
+      --text: #172033;
+      --muted: #6c7892;
+      --line: #dbe4f0;
+      --primary: #2457ff;
+      --primary-2: #153bb8;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --shadow: 0 20px 50px rgba(20, 42, 92, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
     body {
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(36, 87, 255, .10), transparent 30%),
+        radial-gradient(circle at right 20%, rgba(36, 87, 255, .08), transparent 25%),
+        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
       min-height: 100vh;
-      background: linear-gradient(180deg, rgba(25, 135, 84, .08), rgba(255, 255, 255, 0));
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 1.02fr 1.18fr;
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      background:
+        radial-gradient(circle at 20% 15%, rgba(91, 136, 255, .40), transparent 20%),
+        radial-gradient(circle at 80% 0%, rgba(48, 94, 255, .38), transparent 22%),
+        linear-gradient(160deg, #0f1730 0%, #13214c 55%, #183276 100%);
+      color: #fff;
+      padding: 42px 34px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .brand::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 240px;
+      height: 240px;
+      background: rgba(255, 255, 255, .06);
+      border-radius: 50%;
+      filter: blur(4px);
+      z-index: -1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .14);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #6fa7ff;
+      box-shadow: 0 0 0 5px rgba(111, 167, 255, .15);
+    }
+
+    .brand h1 {
+      margin: 26px 0 14px;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 17px;
+      line-height: 1.8;
+      max-width: 33ch;
+    }
+
+    .brand-cards {
+      margin-top: 34px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .brand-card {
+      padding: 20px 20px 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .10);
+    }
+
+    .brand-card strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .brand-card span {
+      display: block;
+      color: rgba(255, 255, 255, .72);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .form-wrap {
+      padding: 32px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(250, 252, 255, .98));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: block;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 8px;
+      letter-spacing: .02em;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 40px);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+    }
+
+    .sub {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+      max-width: 52ch;
+    }
+
+    .signin-link {
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .quick-points {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0 20px;
+    }
+
+    .quick-point {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .quick-icon {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #5f82ff);
+      box-shadow: 0 10px 22px rgba(36, 87, 255, .10);
+    }
+
+    .quick-title {
+      font-weight: 800;
+      margin: 2px 0 4px;
+      font-size: 15px;
+    }
+
+    .quick-desc {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .card {
-      border: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -.02em;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      min-width: 0
+    }
+
+    .field.full {
+      grid-column: 1/-1
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #23304c;
+    }
+
+    .input {
+      width: 100%;
+      height: 52px;
       border-radius: 16px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0 16px;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .input:focus {
+      border-color: rgba(36, 87, 255, .45);
+      box-shadow: 0 0 0 4px rgba(36, 87, 255, .10);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap .input {
+      padding-right: 68px;
+    }
+
+    .toggle {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: #61708e;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 12px;
+    }
+
+    .helper-row {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .text-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .text-link:hover {
+      text-decoration: underline;
+    }
+
+    .hint-box {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: var(--panel-2);
+      border: 1px dashed #d7e2f1;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .hint-box strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.success {
+      color: var(--success);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #4e74ff);
+      box-shadow: 0 16px 30px rgba(36, 87, 255, .22);
+    }
+
+    .btn.ghost {
+      background: #f8faff;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(36, 87, 255, .08);
+      color: var(--primary-2);
+      font-family: Consolas, monospace;
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        padding: 16px
+      }
+
+      .shell {
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+      }
+
+      .brand {
+        padding: 28px 22px;
+      }
+
+      .brand p {
+        max-width: none
+      }
+
+      .form-wrap {
+        padding: 22px 18px 20px
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+
+      .quick-points,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px 16px;
+        border-radius: 22px;
+      }
+
+      .actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+
+      .btn,
+      .signin-link {
+        width: 100%;
+      }
+
+      .signin-link {
+        text-align: center;
+      }
+
+      .helper-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page {
+        padding: 10px
+      }
+
+      .shell {
+        border-radius: 22px
+      }
+
+      .brand {
+        padding: 24px 16px;
+      }
+
+      .brand h1 {
+        font-size: 32px;
+      }
+
+      .form-wrap {
+        padding: 18px 14px 16px;
+      }
+
+      .headline {
+        font-size: 30px;
+      }
     }
   </style>
 </head>
 
-<body class="d-flex align-items-center">
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-12 col-sm-10 col-md-8 col-lg-6">
-        <div class="card">
-          <div class="card-body p-4 p-md-5">
-            <h5 class="fw-semibold mb-1 text-center">登入系統</h5>
-            <div class="text-muted small text-center mb-4">請輸入帳號與密碼</div>
+<body>
+  <div class="page">
+    <div class="shell">
+      <aside class="brand">
+        <div class="badge"><span class="badge-dot"></span> Smart Support Platform</div>
+        <h1>安全登入技術支援平台</h1>
+        <p>延續 register.html 的正式視覺風格，登入畫面同樣維持乾淨、專業、手機版正常的產品級版面。</p>
 
-            <form id="f" novalidate>
-              <div class="mb-3">
-                <label class="form-label">帳號</label>
-                <input class="form-control" id="username" required minlength="3" autocomplete="username">
-                <div class="invalid-feedback">帳號至少 3 個字。</div>
-              </div>
+        <div class="brand-cards">
+          <div class="brand-card">
+            <strong>一致的品牌感</strong>
+            <span>登入與註冊畫面統一語言、配色與版型，整體更像正式平台，而不是臨時頁面。</span>
+          </div>
+          <div class="brand-card">
+            <strong>快速進入</strong>
+            <span>保留核心欄位與記住我、忘記密碼入口，讓使用者可以快速完成登入。</span>
+          </div>
+          <div class="brand-card">
+            <strong>方便後續串接</strong>
+            <span>可直接接 Apps Script、API 或未來會員中心，前端結構清楚，後續維護比較輕鬆。</span>
+          </div>
+        </div>
+      </aside>
 
-              <div class="mb-3">
-                <label class="form-label">密碼</label>
-                <input type="password" class="form-control" id="password" required minlength="6"
-                  autocomplete="current-password">
-                <div class="invalid-feedback">密碼至少 6 碼。</div>
-              </div>
+      <main class="form-wrap">
+        <div class="topbar">
+          <div>
+            <span class="eyebrow">官方登入</span>
+            <h2 class="headline">智慧技術支援平台登入</h2>
+            <p class="sub">請輸入 Email 與密碼，登入你的平台帳號。</p>
+          </div>
+          <a href="./register.html" class="signin-link">還沒有帳號？註冊</a>
+        </div>
 
-              <button class="btn btn-primary w-100 py-2" type="submit">登入</button>
-
-              <div class="text-center mt-3 small">
-                尚未有帳號？ <a href="register.html" class="text-decoration-none">建立帳號</a>
-              </div>
-
-              <div id="msg" class="mt-3"></div>
-            </form>
+        <div class="quick-points">
+          <div class="quick-point">
+            <div class="quick-icon">1</div>
+            <div>
+              <div class="quick-title">輸入帳號</div>
+              <div class="quick-desc">使用註冊時的 Email 登入</div>
+            </div>
+          </div>
+          <div class="quick-point">
+            <div class="quick-icon">2</div>
+            <div>
+              <div class="quick-title">驗證密碼</div>
+              <div class="quick-desc">可切換顯示，避免輸入錯誤</div>
+            </div>
+          </div>
+          <div class="quick-point">
+            <div class="quick-icon">3</div>
+            <div>
+              <div class="quick-title">進入平台</div>
+              <div class="quick-desc">登入成功後進入你的會員頁面</div>
+            </div>
           </div>
         </div>
 
-        <div class="text-center text-muted small mt-3">© <span id="yy"></span> Your Company</div>
-      </div>
+        <form id="loginForm" class="card" novalidate>
+          <div class="section-head">
+            <div>
+              <h2>登入資料</h2>
+              <p>請輸入你的登入資料，完成後即可進入平台使用相關功能。</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field full">
+              <label class="label" for="email">Email / 帳號</label>
+              <input class="input" id="email" type="email" placeholder="name@company.com" autocomplete="email"
+                required />
+            </div>
+
+            <div class="field full">
+              <label class="label" for="password">密碼</label>
+              <div class="password-wrap">
+                <input class="input" id="password" type="password" placeholder="請輸入密碼（至少 8 碼）"
+                  autocomplete="current-password" minlength="8" required />
+                <button class="toggle" type="button" id="togglePw">顯示</button>
+              </div>
+              <div class="status" id="formStatus">請輸入有效的帳號密碼後登入。</div>
+            </div>
+          </div>
+
+          <div class="helper-row">
+            <label class="check" for="rememberMe">
+              <input type="checkbox" id="rememberMe" />
+              <span>記住我</span>
+            </label>
+            <a class="text-link" href="#" id="forgotLink">忘記密碼？</a>
+          </div>
+
+          <div class="hint-box">
+            <strong>登入提醒</strong>
+            請使用你註冊時填寫的 Email 與密碼登入。若忘記密碼，請點選右上方的重設入口。
+          </div>
+
+          <div class="actions">
+            <button class="btn ghost" type="button" onclick="window.location.href='./register.html'">前往註冊</button>
+            <button class="btn primary" type="submit" id="loginBtn">登入</button>
+          </div>
+        </form>
+
+        <div class="footer-note">歡迎回來，登入後即可繼續使用平台服務</div>
+      </main>
     </div>
   </div>
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbzbjC0eT3XW1RStUf3mkI7EvJD7yZ3_w8MG1Tw8yt7P_UHds4KrhVahHzi3r6djyYiH/exec";
 
-  document.getElementById('yy').textContent = new Date().getFullYear();
-  const f = document.getElementById('f');
-  const msg = document.getElementById('msg');
+  <script>
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbzeRWAEj0R-7RbAN7Izc1dCqUPluXsdHw0-RqQZxz-g0BmSoBwghvSxi2HubwZqKe0j1g/exec';
 
-  function showMsg(type, text) {
-    msg.className = `alert alert-${type}`;
-    msg.textContent = text;
-  }
+    const form = document.getElementById('loginForm');
+    const btn = document.getElementById('loginBtn');
+    const email = document.getElementById('email');
+    const pw = document.getElementById('password');
+    const statusBox = document.getElementById('formStatus');
+    const togglePw = document.getElementById('togglePw');
+    const forgotLink = document.getElementById('forgotLink');
 
-  async function callApi(payload) {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload)
-    });
-    const text = await res.text();
-    try { return JSON.parse(text); }
-    catch { return { ok: false, message: "回傳不是 JSON：" + text }; }
-  }
-
-  f.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!f.checkValidity()) { f.classList.add('was-validated'); return; }
-
-    showMsg("info", "登入中…");
-
-    const payload = {
-      action: "login",
-      username: document.getElementById('username').value.trim(),
-      password: document.getElementById('password').value
-    };
-
-    try {
-      const data = await callApi(payload);
-      if (data && data.ok) {
-        showMsg("success", data.message || "登入成功！");
-        // ✅ 你可在這裡存 token / 使用者資料
-        localStorage.setItem("user", JSON.stringify(data.data || {}));
-        // setTimeout(() => window.location.href = "index.html", 500);
-      } else {
-        showMsg("danger", (data && data.message) || "登入失敗");
-      }
-    } catch (err) {
-      showMsg("danger", (err && err.message) ? err.message : "登入失敗（可能是 CORS / 網路問題）");
+    function setStatus(message, type = '') {
+      statusBox.textContent = message;
+      statusBox.className = 'status' + (type ? ' ' + type : '');
     }
-  });
-</script>
+
+    togglePw.addEventListener('click', () => {
+      const isPw = pw.type === 'password';
+      pw.type = isPw ? 'text' : 'password';
+      togglePw.textContent = isPw ? '隱藏' : '顯示';
+    });
+
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      setStatus('請聯絡管理員，或前往重設密碼頁面取得新的登入密碼。', 'error');
+    });
+
+    function validateForm() {
+      if (!email.value.trim()) {
+        setStatus('請輸入 Email / 帳號。', 'error');
+        email.focus();
+        return false;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        setStatus('請輸入有效的 Email 格式。', 'error');
+        email.focus();
+        return false;
+      }
+
+      if (!pw.value) {
+        setStatus('請輸入密碼。', 'error');
+        pw.focus();
+        return false;
+      }
+
+      if (pw.value.length < 8) {
+        setStatus('密碼至少需要 8 碼。', 'error');
+        pw.focus();
+        return false;
+      }
+
+      return true;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      btn.disabled = true;
+      btn.textContent = '登入中...';
+      setStatus('正在登入中，請稍候。');
+
+      try {
+        const formData = new URLSearchParams();
+        formData.append('action', 'login');
+        formData.append('email', email.value.trim());
+        formData.append('password', pw.value);
+
+        const res = await fetch(API_BASE, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error(data.message || '登入失敗');
+        }
+
+        const remember = document.getElementById('rememberMe').checked;
+
+        if (data.token) {
+          if (remember) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user || {}));
+          } else {
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('user', JSON.stringify(data.user || {}));
+          }
+        }
+
+        setStatus('登入成功，正在導向...', 'success');
+
+        setTimeout(() => {
+          window.location.href = './index.html';
+        }, 700);
+
+      } catch (err) {
+        setStatus(err.message || '登入失敗，請稍後再試。', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '登入';
+      }
+    });
 
 
+  </script>
 </body>
 
 </html>
