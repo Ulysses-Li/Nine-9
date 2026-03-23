@@ -647,8 +647,18 @@
   </div>
 
   <script>
-    const API_BASE = 'https://script.google.com/macros/s/AKfycbzpN5aASBRkV3HBNtAvRzoVy4ZWlXQ0Q2qoU7rej-HMF10Ww3ut3eK9P14mi76mPMbboQ/exec';
+    /*************************************************
+     * API_BASE
+     * 用途：
+     * 前端登入時要送資料到哪一支 Apps Script Web App
+     *************************************************/
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbxseXYL3tlfmoFT_leK4DMbKa_npXM5XHwWHNHxHjCMgiRj5ce1ndZ00UWdY8iJbwyo/exec';
 
+    /*************************************************
+     * 抓取畫面元素
+     * 用途：
+     * 把常用的 DOM 先抓出來，後面直接使用
+     *************************************************/
     const form = document.getElementById('loginForm');
     const btn = document.getElementById('loginBtn');
     const email = document.getElementById('email');
@@ -656,23 +666,72 @@
     const statusBox = document.getElementById('formStatus');
     const togglePw = document.getElementById('togglePw');
     const forgotLink = document.getElementById('forgotLink');
+    const rememberMe = document.getElementById('rememberMe');
 
+    /*************************************************
+     * setStatus()
+     * 用途：
+     * 顯示表單狀態訊息，例如：
+     * - 請輸入帳號
+     * - 登入中
+     * - 登入成功
+     * - 登入失敗
+     *************************************************/
     function setStatus(message, type = '') {
       statusBox.textContent = message;
       statusBox.className = 'status' + (type ? ' ' + type : '');
     }
 
+    /*************************************************
+     * getClientIP()
+     * 用途：
+     * 透過外部服務取得目前使用者的公開 IP
+     * 然後把 IP 一起傳給 GAS，寫入 Login_Log
+     * 
+     * 注意：
+     * 若抓不到 IP，也不要讓整個登入失敗，所以回傳空字串即可
+     *************************************************/
+    async function getClientIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip || '';
+      } catch (err) {
+        return '';
+      }
+    }
+
+    /*************************************************
+     * 密碼顯示 / 隱藏切換
+     * 用途：
+     * 讓使用者可以確認自己輸入的密碼是否正確
+     *************************************************/
     togglePw.addEventListener('click', () => {
-      const isPw = pw.type === 'password';
-      pw.type = isPw ? 'text' : 'password';
-      togglePw.textContent = isPw ? '隱藏' : '顯示';
+      const isPassword = pw.type === 'password';
+      pw.type = isPassword ? 'text' : 'password';
+      togglePw.textContent = isPassword ? '隱藏' : '顯示';
     });
 
+    /*************************************************
+     * 忘記密碼提示
+     * 用途：
+     * 目前先用提示文字，之後可改成跳轉真正的 forgot-password.html
+     *************************************************/
     forgotLink.addEventListener('click', (e) => {
       e.preventDefault();
       setStatus('請聯絡管理員，或前往重設密碼頁面取得新的登入密碼。', 'error');
     });
 
+    /*************************************************
+     * validateForm()
+     * 用途：
+     * 前端先做基本檢查，減少無效送出
+     * 檢查內容：
+     * 1. Email 不可空白
+     * 2. Email 格式要正確
+     * 3. 密碼不可空白
+     * 4. 密碼至少 8 碼
+     *************************************************/
     function validateForm() {
       if (!email.value.trim()) {
         setStatus('請輸入 Email / 帳號。', 'error');
@@ -701,6 +760,50 @@
       return true;
     }
 
+    /*************************************************
+     * clearStoredAuth()
+     * 用途：
+     * 登入成功前先清理舊的 token / user
+     * 避免 localStorage 和 sessionStorage 同時殘留舊資料
+     *************************************************/
+    function clearStoredAuth() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+    }
+
+    /*************************************************
+     * storeAuth()
+     * 用途：
+     * 根據「記住我」決定要存 localStorage 還是 sessionStorage
+     * 
+     * remember = true
+     *   → 關掉瀏覽器再打開還在
+     * remember = false
+     *   → 關閉分頁或瀏覽器後通常就失效
+     *************************************************/
+    function storeAuth(token, user, remember) {
+      clearStoredAuth();
+
+      if (remember) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user || {}));
+      } else {
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('user', JSON.stringify(user || {}));
+      }
+    }
+
+    /*************************************************
+     * 表單送出登入
+     * 流程：
+     * 1. 先做前端驗證
+     * 2. 取得 IP 與 userAgent
+     * 3. POST 到 Apps Script
+     * 4. 成功就存 token 並跳頁
+     * 5. 失敗就顯示錯誤訊息
+     *************************************************/
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -711,9 +814,13 @@
       setStatus('正在登入中，請稍候。');
 
       try {
+        // 取得使用者公開 IP
         const ip = await getClientIP();
+
+        // 取得瀏覽器 / 裝置資訊
         const userAgent = navigator.userAgent || '';
 
+        // 建立 POST 資料
         const formData = new URLSearchParams();
         formData.append('action', 'login');
         formData.append('email', email.value.trim());
@@ -721,31 +828,36 @@
         formData.append('ip', ip);
         formData.append('userAgent', userAgent);
 
+        // 呼叫後端 GAS API
         const res = await fetch(API_BASE, {
           method: 'POST',
           body: formData
         });
 
+        // 若 HTTP 狀態不正常，先丟錯誤
+        if (!res.ok) {
+          throw new Error('伺服器連線失敗，請稍後再試。');
+        }
+
+        // 解析後端回傳 JSON
         const data = await res.json();
 
+        // 後端回傳 success=false，表示登入失敗
         if (!data.success) {
           throw new Error(data.message || '登入失敗');
         }
 
-        const remember = document.getElementById('rememberMe').checked;
+        // 是否勾選記住我
+        const remember = rememberMe.checked;
 
+        // 若後端有回傳 token，儲存登入資訊
         if (data.token) {
-          if (remember) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user || {}));
-          } else {
-            sessionStorage.setItem('token', data.token);
-            sessionStorage.setItem('user', JSON.stringify(data.user || {}));
-          }
+          storeAuth(data.token, data.user || {}, remember);
         }
 
         setStatus('登入成功，正在導向...', 'success');
 
+        // 延遲一點點再跳頁，讓使用者看到成功訊息
         setTimeout(() => {
           window.location.href = './index.html';
         }, 700);
@@ -757,8 +869,6 @@
         btn.textContent = '登入';
       }
     });
-
-
   </script>
 </body>
 
