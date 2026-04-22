@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAIMER 證書號碼辨識工具</title>
+  <style>
+    body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 24px;
+      color: #1f2937;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    .muted {
+      color: #6b7280;
+      line-height: 1.7;
+    }
+
+    input[type="file"],
+    input[type="password"] {
+      margin: 12px 0;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #475569;
+    }
+
+    .btn-secondary:hover {
+      background: #334155;
+    }
+
+    .btn-light {
+      background: #64748b;
+    }
+
+    .btn-light:hover {
+      background: #475569;
+    }
+
+    .preview-box {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .preview-box img {
+      max-width: 100%;
+      width: 460px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: #fff;
+      display: none;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .result-item {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .label {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #111827;
+      word-break: break-all;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      white-space: pre-wrap;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 220px;
+      margin-top: 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .hint-box,
+    .api-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      line-height: 1.7;
+      color: #475569;
+    }
+
+    @media (max-width: 768px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>HAIMER 證書號碼辨識工具</h1>
+      <div class="muted">
+        這一版改成像名片辨識那樣，<b>不做影像前處理、不裁切紅框</b>，直接把整張圖片送給 <b>Gemini 2.0 Flash</b> 看圖辨識。<br><br>
+        AI 目標是直接抓出：<br>
+        1. <b>Prüfnummer / Test number</b><br>
+        2. <b>Schaftnummer / Serial number</b>
+      </div>
+
+      <div class="api-box">
+        <div class="label">Gemini API Key</div>
+        <div class="input-row">
+          <input type="password" id="apiKey" placeholder="請輸入 Gemini API Key" />
+          <button type="button" id="toggleKeyBtn" class="btn-light">顯示 Key</button>
+          <button type="button" id="saveKeyBtn" class="btn-secondary">儲存 Key</button>
+        </div>
+        <div class="small">
+          Key 只會暫存在你目前瀏覽器的 localStorage。<br>
+          使用模型：<b>gemini-2.0-flash</b>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <input type="file" id="imageInput" accept="image/*" capture="environment" />
+        <button type="button" id="cameraBtn" class="btn-secondary">開啟相機拍照</button>
+      </div>
+      <video id="cameraPreview" autoplay playsinline style="display:none; width:100%; max-width:460px; margin-top:12px; border:1px solid #d1d5db; border-radius:12px; background:#000;"></video>
+      <canvas id="photoCanvas" style="display:none;"></canvas>
+      <div id="cameraActions" style="display:none; margin-top:10px;">
+        <button type="button" id="snapBtn">拍照</button>
+        <button type="button" id="closeCameraBtn" class="btn-light">關閉相機</button>
+      </div>
+      <br>
+      <button id="ocrBtn">開始辨識</button>
+      <button id="sampleBtn">載入這張圖的範例值</button>
+
+      <div class="preview-box">
+        <div>
+          <div class="label">原始圖片預覽</div>
+          <img id="preview" alt="預覽圖片" />
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <div class="label">Prüfnummer / Test number</div>
+          <div class="value" id="testNumber">—</div>
+        </div>
+        <div class="result-item">
+          <div class="label">Schaftnummer / Serial number</div>
+          <div class="value" id="serialNumber">—</div>
+        </div>
+      </div>
+
+      <div class="status" id="status">等待上傳圖片...</div>
+
+      <textarea id="ocrText" placeholder="Gemini 回傳內容會顯示在這裡..."></textarea>
+
+      <div class="hint-box">
+        <b>目前流程：</b><br>
+        1. 上傳原始圖片<br>
+        2. 直接把整張圖送給 Gemini 2.0 Flash<br>
+        3. 用提示詞要求 AI 找出左邊號碼框的 Test number 與右邊號碼框的 Serial number<br>
+        4. 只回傳 JSON 結果
+      </div>
+
+      <div class="small">
+        建議：照片盡量正拍、不要傾斜、數字區域清楚。<br>
+        如果之後要做多張批次辨識，也可以沿用這種做法。<br>
+        另外這版已加上手機/平板可直接拍照上傳，使用上會更接近發票工具。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById("imageInput");
+    const preview = document.getElementById("preview");
+    const cameraBtn = document.getElementById("cameraBtn");
+    const cameraPreview = document.getElementById("cameraPreview");
+    const photoCanvas = document.getElementById("photoCanvas");
+    const photoCtx = photoCanvas.getContext("2d");
+    const snapBtn = document.getElementById("snapBtn");
+    const closeCameraBtn = document.getElementById("closeCameraBtn");
+    const cameraActions = document.getElementById("cameraActions");
+    const ocrBtn = document.getElementById("ocrBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const saveKeyBtn = document.getElementById("saveKeyBtn");
+    const toggleKeyBtn = document.getElementById("toggleKeyBtn");
+    const apiKeyInput = document.getElementById("apiKey");
+    const statusEl = document.getElementById("status");
+    const testNumberEl = document.getElementById("testNumber");
+    const serialNumberEl = document.getElementById("serialNumber");
+    const ocrTextEl = document.getElementById("ocrText");
+
+    let selectedImageFile = null;
+    let selectedImageBase64 = "";
+    let cameraStream = null;
+
+    const STORAGE_KEY = "gemini_api_key";
+    apiKeyInput.value = localStorage.getItem(STORAGE_KEY) || "";
+
+    saveKeyBtn.addEventListener("click", () => {
+      localStorage.setItem(STORAGE_KEY, apiKeyInput.value.trim());
+      statusEl.textContent = apiKeyInput.value.trim() ? "API Key 已儲存到瀏覽器。" : "API Key 已清空。";
+    });
+
+    toggleKeyBtn.addEventListener("click", () => {
+      const isPassword = apiKeyInput.type === "password";
+      apiKeyInput.type = isPassword ? "text" : "password";
+      toggleKeyBtn.textContent = isPassword ? "隱藏 Key" : "顯示 Key";
+    });
+
+    imageInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      loadSelectedFile(file);
+    });
+
+    function loadSelectedFile(file) {
+      selectedImageFile = file;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        preview.src = dataUrl;
+        preview.style.display = "block";
+        selectedImageBase64 = dataUrl.split(",")[1] || "";
+        statusEl.textContent = "圖片已載入，等待辨識。";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    cameraBtn.addEventListener("click", async () => {
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert("這個瀏覽器不支援相機功能");
+          return;
+        }
+
+        if (cameraStream) {
+          stopCamera();
+        }
+
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" } },
+          audio: false
+        });
+
+        cameraPreview.srcObject = cameraStream;
+        cameraPreview.style.display = "block";
+        cameraActions.style.display = "block";
+        statusEl.textContent = "相機已開啟，請對準文件後按拍照。";
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "無法開啟相機：" + err.message;
+      }
+    });
+
+    snapBtn.addEventListener("click", () => {
+      if (!cameraStream) {
+        alert("請先開啟相機");
+        return;
+      }
+
+      const w = cameraPreview.videoWidth;
+      const h = cameraPreview.videoHeight;
+      if (!w || !h) {
+        alert("相機尚未就緒，請稍後再拍");
+        return;
+      }
+
+      photoCanvas.width = w;
+      photoCanvas.height = h;
+      photoCtx.drawImage(cameraPreview, 0, 0, w, h);
+
+      const dataUrl = photoCanvas.toDataURL("image/jpeg", 0.95);
+      preview.src = dataUrl;
+      preview.style.display = "block";
+      selectedImageBase64 = dataUrl.split(",")[1] || "";
+      selectedImageFile = { type: "image/jpeg", name: "camera-capture.jpg" };
+      statusEl.textContent = "拍照完成，等待辨識。";
+
+      stopCamera();
+    });
+
+    closeCameraBtn.addEventListener("click", () => {
+      stopCamera();
+      statusEl.textContent = "相機已關閉。";
+    });
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      cameraPreview.srcObject = null;
+      cameraPreview.style.display = "none";
+      cameraActions.style.display = "none";
+    }
+
+    function extractJson(text) {
+      const cleaned = (text || "").trim();
+      try {
+        return JSON.parse(cleaned);
+      } catch (_) {}
+
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          return JSON.parse(match[0]);
+        } catch (_) {}
+      }
+      return null;
+    }
+
+    function normalizeTestNumber(value) {
+      const v = String(value || "").replace(/\D/g, "");
+      const match = v.match(/\d{6}/);
+      return match ? match[0] : "";
+    }
+
+    function normalizeSerialNumber(value) {
+      const v = String(value || "")
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "")
+        .replace(/O/g, "0");
+
+      const match = v.match(/[0-9]{2}[A-Z][0-9]{4}/);
+      return match ? match[0] : "";
+    }
+
+    async function callGemini(apiKey, base64Image, mimeType) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+      const promptText = `你現在要辨識一張 HAIMER 的 test certificate 文件照片。\n請只找出以下兩個欄位：\n1. 左側紅框樣式數字框中的 Prüfnummer / Test number\n2. 右側紅框樣式數字框中的 Schaftnummer / Serial number\n\n請直接閱讀整張文件版面，不要猜其他欄位。\n如果能辨識，請只回傳 JSON：\n{\n  "testNumber": "",\n  "serialNumber": ""\n}\n\n規則：\n- testNumber 應該是 6 碼純數字，例如 281404\n- serialNumber 應該是 7 碼英數混合，例如 23A9294\n- 看不清楚就回傳空字串\n- 不要輸出 markdown\n- 不要輸出說明文字\n- 只輸出 JSON`; 
+
+      const payload = {
+        contents: [
+          {
+            parts: [
+              { text: promptText },
+              {
+                inlineData: {
+                  mimeType,
+                  data: base64Image
+                }
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0,
+          responseMimeType: "application/json"
+        }
+      };
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json?.error?.message || "Gemini API 呼叫失敗");
+      }
+
+      const text = json?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("\n") || "";
+      return {
+        raw: json,
+        text
+      };
+    }
+
+    ocrBtn.addEventListener("click", async () => {
+      const apiKey = apiKeyInput.value.trim();
+
+      if (!selectedImageFile || !selectedImageBase64) {
+        alert("請先上傳圖片");
+        return;
+      }
+
+      if (!apiKey) {
+        alert("請先輸入 Gemini API Key");
+        return;
+      }
+
+      ocrBtn.disabled = true;
+      statusEl.textContent = "Gemini 辨識中，請稍候...";
+      testNumberEl.textContent = "辨識中...";
+      serialNumberEl.textContent = "辨識中...";
+      ocrTextEl.value = "";
+
+      try {
+        const mimeType = selectedImageFile.type || "image/png";
+        const resp = await callGemini(apiKey, selectedImageBase64, mimeType);
+        const obj = extractJson(resp.text) || {};
+
+        const testNumber = normalizeTestNumber(obj.testNumber || "");
+        const serialNumber = normalizeSerialNumber(obj.serialNumber || "");
+
+        testNumberEl.textContent = testNumber || "未抓到";
+        serialNumberEl.textContent = serialNumber || "未抓到";
+
+        ocrTextEl.value =
+`[Gemini 回應]\n${resp.text}\n\n[完整 JSON]\n${JSON.stringify(resp.raw, null, 2)}`;
+
+        statusEl.textContent =
+          "辨識完成。\n" +
+          `Test number：${testNumber || "未抓到"}\n` +
+          `Serial number：${serialNumber || "未抓到"}`;
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "辨識失敗：" + err.message;
+        testNumberEl.textContent = "失敗";
+        serialNumberEl.textContent = "失敗";
+      } finally {
+        ocrBtn.disabled = false;
+      }
+    });
+
+    sampleBtn.addEventListener("click", () => {
+      testNumberEl.textContent = "281404";
+      serialNumberEl.textContent = "23A9294";
+      statusEl.textContent = "已載入你這張圖的範例值。";
+      ocrTextEl.value =
+`[Gemini 回應]\n{"testNumber":"281404","serialNumber":"23A9294"}`;
+    });
+  </script>
+</body>
+</html>
