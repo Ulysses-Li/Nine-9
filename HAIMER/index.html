@@ -347,7 +347,7 @@
       }
     });
 
-    snapBtn.addEventListener("click", () => {
+    snapBtn.addEventListener("click", async () => {
       if (!cameraStream) {
         alert("請先開啟相機");
         return;
@@ -369,9 +369,15 @@
       preview.style.display = "block";
       selectedImageBase64 = dataUrl.split(",")[1] || "";
       selectedImageFile = { type: "image/jpeg", name: "camera-capture.jpg" };
-      statusEl.textContent = "拍照完成，等待辨識。";
 
       stopCamera();
+
+      statusEl.textContent = "拍照完成，正在自動辨識中...";
+
+      // 拍照後直接自動觸發辨識
+      setTimeout(() => {
+        ocrBtn.click();
+      }, 300);
     });
 
     closeCameraBtn.addEventListener("click", () => {
