@@ -63,7 +63,7 @@ body {
   width: 100%;
   height: 108px;
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 38% 62%;
   border: 0;
   padding: 0;
   background: var(--head-gray);
@@ -184,52 +184,99 @@ body {
 
 /* ===============================
    手機版
-   只顯示圖片 + 標題
-   點擊後才展開 Related Products
+   iPhone / Android 最佳化
    =============================== */
 @media (max-width: 575.98px) {
+
+  /* 頁面左右留白 */
   .products-page {
-    padding: 16px 12px;
+    padding: 14px 10px;
   }
 
+  /* Products 標題 */
   .products-title {
-    margin-bottom: 20px;
+    font-size: 34px;
+    margin: 4px 0 18px;
   }
 
+  /* 卡片 */
   .product-family-card {
     min-height: auto;
-    border-radius: 14px;
+    border-radius: 18px;
+    margin-bottom: 14px;
   }
 
+  /* 上方 Header */
   .product-family-head {
-    grid-template-columns: 30% 70%;
-    height: 96px;
+
+    /* 左圖 32% / 右字 68% */
+    grid-template-columns: 32% 68%;
+
+    /* 高度縮小 */
+    height: 88px;
   }
 
+  /* 左側圖片區 */
+  .product-family-icon {
+    padding: 8px;
+  }
+
+  /* Icon 圖片 */
   .product-family-img {
-    width: 68px;
-    height: 68px;
+
+    /* iPhone 看起來比較剛好 */
+    width: 56px;
+    height: 56px;
+
+    object-fit: contain;
   }
 
+  /* 右側標題區 */
+  .product-family-name-wrap {
+    padding: 0 16px;
+    align-items: center;
+  }
+
+  /* 標題文字 */
   .product-family-name {
-    font-size: 26px;
+
+    /* 修正 iPhone 字太大問題 */
+    font-size: 18px;
+
+    font-weight: 800;
+
+    line-height: 1.05;
+
+    letter-spacing: -0.2px;
   }
 
+  /* Related Products 預設收合 */
   .product-family-body {
     display: none;
-    padding: 16px 18px 20px;
+
+    padding: 14px 16px 18px;
   }
 
+  /* 點開後顯示 */
   .product-family-card.is-open .product-family-body {
     display: block;
   }
 
+  /* Related Products 標題 */
   .related-title {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 12px;
   }
 
+  /* 清單文字 */
   .related-list li {
-    font-size: 18px;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  /* 箭頭 */
+  .related-list li::before {
+    font-size: 22px;
   }
 }
 
