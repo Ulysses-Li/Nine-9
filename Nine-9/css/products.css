@@ -58,12 +58,13 @@ body {
 
 /* ===============================
    Card 上方：圖片 + 標題
+   改成 flex，避免 iPhone Safari 跑版
    =============================== */
 .product-family-head {
   width: 100%;
   height: 108px;
-  display: grid;
-  grid-template-columns: 38% 62%;
+  display: flex;
+  align-items: stretch;
   border: 0;
   padding: 0;
   background: var(--head-gray);
@@ -73,7 +74,10 @@ body {
   text-align: left;
 }
 
+/* 左側圖片區 */
 .product-family-icon {
+  width: 120px;
+  flex: 0 0 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,29 +85,34 @@ body {
   border-right: 1px solid rgba(255, 255, 255, 0.9);
 }
 
+/* 圖片本體 */
 .product-family-img {
-  width: 84px;
-  height: 84px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
   display: block;
 }
 
+/* 右側標題區 */
 .product-family-name-wrap {
+  flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 18px;
   background: var(--head-gray);
   overflow: hidden;
 }
 
+/* 標題文字 */
 .product-family-name {
   font-size: clamp(22px, 1.8vw, 28px);
   font-weight: 900;
   line-height: 1.08;
   margin: 0;
-  white-space: normal;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ===============================
@@ -176,88 +185,137 @@ body {
     height: 100px;
   }
 
+  .product-family-icon {
+    width: 110px;
+    flex: 0 0 110px;
+  }
+
   .product-family-img {
-    width: 76px;
-    height: 76px;
+    width: 66px;
+    height: 66px;
+  }
+
+  .product-family-name {
+    font-size: 24px;
   }
 }
 
+/* ===============================
+   手機版
+   只顯示圖片 + 標題
+   點擊後才展開 Related Products
+   =============================== */
 /* ===============================
    手機版
    iPhone / Android 最佳化
    =============================== */
 @media (max-width: 575.98px) {
 
-  /* 頁面左右留白 */
+  /* 手機版頁面外距 */
   .products-page {
-    padding: 14px 10px;
+    padding: 14px 12px 24px;
+  }
+
+  /* 手機版容器取消 Bootstrap container-fluid 可能造成的左右空間 */
+  .products-container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   /* Products 標題 */
   .products-title {
-    font-size: 34px;
+    font-size: 32px;
+    line-height: 1.1;
     margin: 4px 0 18px;
   }
 
-  /* 卡片 */
-  .product-family-card {
-    min-height: auto;
-    border-radius: 18px;
-    margin-bottom: 14px;
+  /* Bootstrap row 在手機版不要有太大的負邊距 */
+  #productsGrid {
+    margin-left: 0;
+    margin-right: 0;
+    row-gap: 16px;
   }
 
-  /* 上方 Header */
+  /* Bootstrap 欄位手機版不要額外左右 padding */
+  #productsGrid > [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* 手機版整張 Card */
+  .product-family-card {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 0;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  }
+
+  /* 手機版上方按鈕：左圖右文字 */
   .product-family-head {
-
-    /* 左圖 32% / 右字 68% */
-    grid-template-columns: 32% 68%;
-
-    /* 高度縮小 */
+    width: 100%;
     height: 88px;
+    min-height: 88px;
+    display: grid;
+    grid-template-columns: 104px 1fr;
+    background: var(--head-gray);
+    border: 0;
   }
 
   /* 左側圖片區 */
   .product-family-icon {
-    padding: 8px;
-  }
-
-  /* Icon 圖片 */
-  .product-family-img {
-
-    /* iPhone 看起來比較剛好 */
-    width: 56px;
-    height: 56px;
-
-    object-fit: contain;
-  }
-
-  /* 右側標題區 */
-  .product-family-name-wrap {
-    padding: 0 16px;
+    width: 104px;
+    height: 88px;
+    padding: 10px;
+    background: var(--head-light);
+    display: flex;
     align-items: center;
+    justify-content: center;
   }
 
-  /* 標題文字 */
+  /* 圖片大小 */
+  .product-family-img {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* 右側文字區 */
+  .product-family-name-wrap {
+    height: 88px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: var(--head-gray);
+    overflow: hidden;
+  }
+
+  /* 產品分類文字 */
   .product-family-name {
-
-    /* 修正 iPhone 字太大問題 */
-    font-size: 18px;
-
-    font-weight: 800;
-
-    line-height: 1.05;
-
-    letter-spacing: -0.2px;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+    margin: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
-  /* Related Products 預設收合 */
+  /* 手機版 Related Products 預設收合 */
   .product-family-body {
     display: none;
-
     padding: 14px 16px 18px;
+    background: #ffffff;
   }
 
-  /* 點開後顯示 */
+  /* 點擊後展開 */
   .product-family-card.is-open .product-family-body {
     display: block;
   }
@@ -268,15 +326,25 @@ body {
     margin-bottom: 12px;
   }
 
-  /* 清單文字 */
-  .related-list li {
-    font-size: 16px;
-    margin-bottom: 12px;
+  .related-title::before {
+    width: 6px;
+    height: 18px;
   }
 
-  /* 箭頭 */
+  /* Related Products 清單文字 */
+  .related-list li {
+    font-size: 16px;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+
   .related-list li::before {
     font-size: 22px;
+  }
+
+  /* 手機版取消 hover 位移，避免點擊時畫面跳動 */
+  .product-family-card:hover {
+    transform: none;
   }
 }
 
@@ -285,80 +353,74 @@ body {
    =============================== */
 
 /*
-1. 調整整張 Card 高度：
-   改這裡：
+1. 調整 Card 高度：
    .product-family-card {
      min-height: 390px;
    }
 
 2. 調整 Card 圓角：
-   改這裡：
    .product-family-card {
      border-radius: 16px;
    }
 
 3. 調整上方圖片與標題區高度：
-   改這裡：
    .product-family-head {
      height: 108px;
    }
 
-4. 調整左邊圖片區與右邊文字區比例：
-   改這裡：
-   .product-family-head {
-     grid-template-columns: 42% 58%;
+4. 調整左邊圖片區寬度：
+   .product-family-icon {
+     width: 120px;
+     flex: 0 0 120px;
    }
 
-   例如：
-   40% 60% = 圖片區比較窄，文字區比較寬
-   45% 55% = 圖片區比較寬，文字區比較窄
-
 5. 調整圖片大小：
-   改這裡：
    .product-family-img {
-     width: 84px;
-     height: 84px;
+     width: 72px;
+     height: 72px;
    }
 
 6. 調整分類標題大小：
-   改這裡：
    .product-family-name {
      font-size: clamp(22px, 1.8vw, 28px);
    }
 
-7. 如果 Accessories、Engraving 文字跑版：
-   主要看這幾個設定：
-   .product-family-name-wrap {
-     min-width: 0;
-     overflow: hidden;
-   }
-
-   .product-family-name {
-     white-space: normal;
-     overflow-wrap: anywhere;
-   }
-
-8. 調整 Related Products 文字大小：
-   改這裡：
-   .related-list li {
-     font-size: 19px;
-   }
-
-9. 手機版預設收合內容：
-   這裡控制：
+7. 手機版卡片高度：
    @media (max-width: 575.98px) {
-     .product-family-body {
-       display: none;
-     }
-
-     .product-family-card.is-open .product-family-body {
-       display: block;
+     .product-family-head {
+       height: 84px;
      }
    }
 
-10. 如果要手機版一開始就展開：
-    把手機版這段刪掉：
+8. 手機版圖片大小：
+   @media (max-width: 575.98px) {
+     .product-family-img {
+       width: 52px;
+       height: 52px;
+     }
+   }
+
+9. 手機版文字大小：
+   @media (max-width: 575.98px) {
+     .product-family-name {
+       font-size: 20px;
+     }
+   }
+
+10. 手機版 Related Products 預設收合：
     .product-family-body {
       display: none;
     }
+
+11. 手機版點擊後展開：
+    .product-family-card.is-open .product-family-body {
+      display: block;
+    }
+
+12. 如果手機版還是覺得太大：
+    把以下數值再縮小：
+    .product-family-head height: 80px;
+    .product-family-icon width: 86px;
+    .product-family-img width/height: 48px;
+    .product-family-name font-size: 18px;
 */
