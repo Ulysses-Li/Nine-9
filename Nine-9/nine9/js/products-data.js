@@ -11,7 +11,8 @@ const PRODUCT_FAMILIES = [
   {
     title: "Spotting",
     image: "../img/spotting.png",
-    href: "/Machining/Spotting/index.html",
+    href: '${ROOT_PATH}/Machining/Spotting/index.html',
+   
     products: [
       { name: "ACE Spot Drill", href: "#ace-spot-drill" },
       { name: "Micro Spot Drill", href: "#micro-spot-drill" },
