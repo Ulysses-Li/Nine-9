@@ -107,7 +107,7 @@ function renderProductsByCategory(categoryTitle) {
 
 function loadHeader() {
 
-  fetch("/header/header.html")
+  fetch("https://cwli.dev/Nine-9/header/header.html")
 
     .then(response => response.text())
 
@@ -146,7 +146,7 @@ function loadHeader() {
 
 function loadFooter() {
 
-  fetch("/footer/footer.html")
+  fetch("https://cwli.dev/Nine-9/footer/footer.html")
 
     .then(response => response.text())
 
