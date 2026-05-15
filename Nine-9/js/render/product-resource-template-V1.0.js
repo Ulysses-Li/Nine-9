@@ -1,11 +1,3 @@
-/* =========================================================
-   Chamfer Mill Render
-   用意：
-   1. 控制左側選單切換
-   2. 產生 Download / Programming / FAQ 畫面
-   3. 載入共用 Header / Footer
-========================================================= */
-
 document.addEventListener("DOMContentLoaded", function () {
   bindMenu();
   renderDownload();
@@ -13,21 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
   loadFooter();
 });
 
-/* =========================================================
-   DOM
-========================================================= */
-
 const contentArea = document.getElementById("contentArea");
 const menuLinks = document.querySelectorAll(".side-menu a");
 
-/* =========================================================
-   escapeHTML
-   用意：
-   防止特殊字元破壞 HTML 結構
-========================================================= */
-
 function escapeHTML(value) {
-  return String(value)
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -35,9 +17,53 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
-/* =========================================================
-   Render Download
-========================================================= */
+function formatFaqAnswer(value) {
+  const lines = String(value ?? "")
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  if (!lines.length) {
+    return "<p>FAQ content is being prepared.</p>";
+  }
+
+  const blocks = [];
+  let listItems = [];
+
+  const flushList = () => {
+    if (!listItems.length) return;
+    blocks.push(`<ul>${listItems.map(item => `<li>${item}</li>`).join("")}</ul>`);
+    listItems = [];
+  };
+
+  lines.forEach(line => {
+    const cleaned = line.replace(/^[-*]\s+/, "");
+    const escaped = escapeHTML(cleaned);
+
+    if (/^[-*]\s+/.test(line)) {
+      listItems.push(escaped);
+      return;
+    }
+
+    flushList();
+    blocks.push(`<p>${escaped}</p>`);
+  });
+
+  flushList();
+  return blocks.join("");
+}
+
+function getFaqQuestion(item) {
+  return item.question || item.title || "FAQ";
+}
+
+function getFaqAnswer(item) {
+  return item.answer || item.desc || "";
+}
+
+function getFaqTopic(item) {
+  return item.topic || item.subtitle || "Technical FAQ";
+}
 
 function renderDownload() {
   const data = PRODUCT_PAGE_DATA;
@@ -52,20 +78,13 @@ function renderDownload() {
           class="resource-card ${item.href ? "" : "is-disabled"}"
           ${item.href ? `href="${escapeHTML(item.href)}" target="_blank"` : ""}
         >
-          <div class="resource-title">
-            ${escapeHTML(item.title)}
-          </div>
+          <div class="resource-title">${escapeHTML(item.title)}</div>
 
           <div class="resource-preview">
             ${item.image ? `
-              <img
-                src="${escapeHTML(item.image)}"
-                alt="${escapeHTML(item.title)}"
-              >
+              <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.title)}">
             ` : `
-              <div class="resource-placeholder">
-                Coming soon
-              </div>
+              <div class="resource-placeholder">Coming soon</div>
             `}
           </div>
         </${item.href ? "a" : "div"}>
@@ -74,133 +93,93 @@ function renderDownload() {
   `;
 }
 
-/* =========================================================
-   Render Programming
-========================================================= */
-
 function renderProgramming() {
   const data = PRODUCT_PAGE_DATA.programming;
 
   contentArea.innerHTML = `
-    <h1 class="page-title">${escapeHTML(PRODUCT_PAGE_DATA.productName)} NC 程式產生器</h1>
+    <h1 class="page-title">${escapeHTML(PRODUCT_PAGE_DATA.productName)} NC Program Generator</h1>
     <div class="title-line"></div>
 
     <div class="program-box">
-      <div class="program-title">
-        ${escapeHTML(data.title)}
-      </div>
-
-      <div class="program-desc">
-        ${escapeHTML(data.desc)}
-      </div>
+      <div class="program-title">${escapeHTML(data.title)}</div>
+      <div class="program-desc">${escapeHTML(data.desc)}</div>
 
       ${data.href ? `
-        <a
-          href="${escapeHTML(data.href)}"
-          class="program-btn"
-        >
-          Open NC Program Generator
-        </a>
+        <a href="${escapeHTML(data.href)}" class="program-btn">Open NC Program Generator</a>
       ` : `
-        <span class="program-btn is-disabled">
-          Coming soon
-        </span>
+        <span class="program-btn is-disabled">Coming soon</span>
       `}
     </div>
   `;
 }
 
-/* =========================================================
-   Render FAQ List
-========================================================= */
-
 function renderFaqList() {
-  const faqs = PRODUCT_PAGE_DATA.faqs;
+  const faqs = PRODUCT_PAGE_DATA.faqs || [];
 
   contentArea.innerHTML = `
-    <h1 class="page-title">${escapeHTML(PRODUCT_PAGE_DATA.productName)} 常見技術問題</h1>
+    <div class="faq-heading">
+      <h1 class="page-title">${escapeHTML(PRODUCT_PAGE_DATA.productName)} Technical FAQ</h1>
+      <p>Knowledge-base answers for application selection, cutting data, setup checks, and troubleshooting.</p>
+    </div>
     <div class="title-line"></div>
 
     <div class="faq-grid">
       ${faqs.map((item, index) => `
-        <div
-          class="faq-card"
-          onclick="renderFaqDetail(${index})"
-        >
-          <div class="faq-img">圖</div>
-
-          <div class="faq-text">
-            ${escapeHTML(item.title)}<br>
-            ${escapeHTML(item.subtitle)}
-          </div>
-        </div>
+        <button class="faq-card" type="button" onclick="renderFaqDetail(${index})">
+          <span class="faq-number">Q${index + 1}</span>
+          <span class="faq-topic">${escapeHTML(getFaqTopic(item))}</span>
+          <span class="faq-question">${escapeHTML(getFaqQuestion(item))}</span>
+        </button>
       `).join("")}
     </div>
   `;
 }
 
-/* =========================================================
-   Render FAQ Detail
-========================================================= */
-
 function renderFaqDetail(index) {
-  const faqs = PRODUCT_PAGE_DATA.faqs;
+  const faqs = PRODUCT_PAGE_DATA.faqs || [];
   const item = faqs[index];
+
+  if (!item) {
+    renderFaqList();
+    return;
+  }
 
   const prevIndex = index - 1;
   const nextIndex = index + 1;
+  const question = getFaqQuestion(item);
 
   contentArea.innerHTML = `
-    <div class="faq-detail">
-      <div class="faq-detail-title">
-        ${escapeHTML(item.detailTitle)}
+    <button class="faq-back" type="button" onclick="renderFaqList()">Back to FAQ</button>
+
+    <article class="faq-detail">
+      <div class="faq-detail-header">
+        <span class="faq-detail-kicker">Q${index + 1} / ${escapeHTML(getFaqTopic(item))}</span>
+        <h1>${escapeHTML(question)}</h1>
       </div>
 
       <div class="faq-detail-body">
-        <div class="faq-video">
-          ${escapeHTML(item.mediaText).replaceAll("\n", "<br>")}
-        </div>
-
-        <div class="faq-desc-title">
-          文字敘述
-        </div>
-
-        <div class="faq-desc">
-          ${escapeHTML(item.desc)}
+        <div class="faq-answer">
+          ${formatFaqAnswer(getFaqAnswer(item))}
         </div>
 
         <div class="contact-box">
-          聯絡我們
+          Need case-specific confirmation?
           <span>Contact Nine9 Tech Support</span>
         </div>
-
-        <div class="faq-desc">
-          詢問此主題與客戶可留言的表單
-        </div>
       </div>
-    </div>
+    </article>
 
     <div class="faq-nav">
-      <button
-        onclick="renderFaqDetail(${prevIndex})"
-        ${prevIndex < 0 ? "disabled" : ""}
-      >
-        ◀ ${prevIndex >= 0 ? escapeHTML(faqs[prevIndex].title) : ""}
+      <button type="button" onclick="renderFaqDetail(${prevIndex})" ${prevIndex < 0 ? "disabled" : ""}>
+        Previous${prevIndex >= 0 ? `: ${escapeHTML(getFaqQuestion(faqs[prevIndex]))}` : ""}
       </button>
 
-      <button
-        onclick="renderFaqDetail(${nextIndex})"
-        ${nextIndex >= faqs.length ? "disabled" : ""}
-      >
-        ${nextIndex < faqs.length ? escapeHTML(faqs[nextIndex].title) : ""} ▶
+      <button type="button" onclick="renderFaqDetail(${nextIndex})" ${nextIndex >= faqs.length ? "disabled" : ""}>
+        ${nextIndex < faqs.length ? `Next: ${escapeHTML(getFaqQuestion(faqs[nextIndex]))}` : "Next"}
       </button>
     </div>
   `;
 }
-
-/* =========================================================
-   Bind Menu
-========================================================= */
 
 function bindMenu() {
   menuLinks.forEach(link => {
@@ -216,10 +195,6 @@ function bindMenu() {
     });
   });
 }
-
-/* =========================================================
-   Load Header
-========================================================= */
 
 function loadHeader() {
   fetch("../../header/header.html")
@@ -237,10 +212,6 @@ function loadHeader() {
       }
     });
 }
-
-/* =========================================================
-   Load Footer
-========================================================= */
 
 function loadFooter() {
   fetch("../../footer/footer.html")
