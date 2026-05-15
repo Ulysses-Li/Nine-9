@@ -13,21 +13,21 @@ const SPOTTING_PRODUCTS = [
 
   {
     name: "ACE Spot Drill",
-    image: "../../../img/ace-spot-drill.jpg",
+    image: "../../img/spotting.png",
     description: "High performance spotting and chamfering.",
     href: "../../Products/AceSpotDrill/index.html"
   },
 
   {
     name: "Micro Spot Drill",
-    image: "../../../img/micro-spot-drill.jpg",
+    image: "../../img/spotting.png",
     description: "Micro precision spotting application.",
     href: "../../Products/MicroSpotDrill/index.html"
   },
 
   {
     name: "NC Spot Drill",
-    image: "../../../img/nc-spot-drill.jpg",
+    image: "../../img/spotting.png",
     description: "Multi-function spotting tool.",
     href: "../../Products/NCSpotDrill/index.html"
   }
@@ -44,7 +44,7 @@ const CENTERING_PRODUCTS = [
 
   {
     name: "i-Center Center Drill",
-    image: "../../../img/i-center.jpg",
+    image: "../../img/spotting.png",
     description: "Center drilling and positioning tool.",
     href: "../../Products/ICenter/index.html"
   }
@@ -61,14 +61,14 @@ const DRILLING_PRODUCTS = [
 
   {
     name: "Super Drill",
-    image: "../../../img/super-drill.jpg",
+    image: "../../img/drilling.png",
     description: "Replaceable insert drilling system.",
     href: "../../Products/SuperDrill/index.html"
   },
 
   {
     name: "Super Power Drill",
-    image: "../../../img/super-power-drill.jpg",
+    image: "../../img/drilling.png",
     description: "High rigidity drilling application.",
     href: "../../Products/SuperPowerDrill/index.html"
   }
@@ -85,14 +85,14 @@ const BORING_PRODUCTS = [
 
   {
     name: "NineBore Boring Tool",
-    image: "../../../img/ninebore.jpg",
+    image: "../../img/boring.png",
     description: "Precision boring tool system.",
     href: "../../Products/NineBore/index.html"
   },
 
   {
     name: "NineSwiss Modular Head Boring Tool",
-    image: "../../../img/nineswiss-boring.jpg",
+    image: "../../img/boring.png",
     description: "Modular boring tool solution.",
     href: "../../Products/NineSwissBoring/index.html"
   }
@@ -109,7 +109,7 @@ const MILLING_PRODUCTS = [
 
   {
     name: "Power Mill",
-    image: "../../../img/power-mill.jpg",
+    image: "../../img/milling.png",
     description: "General milling cutter system.",
     href: "../../Products/PowerMill/index.html"
   }
@@ -126,7 +126,7 @@ const NC_HELIX_DRILL_PRODUCTS = [
 
   {
     name: "NC Helix Drill",
-    image: "../../../img/nc-helix-drill.jpg",
+    image: "../../img/drilling.png",
     description: "Helical interpolation drilling system.",
     href: "../../Products/NCHelixDrill/index.html"
   }
@@ -143,7 +143,7 @@ const THREADING_PRODUCTS = [
 
   {
     name: "MCC Thread Mill",
-    image: "../../../img/mcc-thread-mill.jpg",
+    image: "../../img/drilling.png",
     description: "Thread milling cutter system.",
     href: "../../Products/MCCThreadMill/index.html"
   }
@@ -160,35 +160,35 @@ const ENGRAVING_PRODUCTS = [
 
   {
     name: "X060",
-    image: "../../../img/x060.jpg",
+    image: "../../img/engraving.png",
     description: "Micro engraving tool.",
     href: "../../Products/X060/index.html"
   },
 
   {
     name: "V060 / V045",
-    image: "../../../img/v060.jpg",
+    image: "../../img/engraving.png",
     description: "V type engraving cutter.",
     href: "../../Products/V060/index.html"
   },
 
   {
     name: "W060",
-    image: "../../../img/w060.jpg",
+    image: "../../img/engraving.png",
     description: "W type engraving cutter.",
     href: "../../Products/W060/index.html"
   },
 
   {
     name: "N9MT-W",
-    image: "../../../img/n9mt-w.jpg",
+    image: "../../img/engraving.png",
     description: "Multi-purpose engraving tool.",
     href: "../../Products/N9MTW/index.html"
   },
 
   {
     name: "NC Spot Drill",
-    image: "../../../img/nc-spot-drill.jpg",
+    image: "../../img/spotting.png",
     description: "Spotting and engraving application.",
     href: "../../Products/NCSpotDrill/index.html"
   }
@@ -205,35 +205,35 @@ const CHAMFERING_CORNER_PRODUCTS = [
 
   {
     name: "Chamfer Mill",
-    image: "../../../img/chamfer-mill.jpg",
+    image: "../../img/chamfering.png",
     description: "Front and back chamfering tool.",
     href: "../../Products/ChamferMill/index.html"
   },
 
   {
     name: "ACE Spot Drill",
-    image: "../../../img/ace-spot-drill.jpg",
+    image: "../../img/spotting.png",
     description: "Chamfering and countersinking.",
     href: "../../Products/AceSpotDrill/index.html"
   },
 
   {
     name: "NC Spot Drill",
-    image: "../../../img/nc-spot-drill.jpg",
+    image: "../../img/spotting.png",
     description: "Spotting and chamfering tool.",
     href: "../../Products/NCSpotDrill/index.html"
   },
 
   {
     name: "Corner Rounding_RC Type",
-    image: "../../../img/corner-rounding-rc.jpg",
+    image: "../../img/chamfering.png",
     description: "RC type corner rounding cutter.",
     href: "../../Products/CornerRoundingRC/index.html"
   },
 
   {
     name: "Corner Rounding_R Type",
-    image: "../../../img/corner-rounding-r.jpg",
+    image: "../../img/chamfering.png",
     description: "R type corner rounding cutter.",
     href: "../../Products/CornerRoundingR/index.html"
   }
@@ -250,14 +250,14 @@ const DEBURRING_PRODUCTS = [
 
   {
     name: "NC Deburring",
-    image: "../../../img/nc-deburring.jpg",
+    image: "../../img/chamfering.png",
     description: "Deburring application tool.",
     href: "../../Products/NCDeburring/index.html"
   },
 
   {
     name: "MCC Deburring Mill",
-    image: "../../../img/mcc-deburring.jpg",
+    image: "../../img/chamfering.png",
     description: "Thread mill type deburring tool.",
     href: "../../Products/MCCDeburring/index.html"
   }
@@ -274,14 +274,14 @@ const TURNING_PRODUCTS = [
 
   {
     name: "NineSwiss Modular Head Turning Tool",
-    image: "../../../img/nineswiss-turning.jpg",
+    image: "../../img/turning.png",
     description: "Swiss type turning tool system.",
     href: "../../Products/NineSwissTurning/index.html"
   },
 
   {
     name: "NineSwiss Modular Head Boring Tool",
-    image: "../../../img/nineswiss-boring.jpg",
+    image: "../../img/boring.png",
     description: "Swiss modular boring solution.",
     href: "../../Products/NineSwissBoring/index.html"
   }
@@ -298,7 +298,7 @@ const ER_TAPER_SHANK_PRODUCTS = [
 
   {
     name: "Ergo ER Taper-Shank Cutter",
-    image: "../../../img/ergo-er.jpg",
+    image: "../../img/accessories.png",
     description: "ER taper-shank modular cutter system.",
     href: "../../Products/ErgoER/index.html"
   }

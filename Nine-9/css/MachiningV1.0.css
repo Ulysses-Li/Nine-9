@@ -1,309 +1,148 @@
-/* =========================================================
-   Basic
-========================================================= */
+:root {
+  --nine9-orange: #f05a1a;
+  --page-bg: #f4f4f4;
+  --card-bg: #ffffff;
+  --text-main: #111111;
+  --text-muted: #3f4650;
+  --border-dark: #222222;
+  --border-soft: rgba(0, 0, 0, 0.12);
+  --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
 
 body {
   margin: 0;
-  background: #f4f4f4;
+  background: var(--page-bg);
   font-family: Arial, "Microsoft JhengHei", sans-serif;
-  color: #111;
+  color: var(--text-main);
 }
 
-/* =========================================================
-   Page Layout
-========================================================= */
-
-.resource-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 48px 24px 90px;
-}
-
-.resource-layout {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 48px;
-}
-
-/* =========================================================
-   Side Menu
-========================================================= */
-
-.side-menu {
-  background: #cfcfcf;
-  padding: 18px;
-  align-self: start;
-}
-
-.side-menu a {
-  display: block;
-  color: #111;
+a {
   text-decoration: none;
-  font-weight: 700;
-  padding: 10px 0;
-  border-bottom: 2px solid #333;
-  cursor: pointer;
 }
 
-.side-menu a:hover,
-.side-menu a.active {
-  color: #f05a1a;
+.product-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 44px 24px 90px;
 }
-
-/* =========================================================
-   Common Title
-========================================================= */
 
 .page-title {
-  font-size: 34px;
-  font-weight: 800;
-  margin-bottom: 14px;
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 900;
+  line-height: 1.05;
+  margin: 0 0 14px;
 }
 
 .title-line {
   height: 2px;
-  background: #222;
-  margin-bottom: 28px;
+  background: var(--border-dark);
+  margin-bottom: 34px;
 }
 
-/* =========================================================
-   Download Page
-========================================================= */
-
-.resource-grid {
+.product-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
-  gap: 48px;
-  max-width: 720px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
 }
 
-.resource-card {
-  color: #111;
-  text-decoration: none;
-  transition: 0.25s;
+.product-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 330px;
+  color: var(--text-main);
+  background: var(--card-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
-.resource-card:hover {
+.product-card:hover {
+  color: var(--text-main);
+  border-color: rgba(240, 90, 26, 0.44);
+  box-shadow: var(--shadow-soft);
   transform: translateY(-4px);
 }
 
-.resource-title {
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 16px;
-}
-
-.resource-title::before {
-  content: "•";
-  margin-right: 14px;
-}
-
-.resource-preview {
-  width: 190px;
-  height: 270px;
-  border: 1px solid #333;
-  background: #fff;
+.product-image-box {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-soft);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.resource-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* =========================================================
-   Programming Page
-========================================================= */
-
-.program-box {
-  border: 2px solid #333;
-  background: #fff;
-  padding: 36px;
-  max-width: 720px;
-}
-
-.program-title {
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 16px;
-}
-
-.program-desc {
-  font-size: 20px;
-  line-height: 1.7;
-  margin-bottom: 24px;
-}
-
-.program-btn {
-  display: inline-block;
-  padding: 14px 26px;
-  border: 2px solid #333;
-  color: #111;
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.program-btn:hover {
-  color: #f05a1a;
-  border-color: #f05a1a;
-}
-
-/* =========================================================
-   FAQ List
-========================================================= */
-
-.faq-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  max-width: 760px;
-}
-
-.faq-card {
+.product-image-box img {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
   display: block;
-  border: 2px solid #333;
-  background: #fff;
-  color: #111;
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.25s;
 }
 
-.faq-card:hover {
-  transform: translateY(-4px);
-  border-color: #f05a1a;
+.product-desc {
+  position: absolute;
+  inset: auto 0 0;
+  min-height: 54px;
+  padding: 12px 16px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.76);
+  font-size: 15px;
+  line-height: 1.35;
 }
 
-.faq-img {
-  height: 130px;
-  border-bottom: 1px solid #333;
+.product-name {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 34px;
-  font-weight: 800;
-  background: #fff;
+  min-height: 82px;
+  padding: 18px;
+  color: var(--text-main);
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
 }
 
-.faq-text {
-  padding: 24px;
-  font-size: 28px;
-  font-weight: 800;
-  line-height: 1.25;
+@media (max-width: 991.98px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-/* =========================================================
-   FAQ Detail
-========================================================= */
+@media (max-width: 575.98px) {
+  .product-page {
+    padding: 28px 14px 60px;
+  }
 
-.faq-detail {
-  max-width: 780px;
-  border: 2px solid #333;
-  background: #fff;
-}
+  .title-line {
+    margin-bottom: 18px;
+  }
 
-.faq-detail-title {
-  font-size: 28px;
-  font-weight: 800;
-  padding: 16px 28px;
-  border-bottom: 2px solid #333;
-}
-
-.faq-detail-body {
-  padding: 28px 40px 32px;
-}
-
-.faq-video {
-  height: 220px;
-  border: 2px solid #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-  font-weight: 800;
-  margin-bottom: 28px;
-}
-
-.faq-desc-title {
-  font-size: 32px;
-  font-weight: 800;
-  margin-bottom: 12px;
-}
-
-.faq-desc {
-  font-size: 20px;
-  line-height: 1.8;
-  margin-bottom: 26px;
-}
-
-.contact-box {
-  border: 2px solid #333;
-  padding: 14px 18px;
-  font-size: 24px;
-  font-weight: 800;
-  max-width: 520px;
-  margin-bottom: 16px;
-}
-
-.contact-box span {
-  display: block;
-  font-size: 28px;
-}
-
-.faq-nav {
-  max-width: 780px;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 22px;
-  font-size: 28px;
-  font-weight: 800;
-}
-
-.faq-nav button {
-  border: none;
-  background: transparent;
-  font-size: 28px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.faq-nav button:hover {
-  color: #f05a1a;
-}
-
-.faq-nav button:disabled {
-  opacity: 0.25;
-  cursor: default;
-}
-
-/* =========================================================
-   Mobile
-========================================================= */
-
-@media (max-width: 768px) {
-  .resource-layout {
+  .product-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
-  .resource-grid,
-  .faq-grid {
-    grid-template-columns: 1fr;
+  .product-card {
+    min-height: 0;
   }
 
-  .page-title {
-    font-size: 28px;
+  .product-image-box {
+    aspect-ratio: 16 / 9;
   }
 
-  .faq-text {
-    font-size: 24px;
+  .product-desc {
+    position: static;
+    color: var(--text-muted);
+    background: #f7f7f7;
   }
 
-  .faq-detail-body {
-    padding: 22px;
+  .product-name {
+    min-height: 0;
+    padding: 16px;
+    font-size: 20px;
   }
 }
