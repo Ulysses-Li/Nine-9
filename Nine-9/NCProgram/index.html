@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Nine9 Tech Center | NC Program</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../header/header.css">
+  <link rel="stylesheet" href="../footer/footer.css">
+  <link rel="stylesheet" href="../css/nc-program.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  <div id="header-placeholder"></div>
+
+  <main class="flex-grow-1">
+    <section class="nc-program-page">
+      <h1 class="page-title">NC Program</h1>
+      <div class="title-line"></div>
+
+      <div class="program-grid" aria-label="NC Program generators">
+        <a class="program-card" href="./ThreadMilling/index.html">
+          <div class="program-icon" aria-hidden="true">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+          </div>
+
+          <div>
+            <h2>Thread Milling</h2>
+            <p>Thread milling NC program support for MCC Thread Mill.</p>
+          </div>
+
+          <span class="program-cta">
+            Open NC Program Generator
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </span>
+        </a>
+
+        <a class="program-card" href="../Products/NCHelixDrill/index.html#programming">
+          <div class="program-icon" aria-hidden="true">
+            <i class="fa-solid fa-rotate"></i>
+          </div>
+
+          <div>
+            <h2>NC Helix Drill</h2>
+            <p>Helical interpolation drilling NC program support for NC Helix Drill.</p>
+          </div>
+
+          <span class="program-cta">
+            Open NC Program Generator
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch("../header/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const topNav = document.getElementById("topNav");
+
+        if (mobileMenuBtn && topNav) {
+          mobileMenuBtn.addEventListener("click", function () {
+            topNav.classList.toggle("active");
+          });
+        }
+      });
+
+    fetch("../footer/footer.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("footer-placeholder").innerHTML = data;
+      });
+  </script>
+</body>
+</html>
