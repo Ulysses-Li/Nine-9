@@ -17,6 +17,174 @@ const PRODUCT_PAGE_DATA = {
     "desc": "ACE Spot Drill technical support area for catalog downloads, cutting data, NC programming support, and knowledge-base FAQ.",
     "href": ""
   },
+  "cuttingData": {
+    "operations": [
+      {
+        "id": "spotting",
+        "label": "Spotting",
+        "showQ": true,
+        "insertGroups": [
+          {
+            "id": "SI06",
+            "label": "SI06 - S9MT06T1",
+            "diameter": 5.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.01, 0.05], "carbonHigh": [0.01, 0.05], "lowAlloy": [0.01, 0.04], "highAlloy": [0.01, 0.03], "stainless": [0.01, 0.02], "castIron": [0.01, 0.05], "nonFerrous": [0.01, 0.06] } },
+              "90": { "f": { "carbonLow": [0.02, 0.08], "carbonHigh": [0.02, 0.08], "lowAlloy": [0.02, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
+              "120": { "f": { "carbonLow": [0.02, 0.10], "carbonHigh": [0.02, 0.10], "lowAlloy": [0.02, 0.08], "highAlloy": [0.02, 0.07], "stainless": [0.01, 0.03], "castIron": [0.02, 0.10], "nonFerrous": [0.03, 0.12] } },
+              "142": { "f": { "carbonLow": [0.02, 0.10], "carbonHigh": [0.02, 0.10], "lowAlloy": [0.02, 0.08], "highAlloy": [0.02, 0.07], "stainless": [0.01, 0.03], "castIron": [0.02, 0.10], "nonFerrous": [0.03, 0.12] } }
+            }
+          },
+          {
+            "id": "SI08",
+            "label": "SI08 - S9MT0802",
+            "diameter": 7.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.02, 0.08], "carbonHigh": [0.02, 0.08], "lowAlloy": [0.02, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
+              "90": { "f": { "carbonLow": [0.03, 0.10], "carbonHigh": [0.03, 0.10], "lowAlloy": [0.03, 0.08], "highAlloy": [0.03, 0.07], "stainless": [0.01, 0.04], "castIron": [0.03, 0.10], "nonFerrous": [0.03, 0.12] } },
+              "120": { "f": { "carbonLow": [0.03, 0.12], "carbonHigh": [0.03, 0.12], "lowAlloy": [0.03, 0.10], "highAlloy": [0.03, 0.08], "stainless": [0.01, 0.04], "castIron": [0.03, 0.12], "nonFerrous": [0.03, 0.15] } },
+              "142": { "f": { "carbonLow": [0.03, 0.12], "carbonHigh": [0.03, 0.12], "lowAlloy": [0.03, 0.10], "highAlloy": [0.03, 0.08], "stainless": [0.01, 0.04], "castIron": [0.03, 0.12], "nonFerrous": [0.03, 0.15] } }
+            }
+          },
+          {
+            "id": "SI10",
+            "label": "SI10 - S9MT1003",
+            "diameter": 9.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.03, 0.08], "carbonHigh": [0.03, 0.08], "lowAlloy": [0.03, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
+              "90": { "f": { "carbonLow": [0.04, 0.15], "carbonHigh": [0.04, 0.15], "lowAlloy": [0.03, 0.12], "highAlloy": [0.03, 0.10], "stainless": [0.01, 0.04], "castIron": [0.03, 0.12], "nonFerrous": [0.04, 0.20] } },
+              "120": { "f": { "carbonLow": [0.05, 0.20], "carbonHigh": [0.05, 0.20], "lowAlloy": [0.05, 0.15], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.04], "castIron": [0.05, 0.15], "nonFerrous": [0.05, 0.25] } },
+              "142": { "f": { "carbonLow": [0.05, 0.20], "carbonHigh": [0.05, 0.20], "lowAlloy": [0.05, 0.15], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.04], "castIron": [0.05, 0.15], "nonFerrous": [0.05, 0.25] } }
+            }
+          },
+          {
+            "id": "SI12",
+            "label": "SI12 - S9MT1203",
+            "diameter": 11.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.03, 0.08], "carbonHigh": [0.03, 0.08], "lowAlloy": [0.03, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
+              "90": { "f": { "carbonLow": [0.05, 0.20], "carbonHigh": [0.05, 0.20], "lowAlloy": [0.04, 0.15], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.04], "castIron": [0.04, 0.15], "nonFerrous": [0.05, 0.22] } },
+              "120": { "f": { "carbonLow": [0.06, 0.25], "carbonHigh": [0.06, 0.25], "lowAlloy": [0.05, 0.20], "highAlloy": [0.05, 0.16], "stainless": [0.01, 0.04], "castIron": [0.05, 0.20], "nonFerrous": [0.06, 0.25] } },
+              "142": { "f": { "carbonLow": [0.06, 0.25], "carbonHigh": [0.06, 0.25], "lowAlloy": [0.05, 0.20], "highAlloy": [0.05, 0.16], "stainless": [0.01, 0.04], "castIron": [0.05, 0.20], "nonFerrous": [0.06, 0.25] } }
+            }
+          },
+          {
+            "id": "SI16",
+            "label": "SI16 - S9MT1603",
+            "diameter": 15.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.04, 0.10], "carbonHigh": [0.04, 0.10], "lowAlloy": [0.03, 0.08], "highAlloy": [0.02, 0.07], "stainless": [0.01, 0.03], "castIron": [0.03, 0.08], "nonFerrous": [0.04, 0.12] } },
+              "90": { "f": { "carbonLow": [0.05, 0.20], "carbonHigh": [0.05, 0.20], "lowAlloy": [0.04, 0.15], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.04], "castIron": [0.04, 0.15], "nonFerrous": [0.05, 0.25] } },
+              "120": { "f": { "carbonLow": [0.06, 0.25], "carbonHigh": [0.06, 0.25], "lowAlloy": [0.05, 0.20], "highAlloy": [0.05, 0.16], "stainless": [0.01, 0.04], "castIron": [0.05, 0.20], "nonFerrous": [0.06, 0.25] } },
+              "142": { "f": { "carbonLow": [0.06, 0.25], "carbonHigh": [0.06, 0.25], "lowAlloy": [0.05, 0.20], "highAlloy": [0.05, 0.16], "stainless": [0.01, 0.04], "castIron": [0.05, 0.20], "nonFerrous": [0.06, 0.25] } }
+            }
+          },
+          {
+            "id": "SI20",
+            "label": "SI20 - S9MT2004",
+            "diameter": 19.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.04, 0.10], "carbonHigh": [0.04, 0.10], "lowAlloy": [0.03, 0.08], "highAlloy": [0.02, 0.07], "stainless": [0.01, 0.03], "castIron": [0.03, 0.08], "nonFerrous": [0.04, 0.12] } },
+              "90": { "f": { "carbonLow": [0.05, 0.25], "carbonHigh": [0.05, 0.25], "lowAlloy": [0.04, 0.20], "highAlloy": [0.04, 0.15], "stainless": [0.01, 0.04], "castIron": [0.04, 0.20], "nonFerrous": [0.05, 0.30] } },
+              "120": { "f": { "carbonLow": [0.06, 0.30], "carbonHigh": [0.06, 0.30], "lowAlloy": [0.05, 0.25], "highAlloy": [0.05, 0.20], "stainless": [0.01, 0.04], "castIron": [0.05, 0.25], "nonFerrous": [0.06, 0.30] } },
+              "142": { "f": { "carbonLow": [0.06, 0.30], "carbonHigh": [0.06, 0.30], "lowAlloy": [0.05, 0.25], "highAlloy": [0.05, 0.20], "stainless": [0.01, 0.04], "castIron": [0.05, 0.25], "nonFerrous": [0.06, 0.30] } }
+            }
+          }
+        ],
+        "materials": {
+          "carbonLow": { "label": "Carbon steel C < 0.3%", "vc": [120, 250], "q": "0.1-0.5 mm", "grade": "NC5254" },
+          "carbonHigh": { "label": "Carbon steel C > 0.3%", "vc": [100, 220], "q": "0.1-0.5 mm", "grade": "NC2057" },
+          "lowAlloy": { "label": "Low alloy steel C < 0.3%", "vc": [100, 200], "q": "0.1-0.5 mm", "grade": "NC5254" },
+          "highAlloy": { "label": "High alloy steel", "vc": [80, 180], "q": "0.1-0.5 mm", "grade": "NC2057" },
+          "stainless": { "label": "Stainless steel", "vc": [30, 80], "q": "0.1-0.2 mm", "grade": "NC5254" },
+          "castIron": { "label": "Cast Iron", "vc": [80, 180], "q": "0.1-0.5 mm", "grade": "NC2057" },
+          "nonFerrous": { "label": "Non-ferrous metal", "vc": [150, 300], "q": "0.2-1.0 mm", "grade": "XP9000" }
+        }
+      },
+      {
+        "id": "chamfering",
+        "label": "Chamfering",
+        "showQ": false,
+        "insertGroups": [
+          {
+            "id": "SI06",
+            "label": "SI06 - S9MT06T1",
+            "diameter": 5.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.02, 0.05], "carbonHigh": [0.04, 0.16], "lowAlloy": [0.02, 0.05], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.03], "castIron": [0.04, 0.16], "nonFerrous": [0.02, 0.16] } },
+              "90": { "f": { "carbonLow": [0.02, 0.08], "carbonHigh": [0.04, 0.20], "lowAlloy": [0.02, 0.08], "highAlloy": [0.04, 0.16], "stainless": [0.01, 0.04], "castIron": [0.04, 0.20], "nonFerrous": [0.02, 0.20] } },
+              "120": { "f": { "carbonLow": [0.02, 0.06], "carbonHigh": [0.04, 0.16], "lowAlloy": [0.02, 0.06], "highAlloy": [0.04, 0.14], "stainless": [0.01, 0.04], "castIron": [0.04, 0.16], "nonFerrous": [0.02, 0.16] } },
+              "142": { "f": { "carbonLow": [0.02, 0.05], "carbonHigh": [0.04, 0.14], "lowAlloy": [0.02, 0.05], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.03], "castIron": [0.04, 0.14], "nonFerrous": [0.02, 0.14] } }
+            }
+          },
+          {
+            "id": "SI08",
+            "label": "SI08 - S9MT0802",
+            "diameter": 7.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.03, 0.06], "carbonHigh": [0.06, 0.20], "lowAlloy": [0.03, 0.06], "highAlloy": [0.06, 0.18], "stainless": [0.01, 0.03], "castIron": [0.06, 0.18], "nonFerrous": [0.03, 0.20] } },
+              "90": { "f": { "carbonLow": [0.03, 0.10], "carbonHigh": [0.06, 0.30], "lowAlloy": [0.03, 0.10], "highAlloy": [0.06, 0.25], "stainless": [0.01, 0.04], "castIron": [0.06, 0.25], "nonFerrous": [0.03, 0.30] } },
+              "120": { "f": { "carbonLow": [0.03, 0.08], "carbonHigh": [0.06, 0.20], "lowAlloy": [0.03, 0.08], "highAlloy": [0.06, 0.18], "stainless": [0.01, 0.04], "castIron": [0.06, 0.18], "nonFerrous": [0.03, 0.20] } },
+              "142": { "f": { "carbonLow": [0.03, 0.08], "carbonHigh": [0.06, 0.16], "lowAlloy": [0.03, 0.08], "highAlloy": [0.06, 0.14], "stainless": [0.01, 0.03], "castIron": [0.06, 0.14], "nonFerrous": [0.03, 0.16] } }
+            }
+          },
+          {
+            "id": "SI10",
+            "label": "SI10 - S9MT1003",
+            "diameter": 9.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.04, 0.08], "carbonHigh": [0.08, 0.30], "lowAlloy": [0.04, 0.08], "highAlloy": [0.08, 0.25], "stainless": [0.01, 0.04], "castIron": [0.08, 0.25], "nonFerrous": [0.04, 0.30] } },
+              "90": { "f": { "carbonLow": [0.04, 0.12], "carbonHigh": [0.08, 0.40], "lowAlloy": [0.04, 0.10], "highAlloy": [0.08, 0.30], "stainless": [0.01, 0.06], "castIron": [0.08, 0.30], "nonFerrous": [0.04, 0.40] } },
+              "120": { "f": { "carbonLow": [0.04, 0.08], "carbonHigh": [0.08, 0.30], "lowAlloy": [0.04, 0.08], "highAlloy": [0.08, 0.25], "stainless": [0.01, 0.04], "castIron": [0.08, 0.25], "nonFerrous": [0.04, 0.30] } },
+              "142": { "f": { "carbonLow": [0.04, 0.08], "carbonHigh": [0.08, 0.30], "lowAlloy": [0.04, 0.08], "highAlloy": [0.08, 0.25], "stainless": [0.01, 0.04], "castIron": [0.08, 0.25], "nonFerrous": [0.04, 0.30] } }
+            }
+          },
+          {
+            "id": "SI12",
+            "label": "SI12 - S9MT1203",
+            "diameter": 11.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.06, 0.10], "carbonHigh": [0.10, 0.40], "lowAlloy": [0.06, 0.10], "highAlloy": [0.10, 0.30], "stainless": [0.02, 0.06], "castIron": [0.10, 0.30], "nonFerrous": [0.06, 0.40] } },
+              "90": { "f": { "carbonLow": [0.06, 0.16], "carbonHigh": [0.10, 0.50], "lowAlloy": [0.06, 0.16], "highAlloy": [0.10, 0.40], "stainless": [0.02, 0.08], "castIron": [0.10, 0.40], "nonFerrous": [0.06, 0.50] } },
+              "120": { "f": { "carbonLow": [0.06, 0.12], "carbonHigh": [0.10, 0.50], "lowAlloy": [0.06, 0.12], "highAlloy": [0.10, 0.40], "stainless": [0.02, 0.08], "castIron": [0.10, 0.40], "nonFerrous": [0.06, 0.50] } },
+              "142": { "f": { "carbonLow": [0.06, 0.10], "carbonHigh": [0.10, 0.40], "lowAlloy": [0.06, 0.10], "highAlloy": [0.10, 0.30], "stainless": [0.02, 0.06], "castIron": [0.10, 0.30], "nonFerrous": [0.06, 0.40] } }
+            }
+          },
+          {
+            "id": "SI16",
+            "label": "SI16 - S9MT1603",
+            "diameter": 15.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.06, 0.10], "carbonHigh": [0.10, 0.40], "lowAlloy": [0.06, 0.10], "highAlloy": [0.10, 0.30], "stainless": [0.02, 0.06], "castIron": [0.10, 0.30], "nonFerrous": [0.06, 0.40] } },
+              "90": { "f": { "carbonLow": [0.06, 0.16], "carbonHigh": [0.10, 0.50], "lowAlloy": [0.06, 0.16], "highAlloy": [0.10, 0.40], "stainless": [0.02, 0.08], "castIron": [0.10, 0.40], "nonFerrous": [0.06, 0.50] } },
+              "120": { "f": { "carbonLow": [0.06, 0.12], "carbonHigh": [0.10, 0.50], "lowAlloy": [0.06, 0.12], "highAlloy": [0.10, 0.40], "stainless": [0.02, 0.08], "castIron": [0.10, 0.40], "nonFerrous": [0.06, 0.50] } },
+              "142": { "f": { "carbonLow": [0.06, 0.10], "carbonHigh": [0.10, 0.40], "lowAlloy": [0.06, 0.10], "highAlloy": [0.10, 0.30], "stainless": [0.02, 0.06], "castIron": [0.10, 0.30], "nonFerrous": [0.06, 0.40] } }
+            }
+          },
+          {
+            "id": "SI20",
+            "label": "SI20 - S9MT2004",
+            "diameter": 19.5,
+            "angles": {
+              "60": { "f": { "carbonLow": [0.06, 0.10], "carbonHigh": [0.10, 0.40], "lowAlloy": [0.06, 0.10], "highAlloy": [0.10, 0.30], "stainless": [0.02, 0.06], "castIron": [0.10, 0.30], "nonFerrous": [0.06, 0.40] } },
+              "90": { "f": { "carbonLow": [0.06, 0.16], "carbonHigh": [0.10, 0.50], "lowAlloy": [0.06, 0.16], "highAlloy": [0.10, 0.40], "stainless": [0.02, 0.08], "castIron": [0.10, 0.40], "nonFerrous": [0.06, 0.50] } },
+              "120": { "f": { "carbonLow": [0.06, 0.12], "carbonHigh": [0.10, 0.50], "lowAlloy": [0.06, 0.12], "highAlloy": [0.10, 0.40], "stainless": [0.02, 0.08], "castIron": [0.10, 0.40], "nonFerrous": [0.06, 0.50] } },
+              "142": { "f": { "carbonLow": [0.06, 0.10], "carbonHigh": [0.10, 0.40], "lowAlloy": [0.06, 0.10], "highAlloy": [0.10, 0.30], "stainless": [0.02, 0.06], "castIron": [0.10, 0.30], "nonFerrous": [0.06, 0.40] } }
+            }
+          }
+        ],
+        "materials": {
+          "carbonLow": { "label": "Carbon steel C < 0.3%", "vc": [60, 150], "grade": "NC5254" },
+          "carbonHigh": { "label": "Carbon steel C > 0.3%", "vc": [60, 150], "grade": "NC2057" },
+          "lowAlloy": { "label": "Low alloy steel C < 0.3%", "vc": [40, 120], "grade": "NC5254" },
+          "highAlloy": { "label": "High alloy steel", "vc": [40, 100], "grade": "NC2057" },
+          "stainless": { "label": "Stainless steel", "vc": [30, 80], "grade": "NC5254" },
+          "castIron": { "label": "Cast Iron", "vc": [40, 120], "grade": "NC2057" },
+          "nonFerrous": { "label": "Non-ferrous metal", "vc": [90, 200], "grade": "XP9000" }
+        }
+      }
+    ]
+  },
   "faqs": [
     {
       "topic": "Technical FAQ",
