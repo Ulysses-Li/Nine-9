@@ -4,91 +4,131 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Nine9 Tech Center | Products</title>
+  <title>Nine9 Tech Center</title>
 
-  <!-- Bootstrap 5：負責 RWD Grid / 基礎元件 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Font Awesome：負責簡易線性圖示 -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
-  <!-- Products Card 專用樣式 -->
   <link rel="stylesheet" href="css/products.css">
-  
   <link rel="stylesheet" href="../header/header.css">
   <link rel="stylesheet" href="../footer/footer.css">
-
-
 </head>
 
-<body>
-    <!-- Header -->
+<body class="d-flex flex-column min-vh-100">
   <div id="header-placeholder"></div>
 
-  <main class="products-page">
-    <div class="container-fluid products-container">
-      <!-- <h1 class="products-title">Products</h1> -->
+  <main class="home-page flex-grow-1">
+    <section class="home-hero" aria-labelledby="homeTitle">
+      <div class="home-hero-copy">
+        <span class="home-kicker">Nine9 Tech Center</span>
+        <h1 id="homeTitle">Technical Application Portal</h1>
+        <p>
+          Find products, cutting data, CAD references, NC program tools, and technical support resources from one place.
+        </p>
+      </div>
 
-      <!-- JS 會自動把產品分類 Card 插入這裡 -->
-      <section class="row g-4" id="productsGrid" aria-label="Products"></section>
-    </div>
+      <div class="home-hero-panel" aria-label="Featured technical tools">
+        <a class="home-feature is-primary" href="products.html">
+          <i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i>
+          <span>Product Finder</span>
+          <strong>Browse by machining category</strong>
+        </a>
+
+        <a class="home-feature" href="../NCProgram/index.html">
+          <i class="fa-solid fa-code" aria-hidden="true"></i>
+          <span>NC Program</span>
+          <strong>Generate starter NC code</strong>
+        </a>
+      </div>
+    </section>
+
+    <section class="home-tool-grid" aria-label="Tech Center shortcuts">
+      <a class="home-tool-card" href="products.html">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <h2>找產品</h2>
+        <p>依工法分類快速找到 Nine9 產品與技術資料。</p>
+      </a>
+
+      <a class="home-tool-card" href="../CADDownload/index.html">
+        <i class="fa-solid fa-cube" aria-hidden="true"></i>
+        <h2>CAD Download</h2>
+        <p>查找 2D DXF 與 3D STEP 檔案入口。</p>
+      </a>
+
+      <a class="home-tool-card" href="../NCProgram/index.html">
+        <i class="fa-solid fa-gears" aria-hidden="true"></i>
+        <h2>NC Program</h2>
+        <p>給沒有 CAM 軟體的使用者建立起始加工程式。</p>
+      </a>
+
+      <a class="home-tool-card" href="../Products/AceSpotDrill/index.html#cutting-data">
+        <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+        <h2>Cutting Data</h2>
+        <p>用產品預設值快速換算轉速與進給。</p>
+      </a>
+
+      <a class="home-tool-card" href="../Products/AceSpotDrill/index.html#videos">
+        <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+        <h2>Product Videos</h2>
+        <p>放置企劃與行銷拍攝的產品介紹影片。</p>
+      </a>
+
+      <a class="home-tool-card" href="#contact">
+        <i class="fa-solid fa-headset" aria-hidden="true"></i>
+        <h2>Technical Support</h2>
+        <p>特殊應用、參數確認、技術問題可聯絡支援窗口。</p>
+      </a>
+    </section>
+
+    <section class="home-product-strip" aria-labelledby="popularTitle">
+      <div class="home-section-heading">
+        <h2 id="popularTitle">Popular Machining Methods</h2>
+        <a href="products.html">View all products</a>
+      </div>
+
+      <div class="home-method-row">
+        <a href="../Machining/Spotting/index.html">
+          <img src="../img/spotting.png" alt="">
+          <span>Spotting</span>
+        </a>
+        <a href="../Machining/Drilling/index.html">
+          <img src="../img/drilling.png" alt="">
+          <span>Drilling</span>
+        </a>
+        <a href="../Machining/Milling/index.html">
+          <img src="../img/milling.png" alt="">
+          <span>Milling</span>
+        </a>
+        <a href="../Machining/Chamfering_Corner_Radii/index.html">
+          <img src="../img/chamfering.png" alt="">
+          <span>Chamfering</span>
+        </a>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer 插入位置：一定要有這行 -->
   <div id="footer-placeholder"></div>
-  
-  <!-- 產品資料：未來要新增/刪除/修改分類，主要改這支檔案 -->
-  <script src="js/products-data.js"></script>
 
-  <!-- 產品渲染：負責把資料變成 HTML Card -->
-  <script src="js/products-render.js"></script>
+  <script>
+    fetch("../header/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
 
-<script>
-/* =========================================================
-   Header Loader
-   用意：
-   載入共用 Header，並在載入完成後綁定手機選單按鈕
-========================================================= */
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const topNav = document.getElementById("topNav");
 
-fetch('../header/header.html')
-  .then(response => response.text())
-  .then(data => {
-
-    document.getElementById('header-placeholder').innerHTML = data;
-
-    /* =====================================================
-       Mobile Menu Toggle
-       用意：
-       Header 被插入頁面後，才找得到 mobileMenuBtn / topNav
-    ====================================================== */
-
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const topNav = document.getElementById('topNav');
-
-    if (mobileMenuBtn && topNav) {
-
-      mobileMenuBtn.addEventListener('click', function () {
-
-        topNav.classList.toggle('active');
-
+        if (mobileMenuBtn && topNav) {
+          mobileMenuBtn.addEventListener("click", function () {
+            topNav.classList.toggle("active");
+          });
+        }
       });
 
-    }
-
-  });
-
-/* =========================================================
-   Footer Loader
-========================================================= */
-
-fetch('../footer/footer.html')
-  .then(response => response.text())
-  .then(data => {
-
-    document.getElementById('footer-placeholder').innerHTML = data;
-
-  });
-</script>
+    fetch("../footer/footer.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("footer-placeholder").innerHTML = data;
+      });
+  </script>
 </body>
-
 </html>
