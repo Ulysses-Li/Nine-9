@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Nine9 Tech Center | CAD Download</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../header/header.css">
+  <link rel="stylesheet" href="../footer/footer.css">
+  <link rel="stylesheet" href="./cad-download.css">
+</head>
+
+<body class="cad-download-page d-flex flex-column min-vh-100">
+  <div id="header-placeholder"></div>
+
+  <main class="cad-main flex-grow-1">
+    <section class="cad-panel" aria-labelledby="cadTitle">
+      <h1 id="cadTitle" class="cad-title">CAD Data 下載</h1>
+      <div class="cad-title-line"></div>
+
+      <div class="cad-columns">
+        <section class="cad-search-block" aria-labelledby="dxfTitle">
+          <h2 id="dxfTitle">2D dxf file</h2>
+          <div class="cad-search-box" data-cad-search="dxf">
+            <div class="cad-input-row">
+              <input type="search" id="dxfSearch" placeholder="e.g. 99616-06" autocomplete="off">
+              <button type="button" aria-label="Search 2D DXF file">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+            <ul class="cad-suggestion-list" id="dxfList"></ul>
+            <p class="cad-dropdown-note">( 即時下拉式選單 )</p>
+            <div class="cad-status" id="dxfStatus" role="status" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="cad-search-block" aria-labelledby="stepTitle">
+          <h2 id="stepTitle">3D Step file</h2>
+          <div class="cad-search-box" data-cad-search="step">
+            <div class="cad-input-row">
+              <input type="search" id="stepSearch" placeholder="e.g. 99616-06" autocomplete="off">
+              <button type="button" aria-label="Search 3D STEP file">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+            <ul class="cad-suggestion-list" id="stepList"></ul>
+            <p class="cad-dropdown-note">( 即時下拉式選單 )</p>
+            <div class="cad-status" id="stepStatus" role="status" aria-live="polite"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="./cad-download.js"></script>
+  <script>
+    fetch("../header/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const topNav = document.getElementById("topNav");
+
+        if (mobileMenuBtn && topNav) {
+          mobileMenuBtn.addEventListener("click", function () {
+            topNav.classList.toggle("active");
+          });
+        }
+      });
+
+    fetch("../footer/footer.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("footer-placeholder").innerHTML = data;
+      });
+  </script>
+</body>
+</html>
