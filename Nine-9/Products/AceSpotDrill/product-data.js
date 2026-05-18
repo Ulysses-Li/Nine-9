@@ -17,6 +17,20 @@ const PRODUCT_PAGE_DATA = {
     "desc": "ACE Spot Drill technical support area for catalog downloads, cutting data, NC programming support, and knowledge-base FAQ.",
     "href": ""
   },
+  "videos": [
+    {
+      "title": "Product Introduction Video",
+      "desc": "Planning and marketing product video for ACE Spot Drill.",
+      "href": "",
+      "status": "Coming soon"
+    },
+    {
+      "title": "Machining Application Video",
+      "desc": "Application footage for spotting, chamfering, and countersinking.",
+      "href": "",
+      "status": "Coming soon"
+    }
+  ],
   "cuttingData": {
     "operations": [
       {

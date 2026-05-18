@@ -20,41 +20,134 @@
   <main class="flex-grow-1">
     <section class="nc-program-page">
       <h1 class="page-title">NC Program</h1>
+      <p class="page-intro">
+        Select by machining method. These tools help users without CAM software create practical starting NC programs faster.
+      </p>
       <div class="title-line"></div>
 
-      <div class="program-grid" aria-label="NC Program generators">
-        <a class="program-card" href="./ThreadMilling/index.html">
-          <div class="program-icon" aria-hidden="true">
-            <i class="fa-solid fa-screwdriver-wrench"></i>
-          </div>
+      <section class="program-section" aria-labelledby="availableProgramTitle">
+        <div class="section-heading">
+          <h2 id="availableProgramTitle">Available by Machining Method</h2>
+          <p>Ready-to-use workflows.</p>
+        </div>
 
-          <div>
-            <h2>Thread Milling</h2>
-            <p>Thread milling NC program support for MCC Thread Mill.</p>
-          </div>
+        <div class="program-grid" aria-label="Available NC Program generators">
+          <a class="program-card" href="./ThreadMilling/index.html">
+            <div class="program-visual is-threading" aria-hidden="true">
+              <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
 
-          <span class="program-cta">
-            Open NC Program Generator
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </span>
-        </a>
+            <div>
+              <span class="program-category">Threading Method</span>
+              <h3>Thread Milling</h3>
+              <p>Create thread milling paths by thread type, size, tool, cutting data, passes, and coordinates.</p>
+            </div>
 
-        <a class="program-card" href="../Products/NCHelixDrill/index.html#programming">
-          <div class="program-icon" aria-hidden="true">
-            <i class="fa-solid fa-rotate"></i>
-          </div>
+            <span class="program-cta">
+              Open NC Program Generator
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
+          </a>
 
-          <div>
-            <h2>NC Helix Drill</h2>
-            <p>Helical interpolation drilling NC program support for NC Helix Drill.</p>
-          </div>
+          <a class="program-card" href="../Products/NCHelixDrill/index.html#programming">
+            <div class="program-visual is-helix" aria-hidden="true">
+              <i class="fa-solid fa-rotate"></i>
+            </div>
 
-          <span class="program-cta">
-            Open NC Program Generator
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </span>
-        </a>
-      </div>
+            <div>
+              <span class="program-category">Hole Making Method</span>
+              <h3>Helical Interpolation Drilling</h3>
+              <p>Support for NC Helix Drill users who need a practical helix drilling program without CAM.</p>
+            </div>
+
+            <span class="program-cta">
+              Open NC Program Generator
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <section class="program-section" aria-labelledby="plannedProgramTitle">
+        <div class="section-heading">
+          <h2 id="plannedProgramTitle">Method Categories</h2>
+          <p>Planning diagrams for future generators.</p>
+        </div>
+
+        <div class="program-grid program-grid-compact" aria-label="NC Program categories">
+          <article class="program-card is-placeholder">
+            <div class="program-visual is-spotting" aria-hidden="true">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <span class="program-category">Spotting Method</span>
+              <h3>Spotting / Chamfering</h3>
+              <p>For spot drill depth, chamfer diameter, angle selection, cutting data, and simple positioning.</p>
+            </div>
+            <span class="program-status">Coming soon</span>
+          </article>
+
+          <article class="program-card is-placeholder">
+            <div class="program-visual is-drilling" aria-hidden="true">
+              <i class="fa-solid fa-circle-dot"></i>
+            </div>
+            <div>
+              <span class="program-category">Drilling Method</span>
+              <h3>Drilling Cycle</h3>
+              <p>For hole diameter, depth, pecking, safe height, spindle speed, and feed rate setup.</p>
+            </div>
+            <span class="program-status">Coming soon</span>
+          </article>
+
+          <article class="program-card is-placeholder">
+            <div class="program-visual is-milling" aria-hidden="true">
+              <i class="fa-solid fa-border-all"></i>
+            </div>
+            <div>
+              <span class="program-category">Milling Method</span>
+              <h3>Basic Milling</h3>
+              <p>For simple shoulder, slot, facing, step-over, depth of cut, and cutting data guidance.</p>
+            </div>
+            <span class="program-status">Coming soon</span>
+          </article>
+
+          <article class="program-card is-placeholder">
+            <div class="program-visual is-boring" aria-hidden="true">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <div>
+              <span class="program-category">Boring Method</span>
+              <h3>Boring / Finishing</h3>
+              <p>For bore diameter, finishing allowance, depth, feed per revolution, and repeatable setup notes.</p>
+            </div>
+            <span class="program-status">Coming soon</span>
+          </article>
+
+          <article class="program-card is-placeholder">
+            <div class="program-visual is-deburring" aria-hidden="true">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div>
+              <span class="program-category">Deburring Method</span>
+              <h3>Front / Back Deburring</h3>
+              <p>For edge break, front and back deburring, tool approach, clearance, and safe exit motion.</p>
+            </div>
+            <span class="program-status">Coming soon</span>
+          </article>
+
+          <article class="program-card is-placeholder">
+            <div class="program-visual is-turning" aria-hidden="true">
+              <i class="fa-solid fa-arrows-spin"></i>
+            </div>
+            <div>
+              <span class="program-category">Turning Method</span>
+              <h3>Swiss Turning Support</h3>
+              <p>For modular head turning applications, tool orientation, feed mode, and starter process setup.</p>
+            </div>
+            <span class="program-status">Coming soon</span>
+          </article>
+        </div>
+      </section>
     </section>
   </main>
 

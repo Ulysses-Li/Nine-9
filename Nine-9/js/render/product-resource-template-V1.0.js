@@ -113,6 +113,41 @@ function renderProgramming() {
   `;
 }
 
+function renderVideos() {
+  const videos = PRODUCT_PAGE_DATA.videos || [];
+
+  contentArea.innerHTML = `
+    <h1 class="page-title">${escapeHTML(PRODUCT_PAGE_DATA.productName)} Product Videos</h1>
+    <div class="title-line"></div>
+
+    ${videos.length ? `
+      <div class="video-grid">
+        ${videos.map(item => `
+          <${item.href ? "a" : "article"}
+            class="video-card ${item.href ? "" : "is-disabled"}"
+            ${item.href ? `href="${escapeHTML(item.href)}" target="_blank"` : ""}
+          >
+            <div class="video-thumb" aria-hidden="true">
+              <i class="fa-solid fa-play"></i>
+            </div>
+
+            <div class="video-copy">
+              <h2>${escapeHTML(item.title)}</h2>
+              <p>${escapeHTML(item.desc || "")}</p>
+              <span>${escapeHTML(item.href ? "Watch video" : item.status || "Coming soon")}</span>
+            </div>
+          </${item.href ? "a" : "article"}>
+        `).join("")}
+      </div>
+    ` : `
+      <div class="program-box">
+        <div class="program-title">Product Videos</div>
+        <div class="program-desc">Coming soon</div>
+      </div>
+    `}
+  `;
+}
+
 function renderFaqList() {
   const faqs = PRODUCT_PAGE_DATA.faqs || [];
 
@@ -458,12 +493,17 @@ function renderPage(page) {
     return;
   }
 
+  if (page === "videos") {
+    renderVideos();
+    return;
+  }
+
   renderDownload();
 }
 
 function getPageFromHash() {
   const page = window.location.hash.replace("#", "");
-  const validPages = ["download", "programming", "faq", "cutting-data"];
+  const validPages = ["download", "programming", "faq", "cutting-data", "videos"];
 
   return validPages.includes(page) ? page : "download";
 }
