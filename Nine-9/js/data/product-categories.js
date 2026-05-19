@@ -44,7 +44,7 @@ const CENTERING_PRODUCTS = [
 
   {
     name: "i-Center Center Drill",
-    image: "../../img/spotting.png",
+    image: "../../img/centering.png",
     description: "Center drilling and positioning tool.",
     href: "../../Products/ICenter/index.html"
   }
@@ -126,7 +126,7 @@ const NC_HELIX_DRILL_PRODUCTS = [
 
   {
     name: "NC Helix Drill",
-    image: "../../img/drilling.png",
+    image: "../../img/helix.png",
     description: "Helical interpolation drilling system.",
     href: "../../Products/NCHelixDrill/index.html"
   }
@@ -143,7 +143,7 @@ const THREADING_PRODUCTS = [
 
   {
     name: "MCC Thread Mill",
-    image: "../../img/drilling.png",
+    image: "../../img/threading.png",
     description: "Thread milling cutter system.",
     href: "../../Products/MCCThreadMill/index.html"
   }
@@ -250,14 +250,14 @@ const DEBURRING_PRODUCTS = [
 
   {
     name: "NC Deburring",
-    image: "../../img/chamfering.png",
+    image: "../../img/deburring.png",
     description: "Deburring application tool.",
     href: "../../Products/NCDeburring/index.html"
   },
 
   {
     name: "MCC Deburring Mill",
-    image: "../../img/chamfering.png",
+    image: "../../img/deburring.png",
     description: "Thread mill type deburring tool.",
     href: "../../Products/MCCDeburring/index.html"
   }
@@ -298,7 +298,7 @@ const ER_TAPER_SHANK_PRODUCTS = [
 
   {
     name: "Ergo ER Taper-Shank Cutter",
-    image: "../../img/accessories.png",
+    image: "../../img/Ergo.png",
     description: "ER taper-shank modular cutter system.",
     href: "../../Products/ErgoER/index.html"
   }

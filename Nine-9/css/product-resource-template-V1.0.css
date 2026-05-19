@@ -84,7 +84,7 @@ body {
 }
 
 .side-menu a[data-page="videos"]::before {
-  content: "▶";
+  content: "PV";
 }
 
 .side-menu a::after {
