@@ -21,7 +21,7 @@ const PRODUCT_FAMILIES = [
 
   {
     title: "Centering",
-    image: "../img/spotting.png",
+    image: "../img/centering.png",
     href: "../Machining/Centering/index.html",
     products: [
       { name: "i-Center Center Drill", href: "../Products/ICenter/index.html" }
@@ -59,7 +59,7 @@ const PRODUCT_FAMILIES = [
 
   {
     title: "NC Helix Drill",
-    image: "../img/drilling.png",
+    image: "../img/helix.png",
     href: "../Machining/NC_Helix_Drill/index.html",
     products: [
       { name: "NC Helix Drill", href: "../Products/NCHelixDrill/index.html" }
@@ -68,7 +68,7 @@ const PRODUCT_FAMILIES = [
 
   {
     title: "Threading",
-    image: "../img/drilling.png",
+    image: "../img/threading.png",
     href: "../Machining/Threading/index.html",
     products: [
       { name: "MCC Thread Mill", href: "../Products/MCCThreadMill/index.html" }
@@ -103,7 +103,7 @@ const PRODUCT_FAMILIES = [
 
   {
     title: "Deburring",
-    image: "../img/chamfering.png",
+    image: "../img/deburring.png",
     href: "../Machining/Deburring/index.html",
     products: [
       { name: "NC Deburring", href: "../Products/NCDeburring/index.html" },
@@ -123,7 +123,7 @@ const PRODUCT_FAMILIES = [
 
   {
     title: "ER Taper-Shank Cutter",
-    image: "../img/accessories.png",
+    image: "../img/Ergo.png",
     href: "../Machining/ER_Taper-Shank_Cutter/index.html",
     products: [
       { name: "Ergo ER Taper-Shank Cutter", href: "../Products/ErgoER/index.html" }
