@@ -4,7 +4,7 @@ const FAQ_PRODUCTS = [
     name: "ACE Spot Drill",
     category: "Spotting / Chamfering",
     image: "../img/spotting.png",
-    href: "../Products/AceSpotDrill/index.html#faq"
+    href: "../Products/AceSpotDrill/indexV2.0.html#faq"
   },
   {
     id: "chamfer-mill",
