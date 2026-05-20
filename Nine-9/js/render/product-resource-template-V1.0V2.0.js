@@ -262,8 +262,20 @@ function renderTechnicalSupport() {
         <form class="support-form" id="supportMailForm">
           <div class="support-form-row">
             <label>
-              Name / Company
-              <input id="supportName" type="text" autocomplete="name" placeholder="Your name or company">
+              Contact Name *
+              <input id="supportContactName" type="text" autocomplete="name" placeholder="Contact person name" required>
+            </label>
+
+            <label>
+              Company Name *
+              <input id="supportCompany" type="text" autocomplete="organization" placeholder="Company name" required>
+            </label>
+          </div>
+
+          <div class="support-form-row">
+            <label>
+              Country *
+              <input id="supportCountry" type="text" autocomplete="country-name" placeholder="Country" required>
             </label>
 
             <label>
@@ -312,13 +324,15 @@ function getSupportConfig() {
   return {
     productName,
     toEmail: "vivian@jimmore.com.tw",
-    bccEmail: "louisl@jimmore.com.tw",
+    bccEmail: "louisli@jimmore.com.tw",
     subject: `${productName} Technical Support Request`
   };
 }
 
 function buildSupportMailto({
-  name = "",
+  contactName = "",
+  company = "",
+  country = "",
   email = "",
   material = "",
   tool = "",
@@ -329,7 +343,9 @@ function buildSupportMailto({
   const body = [
     `Product Name: ${supportConfig.productName}`,
     "",
-    `Name / Company: ${name}`,
+    `Contact Name: ${contactName}`,
+    `Company Name: ${company}`,
+    `Country: ${country}`,
     `Reply Email: ${email}`,
     `Workpiece Material: ${material}`,
     `Tool Size / Model: ${tool}`,
@@ -357,14 +373,21 @@ function bindSupportMailForm() {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const name = document.getElementById("supportName")?.value.trim() || "";
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const contactName = document.getElementById("supportContactName")?.value.trim() || "";
+    const company = document.getElementById("supportCompany")?.value.trim() || "";
+    const country = document.getElementById("supportCountry")?.value.trim() || "";
     const email = document.getElementById("supportEmail")?.value.trim() || "";
     const material = document.getElementById("supportMaterial")?.value.trim() || "";
     const tool = document.getElementById("supportTool")?.value.trim() || "";
     const machine = document.getElementById("supportMachine")?.value.trim() || "";
     const issue = document.getElementById("supportIssue")?.value.trim() || "";
 
-    window.location.href = buildSupportMailto({ name, email, material, tool, machine, issue });
+    window.location.href = buildSupportMailto({ contactName, company, country, email, material, tool, machine, issue });
   });
 }
 

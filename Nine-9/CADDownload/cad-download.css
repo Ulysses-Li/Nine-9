@@ -9,85 +9,83 @@
 body.cad-download-page {
   margin: 0;
   min-height: 100vh;
-  background: var(--page-bg);
+  background: #fff;
   color: var(--text-main);
   font-family: Arial, "Microsoft JhengHei", sans-serif;
 }
 
 .cad-main {
-  padding: 34px 24px 92px;
+  padding: 34px 26px 34px;
   background: #fff;
 }
 
 .cad-panel {
-  max-width: 1120px;
+  max-width: 1180px;
   margin: 0 auto;
 }
 
 .cad-title {
-  position: relative;
-  display: inline-block;
   margin: 0;
-  padding: 8px 34px 10px 0;
-  font-size: 28px;
+  padding: 8px 0 14px 10px;
+  font-size: 34px;
   font-weight: 800;
   line-height: 1.15;
 }
 
 .cad-title::after {
-  content: "";
-  position: absolute;
-  right: -54px;
-  top: 50%;
-  width: 54px;
-  height: 3px;
-  background: #d7182a;
-  transform: translateY(-50%);
+  display: none;
 }
 
 .cad-title-line {
   height: 2px;
-  margin: 0 0 32px;
+  margin: 0 0 18px;
   background: #1d1d1d;
 }
 
-.cad-columns {
+.cad-layout {
   display: grid;
-  grid-template-columns: repeat(2, minmax(280px, 1fr));
-  gap: 96px;
+  grid-template-columns: minmax(520px, 0.98fr) minmax(420px, 0.72fr);
+  gap: 72px;
   align-items: start;
-  padding: 0 54px;
+  padding: 0 28px;
 }
 
-.cad-search-block h2 {
+.cad-left-column {
+  display: grid;
+  gap: 34px;
+}
+
+.cad-search-block h2,
+.cad-product-block h2 {
   position: relative;
-  margin: 0 0 32px;
-  padding-left: 28px;
+  margin: 0 0 14px;
+  padding-left: 34px;
   color: #3c3939;
-  font-size: 30px;
+  font-size: 38px;
   font-weight: 800;
   line-height: 1.2;
 }
 
-.cad-search-block h2::before {
+.cad-search-block h2::before,
+.cad-product-block h2::before {
   content: "";
   position: absolute;
-  left: 0;
+  left: 4px;
   top: 50%;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #3c3939;
   transform: translateY(-50%);
 }
 
 .cad-search-box {
-  width: min(100%, 330px);
+  width: min(100%, 430px);
 }
 
 .cad-input-row {
   display: grid;
-  grid-template-columns: 1fr 42px;
+  grid-template-columns: 1fr 52px;
   border: 2px solid #2f2f2f;
   background: #fff;
 }
@@ -95,11 +93,11 @@ body.cad-download-page {
 .cad-input-row input {
   width: 100%;
   min-width: 0;
-  height: 34px;
+  height: 44px;
   border: 0;
-  padding: 4px 16px;
+  padding: 4px 22px;
   color: #111;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 700;
   line-height: 1;
   outline: none;
@@ -110,8 +108,8 @@ body.cad-download-page {
 }
 
 .cad-input-row button {
-  width: 42px;
-  height: 34px;
+  width: 52px;
+  height: 44px;
   border: 0;
   display: inline-flex;
   align-items: center;
@@ -122,15 +120,15 @@ body.cad-download-page {
 }
 
 .cad-input-row button i {
-  font-size: 22px;
+  font-size: 28px;
   line-height: 1;
 }
 
 .cad-suggestion-list {
-  width: calc(100% - 42px);
-  min-height: 114px;
+  width: calc(100% - 52px);
+  min-height: 148px;
   margin: 0;
-  padding: 7px 0;
+  padding: 8px 0;
   background: var(--list-bg);
   list-style: none;
 }
@@ -141,12 +139,12 @@ body.cad-download-page {
 
 .cad-suggestion-list button {
   width: 100%;
-  min-height: 35px;
+  min-height: 46px;
   border: 0;
-  padding: 6px 16px;
+  padding: 7px 20px;
   background: transparent;
   color: #000;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.25;
   text-align: left;
   cursor: pointer;
@@ -159,16 +157,17 @@ body.cad-download-page {
 }
 
 .cad-suggestion-list .is-empty {
-  padding: 8px 16px;
+  padding: 10px 20px;
   color: #666;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
 }
 
 .cad-dropdown-note {
-  margin: 6px 0 0;
+  width: calc(100% - 52px);
+  margin: 10px 0 0;
   color: #231f20;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1.25;
   text-align: center;
@@ -187,10 +186,50 @@ body.cad-download-page {
   display: none;
 }
 
+.cad-step-block {
+  padding-top: 0;
+}
+
+.cad-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px 10px;
+  max-width: 700px;
+}
+
+.cad-product-grid a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 6px 8px;
+  color: #302b2b;
+  background: #fff;
+  border: 2px solid #111;
+  border-radius: 12px;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  text-decoration: none;
+}
+
+.cad-product-grid a:hover,
+.cad-product-grid a:focus {
+  color: #fff;
+  background: var(--search-dark);
+  outline: none;
+}
+
 @media (max-width: 900px) {
-  .cad-columns {
+  .cad-layout {
+    grid-template-columns: 1fr;
     gap: 46px;
     padding: 0 18px;
+  }
+
+  .cad-search-box {
+    width: min(100%, 520px);
   }
 }
 
@@ -200,44 +239,55 @@ body.cad-download-page {
   }
 
   .cad-title {
-    font-size: 25px;
+    padding-left: 0;
+    font-size: 28px;
   }
 
-  .cad-title::after {
-    right: -40px;
-    width: 40px;
-  }
-
-  .cad-columns {
-    grid-template-columns: 1fr;
+  .cad-layout {
     gap: 42px;
     padding: 0;
   }
 
-  .cad-search-block h2 {
+  .cad-search-block h2,
+  .cad-product-block h2 {
     margin-bottom: 18px;
-    font-size: 26px;
+    padding-left: 26px;
+    font-size: 28px;
   }
 
   .cad-search-box {
     width: 100%;
   }
 
+  .cad-suggestion-list,
+  .cad-dropdown-note {
+    width: calc(100% - 52px);
+  }
+
   .cad-dropdown-note {
     font-size: 22px;
+  }
+
+  .cad-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cad-product-grid a {
+    min-height: 52px;
+    font-size: 17px;
   }
 }
 
 @media (max-width: 420px) {
-  .cad-title::after {
-    display: none;
-  }
-
   .cad-input-row input {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .cad-suggestion-list button {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .cad-product-grid {
+    grid-template-columns: 1fr;
   }
 }
