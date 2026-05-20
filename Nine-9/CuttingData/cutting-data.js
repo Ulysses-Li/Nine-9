@@ -5,7 +5,7 @@ const CUTTING_DATA_PRODUCTS = [
     category: "Spotting / Chamfering",
     image: "../img/spotting.png",
     status: "Available",
-    href: "../Products/AceSpotDrill/index.html#cutting-data",
+    href: "../Products/AceSpotDrill/indexV2.0.html#cutting-data",
     summary: "Product preset cutting data for spotting and chamfering.",
     details: [
       "Operation: Spotting / Chamfering",

@@ -15,7 +15,7 @@ const SPOTTING_PRODUCTS = [
     name: "ACE Spot Drill",
     image: "../../img/spotting.png",
     description: "High performance spotting and chamfering.",
-    href: "../../Products/AceSpotDrill/index.html"
+    href: "../../Products/AceSpotDrill/indexV2.0.html"
   },
 
   {
@@ -214,7 +214,7 @@ const CHAMFERING_CORNER_PRODUCTS = [
     name: "ACE Spot Drill",
     image: "../../img/spotting.png",
     description: "Chamfering and countersinking.",
-    href: "../../Products/AceSpotDrill/index.html"
+    href: "../../Products/AceSpotDrill/indexV2.0.html"
   },
 
   {
