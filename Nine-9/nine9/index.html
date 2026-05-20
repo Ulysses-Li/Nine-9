@@ -74,10 +74,10 @@
         <p>放置企劃與行銷拍攝的產品介紹影片。</p>
       </a>
 
-      <a class="home-tool-card" href="#contact">
-        <i class="fa-solid fa-headset" aria-hidden="true"></i>
-        <h2>Technical Support</h2>
-        <p>特殊應用、參數確認、技術問題可聯絡支援窗口。</p>
+      <a class="home-tool-card" href="../TechnicalFAQ/index.html">
+        <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
+        <h2>Technical FAQ</h2>
+        <p>選擇產品查看常見加工問題、應用說明與技術資料。</p>
       </a>
     </section>
 
@@ -111,7 +111,7 @@
   <div id="footer-placeholder"></div>
 
   <script>
-    fetch("../header/header.html")
+    fetch("../header/header.html?v=20260520-news")
       .then(response => response.text())
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;

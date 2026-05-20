@@ -107,7 +107,7 @@ function renderProductsByCategory(categoryTitle) {
 
 function loadHeader() {
 
-  fetch("../../header/header.html")
+  fetch("../../header/header.html?v=20260520-news")
 
     .then(response => response.text())
 

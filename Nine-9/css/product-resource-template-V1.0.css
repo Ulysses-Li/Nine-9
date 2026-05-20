@@ -87,6 +87,10 @@ body {
   content: "PV";
 }
 
+.side-menu a[data-page="support"]::before {
+  content: "TS";
+}
+
 .side-menu a::after {
   content: "";
   position: absolute;
@@ -482,6 +486,202 @@ body {
   margin-top: 4px;
 }
 
+.support-shell {
+  max-width: 895px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(240, 90, 26, 0.14), rgba(18, 99, 241, 0.08));
+  border: 1px solid #e1e5eb;
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(20, 24, 30, 0.08);
+}
+
+.support-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #d8dde5;
+  border-radius: 10px;
+}
+
+.support-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 30px 32px 24px;
+  border-bottom: 1px solid #e7ebf0;
+}
+
+.support-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  color: #c94611;
+  background: #fff2eb;
+  border: 1px solid #ffd4c0;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.support-head h2 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.support-head p {
+  max-width: 650px;
+  margin: 0;
+  color: #4d5560;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.support-meta {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 210px;
+  padding-top: 4px;
+}
+
+.support-meta div {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e1e5eb;
+  border-radius: 8px;
+}
+
+.support-meta span {
+  display: block;
+  margin-bottom: 5px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.support-meta strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.support-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 32px 0;
+}
+
+.support-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  color: #1f2937;
+  background: #f4f6f8;
+  border: 1px solid #dfe4eb;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.support-tags span::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  background: #f05a1a;
+  border-radius: 50%;
+}
+
+.support-form {
+  display: grid;
+  gap: 18px;
+  padding: 24px 32px 30px;
+}
+
+.support-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.support-form label {
+  display: grid;
+  gap: 8px;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.support-form input,
+.support-form textarea {
+  width: 100%;
+  border: 1px solid #cfd6df;
+  border-radius: 7px;
+  padding: 11px 12px;
+  color: #111;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+}
+
+.support-form input {
+  min-height: 44px;
+}
+
+.support-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.support-form input:focus,
+.support-form textarea:focus {
+  border-color: #1263f1;
+  outline: 3px solid rgba(18, 99, 241, 0.14);
+}
+
+.support-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.support-send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 18px;
+  color: #fff;
+  background: #1263f1;
+  border: 1px solid #1263f1;
+  border-radius: 7px;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.support-send-btn:hover {
+  background: #0b50c8;
+}
+
+.support-send-note {
+  max-width: 520px;
+  color: #66707c;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
 .faq-nav {
   max-width: 900px;
   display: flex;
@@ -697,8 +897,32 @@ body {
   }
 
   .resource-grid,
-  .faq-grid {
+  .faq-grid,
+  .support-form-row {
     grid-template-columns: 1fr;
+  }
+
+  .support-shell {
+    padding: 8px;
+  }
+
+  .support-head {
+    grid-template-columns: 1fr;
+    padding: 24px 20px 20px;
+  }
+
+  .support-meta {
+    min-width: 0;
+  }
+
+  .support-tags,
+  .support-form {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .support-send-btn {
+    width: 100%;
   }
 
   .page-title {

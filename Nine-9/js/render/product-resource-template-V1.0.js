@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const contentArea = document.getElementById("contentArea");
+document.querySelectorAll(".side-menu").forEach(menu => {
+  if (menu.querySelector('[data-page="support"]')) return;
+
+  const supportLink = document.createElement("a");
+  supportLink.dataset.page = "support";
+  supportLink.textContent = "Technical Support";
+  menu.appendChild(supportLink);
+});
 const menuLinks = document.querySelectorAll(".side-menu a");
 
 function escapeHTML(value) {
@@ -214,6 +222,150 @@ function renderFaqDetail(index) {
       </button>
     </div>
   `;
+}
+
+function renderTechnicalSupport() {
+  const supportConfig = getSupportConfig();
+  const productName = supportConfig.productName;
+
+  contentArea.innerHTML = `
+    <h1 class="page-title">${escapeHTML(productName)} Technical Support</h1>
+    <div class="title-line"></div>
+
+    <section class="support-shell" aria-label="${escapeHTML(productName)} technical support">
+      <div class="support-card">
+        <header class="support-head">
+          <div>
+            <span class="support-kicker">Nine9 Tech Support</span>
+            <h2>Need help selecting or applying ${escapeHTML(productName)}?</h2>
+            <p>Send us your tool selection questions, cutting data, material information, machine type, or troubleshooting case. Our technical team will review your application and provide suitable recommendations.</p>
+          </div>
+
+          <div class="support-meta" aria-label="Mail recipients">
+            <div>
+              <span>To</span>
+              <strong>${escapeHTML(supportConfig.toEmail)}</strong>
+            </div>
+            <div>
+              <span>BCC</span>
+              <strong>${escapeHTML(supportConfig.bccEmail)}</strong>
+            </div>
+          </div>
+        </header>
+
+        <div class="support-tags" aria-label="Support topics">
+          <span>Tool selection</span>
+          <span>Cutting data</span>
+          <span>Application support</span>
+        </div>
+
+        <form class="support-form" id="supportMailForm">
+          <div class="support-form-row">
+            <label>
+              Name / Company
+              <input id="supportName" type="text" autocomplete="name" placeholder="Your name or company">
+            </label>
+
+            <label>
+              Reply Email
+              <input id="supportEmail" type="email" autocomplete="email" placeholder="Your reply email">
+            </label>
+          </div>
+
+          <div class="support-form-row">
+            <label>
+              Workpiece Material
+              <input id="supportMaterial" type="text" placeholder="Example: SUS304, aluminum, cast iron">
+            </label>
+
+            <label>
+              Tool Size / Model
+              <input id="supportTool" type="text" placeholder="Example: SI10, 90 deg, tool diameter">
+            </label>
+          </div>
+
+          <label>
+            Machine Type
+            <input id="supportMachine" type="text" placeholder="Example: CNC milling machine, lathe, Swiss type machine">
+          </label>
+
+          <label>
+            Application / Issue Description
+            <textarea id="supportIssue" placeholder="Example: material, hole diameter, tool model, spindle speed, feed rate, machine type, problem description, or photo/video link."></textarea>
+          </label>
+
+          <div class="support-form-actions">
+            <button class="support-send-btn" type="submit">Send Technical Support Request</button>
+            <div class="support-send-note">This will open your email app. To: ${escapeHTML(supportConfig.toEmail)} / BCC: ${escapeHTML(supportConfig.bccEmail)}</div>
+          </div>
+        </form>
+      </div>
+    </section>
+  `;
+
+  bindSupportMailForm();
+}
+
+function getSupportConfig() {
+  const productName = PRODUCT_PAGE_DATA.productName || "Nine9 Product";
+
+  return {
+    productName,
+    toEmail: "vivian@jimmore.com.tw",
+    bccEmail: "louisl@jimmore.com.tw",
+    subject: `${productName} Technical Support Request`
+  };
+}
+
+function buildSupportMailto({
+  name = "",
+  email = "",
+  material = "",
+  tool = "",
+  machine = "",
+  issue = ""
+} = {}) {
+  const supportConfig = getSupportConfig();
+  const body = [
+    `Product Name: ${supportConfig.productName}`,
+    "",
+    `Name / Company: ${name}`,
+    `Reply Email: ${email}`,
+    `Workpiece Material: ${material}`,
+    `Tool Size / Model: ${tool}`,
+    `Machine Type: ${machine}`,
+    "",
+    "Application / Issue Description:",
+    issue
+  ].join("\r\n");
+
+  return [
+    `mailto:${supportConfig.toEmail}`,
+    "?bcc=",
+    encodeURIComponent(supportConfig.bccEmail),
+    "&subject=",
+    encodeURIComponent(supportConfig.subject),
+    "&body=",
+    encodeURIComponent(body)
+  ].join("");
+}
+
+function bindSupportMailForm() {
+  const form = document.getElementById("supportMailForm");
+  if (!form) return;
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById("supportName")?.value.trim() || "";
+    const email = document.getElementById("supportEmail")?.value.trim() || "";
+    const material = document.getElementById("supportMaterial")?.value.trim() || "";
+    const tool = document.getElementById("supportTool")?.value.trim() || "";
+    const machine = document.getElementById("supportMachine")?.value.trim() || "";
+    const issue = document.getElementById("supportIssue")?.value.trim() || "";
+
+    window.location.href = buildSupportMailto({ name, email, material, tool, machine, issue });
+  });
 }
 
 function getRangeMidpoint(range) {
@@ -498,12 +650,17 @@ function renderPage(page) {
     return;
   }
 
+  if (page === "support") {
+    renderTechnicalSupport();
+    return;
+  }
+
   renderDownload();
 }
 
 function getPageFromHash() {
   const page = window.location.hash.replace("#", "");
-  const validPages = ["download", "programming", "faq", "cutting-data", "videos"];
+  const validPages = ["download", "programming", "faq", "cutting-data", "videos", "support"];
 
   return validPages.includes(page) ? page : "download";
 }
@@ -530,7 +687,7 @@ function bindMenu() {
 }
 
 function loadHeader() {
-  fetch("../../header/header.html")
+  fetch("../../header/header.html?v=20260520-news")
     .then(response => response.text())
     .then(data => {
       document.getElementById("header-placeholder").innerHTML = data;
