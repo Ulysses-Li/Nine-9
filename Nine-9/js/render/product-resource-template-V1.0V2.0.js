@@ -414,6 +414,23 @@ function formatDecimal(value, digits) {
   return number.toFixed(digits).replace(/\.?0+$/, "");
 }
 
+function calculateSpottingDepth(diameter, angle, lValue) {
+  const d = Number(diameter);
+  const angleNumber = Number(angle);
+  const l = Number(lValue);
+  const angleFactors = {
+    60: 0.866,
+    90: 0.5,
+    120: 0.289,
+    142: 0.172
+  };
+
+  if (!Number.isFinite(d) || !Number.isFinite(l) || d <= 0) return null;
+  if (!Number.isFinite(angleNumber) || !angleFactors[angleNumber]) return null;
+
+  return d * angleFactors[angleNumber] - l;
+}
+
 function getSelectedCuttingData() {
   const cuttingData = PRODUCT_PAGE_DATA.cuttingData;
   if (!cuttingData) return null;
@@ -473,6 +490,9 @@ function updateCuttingDataCalculator({ resetRecommended = false } = {}) {
   const vcInput = document.getElementById("cuttingVc");
   const feedInput = document.getElementById("cuttingFeed");
   const diameterInput = document.getElementById("cuttingDiameter");
+  const diameterError = document.getElementById("cuttingDiameterError");
+  const depthField = document.getElementById("cuttingSpotDepthField");
+  const depthOutput = document.getElementById("cuttingSpotDepth");
   const rpmOutput = document.getElementById("cuttingRpm");
   const feedRateOutput = document.getElementById("cuttingFeedRate");
   const recommendation = document.getElementById("cuttingRecommendation");
@@ -497,11 +517,30 @@ function updateCuttingDataCalculator({ resetRecommended = false } = {}) {
   const diameter = Number(diameterInput.value);
   const vc = Number(vcInput.value);
   const feed = Number(feedInput.value);
+  const dmax = Number(selected.insert.diameter);
+  const isDiameterOverMax = Number.isFinite(diameter) && Number.isFinite(dmax) && diameter > dmax;
   const rpm = Number.isFinite(diameter) && diameter > 0 && Number.isFinite(vc) && vc > 0
     ? (1000 * vc) / (Math.PI * diameter)
     : null;
   const feedRate = rpm != null && Number.isFinite(feed) && feed > 0 ? rpm * feed : null;
+  const spotDepthData = selected.operation.id === "spotting" ? selected.insert.spotDepth : null;
+  const spotDepth = spotDepthData
+    ? calculateSpottingDepth(diameter, selected.angle, spotDepthData.l?.[selected.angle])
+    : null;
 
+  if (depthField) {
+    depthField.hidden = !spotDepthData;
+  }
+  if (depthOutput) {
+    depthOutput.value = spotDepth == null ? "" : spotDepth.toFixed(2);
+  }
+  diameterInput.max = Number.isFinite(dmax) ? formatDecimal(dmax, 3) : "";
+  diameterInput.classList.toggle("is-error", isDiameterOverMax);
+  diameterInput.setAttribute("aria-invalid", isDiameterOverMax ? "true" : "false");
+  if (diameterError) {
+    diameterError.hidden = !isDiameterOverMax;
+    diameterError.textContent = isDiameterOverMax ? `D cannot exceed Dmax ${formatDecimal(dmax, 3)} mm.` : "";
+  }
   rpmOutput.value = rpm == null ? "" : rpm.toFixed(0);
   feedRateOutput.value = feedRate == null ? "" : feedRate.toFixed(1);
 
@@ -522,6 +561,12 @@ function updateCuttingDataCalculator({ resetRecommended = false } = {}) {
       <div class="cutting-summary-item">
         <span>Q</span>
         <strong>${escapeHTML(selected.material.q || "-")}</strong>
+      </div>
+    ` : ""}
+    ${spotDepthData?.tmax?.[selected.angle] ? `
+      <div class="cutting-summary-item">
+        <span>Tmax</span>
+        <strong>${escapeHTML(spotDepthData.tmax[selected.angle])} mm</strong>
       </div>
     ` : ""}
   `;
@@ -597,7 +642,8 @@ function renderCuttingDataCalculator() {
 
         <label>
           <span>Machining Diameter D (mm)</span>
-          <input id="cuttingDiameter" type="number" min="0" step="0.01">
+          <input id="cuttingDiameter" type="number" min="0" step="0.01" aria-describedby="cuttingDiameterError">
+          <small id="cuttingDiameterError" class="cutting-field-error" hidden></small>
         </label>
 
         <label>
@@ -618,6 +664,12 @@ function renderCuttingDataCalculator() {
         </div>
 
         <div class="cutting-output-grid">
+          <label id="cuttingSpotDepthField" hidden>
+            <span>Spotting Depth</span>
+            <input id="cuttingSpotDepth" type="text" readonly>
+            <em>mm</em>
+          </label>
+
           <label>
             <span>Spindle Speed</span>
             <input id="cuttingRpm" type="text" readonly>
@@ -632,6 +684,7 @@ function renderCuttingDataCalculator() {
         </div>
 
         <div class="cutting-formula">
+          <div>Spotting Depth = D x angle factor - L</div>
           <div>RPM = 1000 x Vc / (pi x D)</div>
           <div>Feed Rate = RPM x f</div>
         </div>
