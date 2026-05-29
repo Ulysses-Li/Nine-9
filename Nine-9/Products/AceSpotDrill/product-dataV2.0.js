@@ -42,6 +42,10 @@ const PRODUCT_PAGE_DATA = {
             "id": "SI06",
             "label": "SI06 - S9MT06T1",
             "diameter": 5.5,
+            "spotDepth": {
+              "l": { "60": 0.35, "90": 0.35, "120": 0.05, "142": 0.04 },
+              "tmax": { "60": 4.1, "90": 2.5, "120": 1.6, "142": 0.95 }
+            },
             "angles": {
               "60": { "f": { "carbonLow": [0.01, 0.05], "carbonHigh": [0.01, 0.05], "lowAlloy": [0.01, 0.04], "highAlloy": [0.01, 0.03], "stainless": [0.01, 0.02], "castIron": [0.01, 0.05], "nonFerrous": [0.01, 0.06] } },
               "90": { "f": { "carbonLow": [0.02, 0.08], "carbonHigh": [0.02, 0.08], "lowAlloy": [0.02, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
@@ -53,6 +57,10 @@ const PRODUCT_PAGE_DATA = {
             "id": "SI08",
             "label": "SI08 - S9MT0802",
             "diameter": 7.5,
+            "spotDepth": {
+              "l": { "60": 0.46, "90": 0.46, "120": 0.05, "142": 0.04 },
+              "tmax": { "60": 5.6, "90": 3.4, "120": 2.2, "142": 1.29 }
+            },
             "angles": {
               "60": { "f": { "carbonLow": [0.02, 0.08], "carbonHigh": [0.02, 0.08], "lowAlloy": [0.02, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
               "90": { "f": { "carbonLow": [0.03, 0.10], "carbonHigh": [0.03, 0.10], "lowAlloy": [0.03, 0.08], "highAlloy": [0.03, 0.07], "stainless": [0.01, 0.04], "castIron": [0.03, 0.10], "nonFerrous": [0.03, 0.12] } },
@@ -64,6 +72,10 @@ const PRODUCT_PAGE_DATA = {
             "id": "SI10",
             "label": "SI10 - S9MT1003",
             "diameter": 9.5,
+            "spotDepth": {
+              "l": { "60": 0.58, "90": 0.58, "120": 0.06, "142": 0.05 },
+              "tmax": { "60": 7.1, "90": 4.4, "120": 2.7, "142": 1.64 }
+            },
             "angles": {
               "60": { "f": { "carbonLow": [0.03, 0.08], "carbonHigh": [0.03, 0.08], "lowAlloy": [0.03, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
               "90": { "f": { "carbonLow": [0.04, 0.15], "carbonHigh": [0.04, 0.15], "lowAlloy": [0.03, 0.12], "highAlloy": [0.03, 0.10], "stainless": [0.01, 0.04], "castIron": [0.03, 0.12], "nonFerrous": [0.04, 0.20] } },
@@ -75,6 +87,10 @@ const PRODUCT_PAGE_DATA = {
             "id": "SI12",
             "label": "SI12 - S9MT1203",
             "diameter": 11.5,
+            "spotDepth": {
+              "l": { "60": 0.69, "90": 0.69, "120": 0.06, "142": 0.05 },
+              "tmax": { "60": 8.6, "90": 5.3, "120": 3.3, "142": 1.98 }
+            },
             "angles": {
               "60": { "f": { "carbonLow": [0.03, 0.08], "carbonHigh": [0.03, 0.08], "lowAlloy": [0.03, 0.07], "highAlloy": [0.02, 0.06], "stainless": [0.01, 0.03], "castIron": [0.02, 0.08], "nonFerrous": [0.03, 0.10] } },
               "90": { "f": { "carbonLow": [0.05, 0.20], "carbonHigh": [0.05, 0.20], "lowAlloy": [0.04, 0.15], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.04], "castIron": [0.04, 0.15], "nonFerrous": [0.05, 0.22] } },
@@ -86,6 +102,10 @@ const PRODUCT_PAGE_DATA = {
             "id": "SI16",
             "label": "SI16 - S9MT1603",
             "diameter": 15.5,
+            "spotDepth": {
+              "l": { "60": 0.92, "90": 0.92, "120": 0.1, "142": 0.15 },
+              "tmax": { "60": 11.6, "90": 7, "120": 4.4, "142": 2.67 }
+            },
             "angles": {
               "60": { "f": { "carbonLow": [0.04, 0.10], "carbonHigh": [0.04, 0.10], "lowAlloy": [0.03, 0.08], "highAlloy": [0.02, 0.07], "stainless": [0.01, 0.03], "castIron": [0.03, 0.08], "nonFerrous": [0.04, 0.12] } },
               "90": { "f": { "carbonLow": [0.05, 0.20], "carbonHigh": [0.05, 0.20], "lowAlloy": [0.04, 0.15], "highAlloy": [0.04, 0.12], "stainless": [0.01, 0.04], "castIron": [0.04, 0.15], "nonFerrous": [0.05, 0.25] } },
@@ -97,6 +117,10 @@ const PRODUCT_PAGE_DATA = {
             "id": "SI20",
             "label": "SI20 - S9MT2004",
             "diameter": 19.5,
+            "spotDepth": {
+              "l": { "60": 1.16, "90": 1.16, "120": 0.1, "142": 0.15 },
+              "tmax": { "60": 14.6, "90": 8.9, "120": 5.6, "142": 3.36 }
+            },
             "angles": {
               "60": { "f": { "carbonLow": [0.04, 0.10], "carbonHigh": [0.04, 0.10], "lowAlloy": [0.03, 0.08], "highAlloy": [0.02, 0.07], "stainless": [0.01, 0.03], "castIron": [0.03, 0.08], "nonFerrous": [0.04, 0.12] } },
               "90": { "f": { "carbonLow": [0.05, 0.25], "carbonHigh": [0.05, 0.25], "lowAlloy": [0.04, 0.20], "highAlloy": [0.04, 0.15], "stainless": [0.01, 0.04], "castIron": [0.04, 0.20], "nonFerrous": [0.05, 0.30] } },
