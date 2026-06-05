@@ -1,0 +1,69 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isLogin() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isLogin() && request.auth.uid == uid;
+    }
+
+    function signedInUser() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isSuperAdmin() {
+      return isLogin()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && signedInUser().email == "louis962911@gmail.com"
+        && signedInUser().status != "disabled";
+    }
+
+    function isAdmin() {
+      return isLogin()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && signedInUser().role in ["admin", "super_admin"]
+        && signedInUser().status != "disabled";
+    }
+
+    function hasValidRoleAndStatus(data) {
+      return data.role in ["user", "admin", "super_admin"]
+        && data.status in ["active", "disabled"];
+    }
+
+    match /users/{uid} {
+      allow create: if isOwner(uid)
+        && request.resource.data.role == "user"
+        && request.resource.data.status == "active";
+
+      allow read: if isOwner(uid) || isAdmin() || isSuperAdmin();
+
+      allow update: if isOwner(uid)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          "role",
+          "status",
+          "jobTitle",
+          "geminiApiKey",
+          "gasWebAppUrl",
+          "googleSheetUrl",
+          "sheetName",
+          "businessCardsGasWebAppUrl",
+          "businessCardsGoogleSheetUrl",
+          "businessCardsSheetName"
+        ]);
+
+      allow update: if isSuperAdmin()
+        && hasValidRoleAndStatus(request.resource.data);
+
+      allow update: if isAdmin()
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["role"])
+        && request.resource.data.role == resource.data.role
+        && hasValidRoleAndStatus(request.resource.data);
+
+      allow delete: if isSuperAdmin();
+    }
+  }
+}

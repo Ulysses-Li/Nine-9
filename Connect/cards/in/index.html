@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>名片批次辨識工具（Gemini Vision）</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#eef5fb;
+      --card:rgba(255,255,255,.94);
+      --muted:#64748b;
+      --line:#dbe4ef;
+      --brand:#2563eb;
+      --brand-2:#0891b2;
+      --ink:#111827;
+      --ok:#15803d;
+      --bad:#dc2626;
+      --warn:#b45309;
+      --shadow: 0 24px 70px rgba(15,23,42,.12);
+      --radius: 8px;
+    }
+    body {
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(37,99,235,.16), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(20,184,166,.15), transparent 26%),
+        linear-gradient(rgba(15,23,42,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,23,42,.045) 1px, transparent 1px),
+        linear-gradient(145deg, #f8fbff 0%, #eaf3fb 52%, #f6f8fb 100%);
+      background-size:auto, auto, 34px 34px, 34px 34px, auto;
+      color:var(--ink);
+    }
+    .app-shell{ max-width: 1220px; }
+
+    .topbar{
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(248,251,255,.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(148,163,184,.28);
+      box-shadow:0 12px 34px rgba(15,23,42,.06);
+    }
+    .brand-dot{
+      width: 14px; height: 14px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 0 0 6px rgba(37,99,235,.12), 0 0 24px rgba(20,184,166,.28);
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .subtle{ color: var(--muted); font-size:.92rem; }
+
+    .tool-flow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .flow-chip{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      padding:4px 10px;
+      border:1px solid rgba(37,99,235,.16);
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+      color:#334155;
+      font-size:.82rem;
+      font-weight:700;
+    }
+    .flow-chip::before{
+      content:"";
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      margin-right:7px;
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+    }
+
+    .cardX{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+    .cardX > .fw-bold:first-child,
+    .cardX > div:first-child .fw-bold{
+      color:#0f172a;
+    }
+    .cardX::before{
+      content:"";
+      display:block;
+      height:3px;
+      background:linear-gradient(90deg, var(--brand), var(--brand-2));
+      opacity:.88;
+    }
+
+    .dropzone{
+      border: 1px dashed rgba(37,99,235,.36);
+      background:
+        linear-gradient(rgba(37,99,235,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,.08) 1px, transparent 1px),
+        rgba(255,255,255,.74);
+      background-size:22px 22px, 22px 22px, auto;
+      border-radius: 8px;
+      padding: 18px;
+      transition: .15s ease;
+      min-height: 150px;
+    }
+    .dropzone:hover{
+      border-color: rgba(8,145,178,.56);
+      background-color:#f8fbff;
+      box-shadow: inset 0 0 0 1px rgba(20,184,166,.08);
+    }
+    .dz-title{ font-weight: 700; }
+    .dz-hint{ color: var(--muted); font-size:.9rem; }
+
+    .thumb{
+      width: 104px; height: 78px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background:#fff;
+      box-shadow:0 10px 20px rgba(15,23,42,.1);
+    }
+
+    .stat{
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.8);
+    }
+    .stat .n{ font-size: 1.2rem; font-weight: 800; line-height: 1; }
+    .stat .t{ color: var(--muted); font-size: .86rem; }
+
+    .table thead th{
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      white-space: nowrap;
+      color:#334155;
+    }
+    .table{
+      min-width:760px;
+    }
+    .table tbody td{
+      vertical-align: middle;
+      border-color:#e2e8f0;
+      padding-top:14px;
+      padding-bottom:14px;
+    }
+    #resultTbody td:nth-child(2){
+      font-weight:800;
+      color:#0f172a;
+    }
+    #resultTbody td:nth-child(5){
+      color:#334155;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size:.92rem;
+    }
+    .table-responsive{
+      border:1px solid #e2e8f0;
+      border-radius:8px;
+      background:#fff;
+    }
+    .table-hover tbody tr:hover{
+      background:rgba(37,99,235,.045);
+      cursor:pointer;
+    }
+
+    .pill{
+      display:inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size:.85rem;
+      font-weight:700;
+    }
+    .pill-ok{ background: rgba(25,135,84,.12); color: var(--ok); }
+    .pill-bad{ background: rgba(220,53,69,.12); color: var(--bad); }
+
+    .kw{
+      display:inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background:#f1f3f5;
+      font-size:.85rem;
+      border: 1px solid #e9ecef;
+    }
+
+    .managed-secret-box{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:rgba(248,250,252,.82);
+      padding:12px 14px;
+    }
+    #previewList{
+      display:grid !important;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:10px !important;
+    }
+    #previewList .thumb,
+    #previewList img{
+      width:100%;
+      height:82px;
+    }
+    #selectedInfo{
+      max-width:260px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    #rawAI{
+      min-height:240px;
+      background:#0f172a;
+      color:#dbeafe;
+      border-color:#1e293b;
+    }
+    .btn-primary{
+      border:1px solid rgba(37,99,235,.34);
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow:0 14px 30px rgba(37,99,235,.22);
+      font-weight:800;
+    }
+    .btn-primary:hover{
+      border-color:rgba(14,165,233,.6);
+      background:linear-gradient(135deg, #1d4ed8, #0e7490);
+    }
+    .btn-outline-secondary,
+    .btn-outline-primary,
+    .btn-outline-danger,
+    .btn-dark{
+      border-radius:8px;
+      font-weight:700;
+    }
+    .form-control{
+      border-radius:8px;
+      border-color:#cbd5e1;
+      padding:10px 12px;
+    }
+    .form-control:focus{
+      border-color:#38bdf8;
+      box-shadow:0 0 0 4px rgba(56,189,248,.14);
+    }
+    .tool-layout > .col-lg-4{
+      align-self:start;
+    }
+    @media (min-width: 992px){
+      .tool-layout > .col-lg-4{
+        position:sticky;
+        top:96px;
+        max-height:calc(100vh - 112px);
+        overflow:auto;
+        padding-bottom:8px;
+      }
+      .tool-layout > .col-lg-4::-webkit-scrollbar{ width:6px; }
+      .tool-layout > .col-lg-4::-webkit-scrollbar-thumb{
+        background:#cbd5e1;
+        border-radius:999px;
+      }
+    }
+    @media (max-width: 768px){
+      .topbar{ position:static; }
+      .tool-flow{ display:none; }
+      .thumb{ width:94px; height:70px; }
+    }
+
+    /* Refined layout: industrial background, clean tool surface */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(120deg, transparent 0 58%, rgba(20,184,166,.16) 58% 58.25%, transparent 58.25%),
+        linear-gradient(120deg, transparent 0 66%, rgba(37,99,235,.12) 66% 66.25%, transparent 66.25%);
+      z-index:-1;
+    }
+    .topbar{
+      background:rgba(255,255,255,.9);
+    }
+    .cardX{
+      border-radius:12px;
+      border-color:rgba(203,213,225,.78);
+      box-shadow:0 14px 42px rgba(15,23,42,.08);
+    }
+    .cardX::before{
+      height:0;
+      display:none;
+    }
+    .dropzone,
+    .managed-secret-box,
+    .stat,
+    .table-responsive{
+      border-radius:10px;
+    }
+    .dropzone{
+      background:#fff;
+      border:1px dashed #b8c7dc;
+    }
+    .managed-secret-box{
+      background:#f8fafc;
+    }
+    .tool-layout{
+      align-items:flex-start;
+    }
+    @media (min-width: 992px){
+      .left-pane{
+        position:sticky;
+        top:96px;
+        max-height:calc(100vh - 112px);
+        overflow:auto;
+        padding-bottom:8px;
+      }
+      .left-pane::-webkit-scrollbar{ width:6px; }
+      .left-pane::-webkit-scrollbar-thumb{
+        background:#cbd5e1;
+        border-radius:999px;
+      }
+    }
+    @media (max-width: 991.98px){
+      .tool-layout{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:16px;
+        margin-left:0;
+        margin-right:0;
+      }
+      .left-pane,
+      .right-pane{
+        display:contents;
+      }
+      .tool-layout > *,
+      .left-pane > *,
+      .right-pane > *{
+        width:100%;
+      }
+      .upload-card{ order:1; }
+      .run-card{ order:2; }
+      .results-card{ order:3; }
+      .detail-card{ order:4; }
+      .industry-card{ order:5; }
+      .raw-card{ order:6; }
+      .manual-card{ order:7; }
+      .cardX{
+        margin-bottom:0 !important;
+      }
+      .topbar .fs-5{
+        font-size:1.05rem !important;
+      }
+      .app-shell{
+        padding-left:14px;
+        padding-right:14px;
+      }
+    }
+    @media (max-width: 575.98px){
+      body{
+        background-size:auto, auto, 28px 28px, 28px 28px, auto;
+      }
+      .topbar .container{
+        padding-top:8px !important;
+        padding-bottom:8px !important;
+      }
+      .topbar > .container > .d-flex{
+        display:grid !important;
+        grid-template-columns:minmax(0, 1fr) auto;
+        align-items:center !important;
+        gap:10px !important;
+      }
+      .topbar .d-flex.align-items-center{
+        align-items:flex-start !important;
+        min-width:0;
+      }
+      .brand-dot{
+        flex:0 0 10px;
+        width:10px;
+        height:10px;
+        margin-top:7px;
+        margin-right:8px;
+        box-shadow:0 0 0 4px rgba(37,99,235,.12);
+      }
+      .topbar .fs-5{
+        max-width:100%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        font-size:1rem !important;
+        line-height:1.25;
+      }
+      .topbar .subtle{
+        display:block;
+        max-width:100%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        font-size:.82rem;
+        line-height:1.35;
+      }
+      .topbar .tool-subtitle{
+        display:none;
+      }
+      .topbar .d-flex.align-items-center > div{
+        min-width:0;
+      }
+      .topbar .d-flex.align-items-center + .d-flex{
+        display:flex !important;
+        justify-content:flex-end;
+        gap:8px !important;
+        width:auto;
+      }
+      .topbar .btn,
+      .topbar .pill{
+        min-height:30px;
+        padding:4px 9px;
+        font-size:.82rem;
+      }
+      .topbar .btn{
+        flex:0 0 auto;
+        white-space:nowrap;
+      }
+      #statusPill{
+        display:none !important;
+      }
+      .subtle{
+        font-size:.86rem;
+      }
+      .cardX{
+        border-radius:10px;
+        box-shadow:0 10px 28px rgba(15,23,42,.07);
+      }
+      #previewList{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+      }
+      #previewList .thumb,
+      #previewList img{
+        height:64px;
+      }
+      .managed-secret-box{
+        align-items:flex-start;
+      }
+      .managed-secret-box .pill{
+        flex:0 0 auto;
+      }
+      .table{
+        min-width:680px;
+      }
+      .table tbody td{
+        padding-top:10px;
+        padding-bottom:10px;
+      }
+      .btn{
+        min-height:40px;
+      }
+      #rawAI{
+        min-height:180px;
+      }
+      .run-card > .subtle,
+      .run-card .managed-secret-box,
+      .run-card .mt-3 > .fw-bold,
+      .run-card .mt-3 > .subtle,
+      .run-card #gsStatus{
+        display:none !important;
+      }
+      .run-card{
+        padding-top:16px !important;
+      }
+      .run-card::after{
+        content:"設定已由管理員載入，可直接開始辨識";
+        display:block;
+        margin-top:8px;
+        color:#64748b;
+        font-size:.86rem;
+      }
+      .run-card .d-grid{
+        margin-top:12px !important;
+      }
+      .run-card #btnCopyJSON,
+      .run-card #btnCopyCSV{
+        display:none !important;
+      }
+      .run-card #btnCopyJSON,
+      .run-card #btnCopyCSV,
+      .run-card #btnCopyJSON + #btnCopyCSV{
+        visibility:hidden;
+      }
+      .run-card #btnCopyJSON:has(+ #btnCopyCSV){
+        display:none !important;
+      }
+      .run-card #btnCopyJSON,
+      .run-card #btnCopyCSV{
+        width:0 !important;
+        min-width:0 !important;
+        padding:0 !important;
+        border:0 !important;
+      }
+      .run-card .run-copy-actions{
+        display:none !important;
+      }
+      #btnCopyCSV2{
+        display:none !important;
+      }
+      .run-card .row.g-2{
+        margin-top:8px !important;
+      }
+      .run-card .stat{
+        padding:10px 12px;
+      }
+    }
+
+    textarea{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="container app-shell py-3">
+      <div class="d-flex align-items-start align-items-md-center justify-content-between gap-3 flex-wrap">
+        <div class="d-flex align-items-center">
+          <span class="brand-dot"></span>
+          <div>
+            <div class="fw-bold fs-5">名片批次辨識工具（Gemini Vision）</div>
+            <div class="subtle tool-subtitle">批次名片 → 14 欄 + 統編 → 產業判斷（半導體 / 加工產業 / both / neither / unknown）→ 寫入 Google Sheet</div>
+            <div class="tool-flow">
+              <span class="flow-chip">上傳名片</span>
+              <span class="flow-chip">批次辨識</span>
+              <span class="flow-chip">檢視修正</span>
+              <span class="flow-chip">寫入 Sheet</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <span id="statusPill" class="pill pill-ok" style="display:none;">Ready</span>
+          <a class="btn btn-outline-primary btn-sm" href="../../app/dashboard.html">會員工作台</a>
+          <button class="btn btn-outline-secondary btn-sm d-none" id="btnLoadKey">讀取 Key</button>
+          <button class="btn btn-outline-danger btn-sm d-none" id="btnClearKey">清除 Key</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container app-shell py-4">
+    <div class="row g-4 tool-layout">
+
+      <!-- LEFT -->
+      <div class="col-lg-4 left-pane">
+
+        <!-- ① 上傳 -->
+        <div class="cardX upload-card p-3 p-md-4 mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-bold">① 上傳名片</div>
+              <div class="subtle">支援 JPG/PNG，多張批次</div>
+            </div>
+            <span class="subtle" id="fileCount">0 張</span>
+          </div>
+
+          <div class="dropzone mt-3">
+            <div class="d-flex flex-column gap-2">
+              <div class="dz-title">把名片圖片拖拉到這裡</div>
+              <div class="dz-hint">或按下方選擇檔案（可多選）</div>
+              <input type="file" class="form-control" id="imageInput" accept="image/*" multiple>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="fw-bold">縮圖預覽</div>
+              <button class="btn btn-outline-secondary btn-sm" id="btnResetAll">清空</button>
+            </div>
+            <div id="previewHint" class="subtle">尚未選擇圖片</div>
+            <div id="previewList" class="d-flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- ② Key + 批次 -->
+        <div class="cardX run-card p-3 p-md-4 mb-4">
+          <div class="fw-bold">② 工具權限與批次執行</div>
+          <div class="subtle">Gemini API Key 由管理員設定，會員頁面不顯示 Key 內容。</div>
+
+          <div class="managed-secret-box mt-3">
+            <div>
+              <div class="subtle">Gemini API Key</div>
+              <div id="managedKeyStatus" class="fw-bold">正在讀取會員設定...</div>
+            </div>
+            <span class="pill pill-ok">管理員設定</span>
+          </div>
+
+          <input type="password" class="form-control d-none" id="aiKey" autocomplete="off">
+
+          <div class="form-check mt-2 d-none">
+            <input class="form-check-input" type="checkbox" id="saveKeyLocal">
+            <label class="form-check-label" for="saveKeyLocal">暫存 Key 到本機（localStorage）</label>
+          </div>
+
+          <!-- 產業判斷 -->
+          <div class="mt-3">
+            <div class="fw-bold mb-2">產業判斷設定</div>
+            <div class="managed-secret-box">
+              <div>
+                <div class="fw-bold">固定啟用網站內容判斷</div>
+                <div class="subtle">名片有公司網址時，一定會抓網站內容（r.jina.ai）輔助判斷。</div>
+                <div class="subtle">沒有網址或網站讀不到時，才會只用名片文字判斷。</div>
+              </div>
+              <span class="pill pill-ok">固定啟用</span>
+            </div>
+          </div>
+
+          <!-- Google Sheet 寫入設定由管理員固定提供，會員端只顯示狀態。 -->
+          <div class="mt-3">
+            <div class="fw-bold mb-2">Google Sheet 寫入</div>
+            <div class="managed-secret-box">
+              <div>
+                <div class="subtle">GAS Web App URL</div>
+                <div id="managedGasStatus" class="fw-bold">正在讀取會員設定...</div>
+              </div>
+              <span class="pill pill-ok">管理員設定</span>
+            </div>
+
+            <div class="managed-secret-box mt-2">
+              <div>
+                <div class="subtle">Google Sheet 連結</div>
+                <div id="managedSheetStatus" class="fw-bold">正在讀取會員設定...</div>
+              </div>
+              <span class="pill pill-ok">管理員設定</span>
+            </div>
+
+            <div class="managed-secret-box mt-2">
+              <div>
+                <div class="subtle">工作表名稱</div>
+                <div id="managedSheetNameStatus" class="fw-bold">正在讀取會員設定...</div>
+              </div>
+              <span class="pill pill-ok">管理員設定</span>
+            </div>
+
+            <input id="gsGasUrl" class="form-control d-none" autocomplete="off">
+            <input id="gsSheetUrl" class="form-control d-none" autocomplete="off">
+            <input id="gsSheetName" class="form-control d-none" value="名片資料" autocomplete="off">
+            <input class="form-check-input d-none" type="checkbox" id="enableWriteSheet" checked>
+
+            <div id="gsStatus" class="subtle mt-2"></div>
+          </div>
+
+          <div class="d-grid gap-2 mt-3">
+            <button class="btn btn-primary" id="btnAI" disabled>▶ 開始批次辨識</button>
+            <div class="d-flex gap-2 run-copy-actions">
+              <button class="btn btn-outline-secondary w-100" id="btnCopyJSON">複製 JSON</button>
+              <button class="btn btn-outline-secondary w-100" id="btnCopyCSV">複製 CSV</button>
+            </div>
+          </div>
+
+          <div id="status" class="subtle mt-3"></div>
+
+          <div class="row g-2 mt-2">
+            <div class="col-4">
+              <div class="stat"><div class="n" id="statTotal">0</div><div class="t">總張數</div></div>
+            </div>
+            <div class="col-4">
+              <div class="stat"><div class="n" id="statOk">0</div><div class="t">成功</div></div>
+            </div>
+            <div class="col-4">
+              <div class="stat"><div class="n" id="statFail">0</div><div class="t">失敗</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ③ 手動產業判斷器 -->
+        <div class="cardX manual-card p-3 p-md-4">
+          <div class="fw-bold">③ AI 產業判斷器（手動）</div>
+          <div class="subtle">貼網址或公司介紹文字 → 輸出 industry / confidence / reasons / evidence_keywords</div>
+
+          <label class="form-label mt-3">公司網址（可選）</label>
+          <input id="mUrlInput" class="form-control" placeholder="https://www.example.com">
+
+          <div class="text-center subtle my-3">或</div>
+
+          <label class="form-label">公司介紹 / 產品服務文字</label>
+          <textarea id="mTextInput" class="form-control" rows="5"
+            placeholder="例：CNC精密加工、治具設計、模具... 或 晶圓代工、封裝測試、半導體設備..."></textarea>
+
+          <button class="btn btn-dark w-100 mt-3" id="btnManualAnalyze">開始判斷</button>
+
+          <div id="mLoading" class="subtle text-center mt-3" style="display:none;">⏳ AI 分析中...</div>
+          <div id="mError" class="alert alert-danger mt-3" style="display:none;"></div>
+
+          <div id="mResult" class="mt-3" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="fw-bold">判斷結果</div>
+              <span id="mBadge" class="pill pill-ok">—</span>
+            </div>
+
+            <div class="row g-3 mt-2">
+              <div class="col-6">
+                <div class="subtle">產業</div>
+                <div id="mIndustry" class="fw-bold fs-5"></div>
+              </div>
+              <div class="col-6">
+                <div class="subtle">信心分數</div>
+                <div id="mConfidence" class="fw-bold fs-5"></div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <div class="fw-bold">理由</div>
+              <ul id="mReasons" class="mt-2 mb-0"></ul>
+            </div>
+
+            <div class="mt-3">
+              <div class="fw-bold">關鍵字</div>
+              <div id="mKeywords" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT -->
+      <div class="col-lg-8 right-pane">
+
+        <!-- ④ 結果表格 -->
+        <div class="cardX results-card p-3 p-md-4 mb-4">
+          <div class="d-flex align-items-start align-items-md-center justify-content-between gap-2 flex-wrap">
+            <div>
+              <div class="fw-bold">④ 批次結果總覽</div>
+              <div class="subtle">點選任一列可在下方顯示詳細欄位與產業判斷</div>
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="btn btn-outline-secondary btn-sm" id="btnShowAll">顯示全部</button>
+              <button class="btn btn-outline-secondary btn-sm" id="btnShowOk">只看成功</button>
+              <button class="btn btn-outline-secondary btn-sm" id="btnCopyCSV2">複製 CSV</button>
+            </div>
+          </div>
+
+          <div class="table-responsive mt-3">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th style="width:60px;">狀態</th>
+                  <th>姓名</th>
+                  <th>公司</th>
+                  <th>產業</th>
+                  <th>Email</th>
+                  <th style="width:160px;">檔案名稱</th>
+                </tr>
+              </thead>
+              <tbody id="resultTbody">
+                <tr>
+                  <td colspan="6" class="subtle py-4 text-center">尚未辨識（請先上傳圖片）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ⑤ 詳細欄位 -->
+        <div class="cardX detail-card p-3 p-md-4 mb-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="fw-bold">⑤ 詳細欄位（含統編）</div>
+              <div class="subtle">顯示你選取的那一筆（或最後一張成功辨識）</div>
+            </div>
+            <div class="subtle" id="selectedInfo">未選取</div>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-md-6"><label class="form-label">姓氏</label><input class="form-control" id="fLastName"></div>
+            <div class="col-md-6"><label class="form-label">名字</label><input class="form-control" id="fFirstName"></div>
+
+            <div class="col-12"><label class="form-label">公司名稱</label><input class="form-control" id="fCompanyName"></div>
+
+            <div class="col-md-6"><label class="form-label">公司電話</label><input class="form-control" id="fCompanyTel"></div>
+            <div class="col-md-6"><label class="form-label">手機電話</label><input class="form-control" id="fMobilePhone"></div>
+
+            <div class="col-md-6"><label class="form-label">公司傳真</label><input class="form-control" id="fCompanyFax"></div>
+            <div class="col-md-6"><label class="form-label">電子郵件</label><input class="form-control" id="fEmail"></div>
+
+            <div class="col-md-6"><label class="form-label">部門</label><input class="form-control" id="fDepartment"></div>
+            <div class="col-md-6"><label class="form-label">職稱</label><input class="form-control" id="fJobTitle"></div>
+
+            <div class="col-12"><label class="form-label">公司地址</label><input class="form-control" id="fCompanyAddr"></div>
+
+            <div class="col-md-6"><label class="form-label">公司網址</label><input class="form-control" id="fWebsite"></div>
+            <div class="col-md-6"><label class="form-label">區域劃分（縣市）</label><input class="form-control" id="fRegion"></div>
+
+            <div class="col-md-6"><label class="form-label">統編（8碼）</label><input class="form-control" id="fTaxId"></div>
+            <div class="col-md-6"><label class="form-label">檔案名稱</label><input class="form-control" id="fFileName" readonly></div>
+
+            <div class="col-12"><label class="form-label">附註（名片原始）</label><input class="form-control" id="fNote"></div>
+          </div>
+        </div>
+
+        <!-- ⑥ 產業判斷 -->
+        <div class="cardX industry-card p-3 p-md-4 mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-bold">⑥ 產業判斷（清楚版）</div>
+              <div class="subtle">industry / confidence / reasons / evidence_keywords</div>
+            </div>
+            <span id="iBadge" class="pill pill-ok">—</span>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-md-6">
+              <div class="subtle">產業</div>
+              <div id="iIndustry" class="fw-bold fs-5">—</div>
+            </div>
+            <div class="col-md-6">
+              <div class="subtle">信心分數</div>
+              <div id="iConfidence" class="fw-bold fs-5">—</div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="fw-bold">理由</div>
+            <ul id="iReasons" class="mt-2 mb-0"></ul>
+          </div>
+
+          <div class="mt-3">
+            <div class="fw-bold">關鍵字</div>
+            <div id="iKeywords" class="d-flex flex-wrap gap-2 mt-2"></div>
+          </div>
+        </div>
+
+        <!-- ⑦ Raw -->
+        <div class="cardX raw-card p-3 p-md-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="fw-bold">⑦ 原始回應（除錯用）</div>
+              <div class="subtle">會累加每張的回應內容，方便追查解析失敗</div>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm" id="btnClearRaw">清空</button>
+          </div>
+          <textarea class="form-control mt-3" id="rawAI" rows="10" readonly></textarea>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ 拆出來的 scripts（順序很重要：AI → Sheet → App） -->
+  <script src="./ai.js"></script>
+  <script src="./sheet.js"></script>
+  <script src="./app.js"></script>
+  <script type="module" src="./member-settings.js?v=20260604-2"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- =========================================================
+       ✅ 程式後註解：檔案分工（架構思路）
+       ---------------------------------------------------------
+       ai.js   ：所有 AI 相關（讀網站、名片辨識、產業判斷）
+       sheet.js：所有 Google Sheet / GAS Web App 寫入
+       app.js  ：主流程與 UI（上傳、批次、表格、欄位填入、匯出）
+       ---------------------------------------------------------
+       這樣做的好處：
+       - AI 出問題只看 ai.js
+       - Sheet 出問題只看 sheet.js
+       - UI/流程出問題只看 app.js
+       ========================================================= -->
+</body>
+</html>
