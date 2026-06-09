@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nine9 三步驟產品選型器</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-block">
+        <span class="eyebrow">Nine9 Main Catalog V 2025-2026</span>
+        <h1>Nine9 三步驟產品選型器</h1>
+        <p>依加工目的、產品系列與可用工具快速定位型錄章節、應用重點與下一步資料。</p>
+      </div>
+      <div class="search-panel">
+        <label for="keyword">搜尋產品、應用或規格</label>
+        <input id="keyword" type="search" autocomplete="off" placeholder="例如 ACE、Chamfer、Threading、ø13" />
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="selector-section">
+      <div class="section-heading">
+        <span class="step-index">1</span>
+        <div>
+          <h2>選擇加工目的</h2>
+          <p>Technology / Application</p>
+        </div>
+      </div>
+      <div id="categoryList" class="selector-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="selector-section" id="seriesSection" hidden>
+      <div class="section-heading">
+        <span class="step-index">2</span>
+        <div>
+          <h2>選擇產品系列</h2>
+          <p>Product Series</p>
+        </div>
+      </div>
+      <div id="seriesList" class="selector-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="selector-section" id="toolSection" hidden>
+      <div class="section-heading">
+        <span class="step-index">3</span>
+        <div>
+          <h2>查看資料與工具</h2>
+          <p>Catalog / Data / Calculator</p>
+        </div>
+      </div>
+      <div id="toolList" class="tool-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="result-section">
+      <div class="result-top">
+        <div>
+          <h2>目前選擇</h2>
+          <p id="breadcrumb">尚未選擇</p>
+        </div>
+        <button id="resetBtn" type="button" class="secondary-button">重設</button>
+      </div>
+      <div id="summary" class="summary-empty">請先選擇加工目的。</div>
+    </section>
+  </main>
+
+  <script src="./js/data-products.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
