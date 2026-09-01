@@ -40,7 +40,7 @@ let currentUserUid = "";
 
 const requestFields = {
   geminiApiKey: {
-    label: "Gemini API Key",
+    label: "Google Cloud Agent Platform API Key",
     statusField: "geminiApiKeyRequestStatus",
     requestedAtField: "geminiApiKeyRequestedAt",
     button: requestGeminiApiKey,

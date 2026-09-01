@@ -8,6 +8,68 @@
 (function () {
   "use strict";
 
+  const AGENT_PLATFORM_BASE_URL =
+    "https://aiplatform.googleapis.com/v1/publishers/google/models";
+  const INDUSTRY_MODEL = "gemini-2.5-flash";
+  const BUSINESS_CARD_MODEL = "gemini-3-flash-preview";
+  const INDUSTRY_VALUES = ["semiconductor", "machining", "both", "neither", "unknown"];
+  const INDUSTRY_CONFIDENCE_THRESHOLD = 70;
+
+  const INDUSTRY_RESPONSE_SCHEMA = {
+    type: "object",
+    properties: {
+      industry: {
+        type: "string",
+        enum: INDUSTRY_VALUES,
+        description: "依明確產品或服務證據判斷的產業分類。證據不足時必須輸出 unknown。"
+      },
+      confidence: {
+        type: "integer",
+        minimum: 0,
+        maximum: 100,
+        description: "產業分類信心分數；只有具體產品或服務證據才能給高分。"
+      },
+      reasons: {
+        type: "array",
+        maxItems: 3,
+        items: { type: "string" },
+        description: "最多三項繁體中文判斷理由。"
+      },
+      evidence_keywords: {
+        type: "array",
+        maxItems: 8,
+        items: { type: "string" },
+        description: "實際出現在輸入內容中的產品、製程或服務關鍵字。"
+      }
+    },
+    required: ["industry", "confidence", "reasons", "evidence_keywords"]
+  };
+
+  function buildModelEndpoint(model, apiKey) {
+    return (
+      `${AGENT_PLATFORM_BASE_URL}/${encodeURIComponent(model)}` +
+      `:generateContent?key=${encodeURIComponent(apiKey)}`
+    );
+  }
+
+  function cleanWebsiteText(value) {
+    const ignored = /^(cookie|privacy|terms|copyright|all rights reserved|隱私權|使用條款|版權)/i;
+    const seen = new Set();
+
+    return String(value || "")
+      .split(/\r?\n/)
+      .map((line) => line.replace(/\s+/g, " ").trim())
+      .filter((line) => line && !ignored.test(line))
+      .filter((line) => {
+        const key = line.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .join("\n")
+      .slice(0, 8000);
+  }
+
   // URL：補 https://
   function normalizeUrl(u) {
     const s = (u || "").trim();
@@ -30,7 +92,7 @@
       const res = await fetch(readerUrl, { signal: ctrl.signal });
       if (!res.ok) return "";
       const text = await res.text();
-      return (text || "").slice(0, 8000); // 控制長度，避免提示詞太大
+      return cleanWebsiteText(text);
     } catch {
       return "";
     } finally {
@@ -43,11 +105,11 @@
     const text = typeof raw === "string" ? raw : JSON.stringify(raw || {});
 
     if (text.includes("API_KEY_INVALID")) {
-      return "Gemini API Key 無效。請到管理員後台換成 Google AI Studio 產生的有效 API Key。";
+      return "Google Cloud API Key 無效，請確認管理員後台中的金鑰是否正確。";
     }
 
     if (text.includes("PERMISSION_DENIED")) {
-      return "Gemini API Key 沒有使用權限，請確認 Google AI Studio 專案與 API Key 設定。";
+      return "API Key 沒有 Agent Platform 使用權限，請確認 API 已啟用及金鑰限制設定。";
     }
 
     if (text.includes("RESOURCE_EXHAUSTED")) {
@@ -68,6 +130,12 @@
 網址：${url || "(未提供)"}
 文字：${text || "(未提供)"}
 
+判斷規則：
+- 只根據輸入中明確出現的產品、製程或服務判斷。
+- 公司名稱、部門或職稱不能單獨作為產業證據。
+- semiconductor 與 machining 都有獨立明確證據時才輸出 both。
+- 證據不足、內容矛盾或無法確認時輸出 unknown。
+
 【輸出】
 只輸出 JSON，繁體中文：
 {
@@ -78,17 +146,17 @@
 }
 `.trim();
 
-    const endpoint =
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const endpoint = buildModelEndpoint(INDUSTRY_MODEL, apiKey);
 
     const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
         generationConfig: {
           responseMimeType: "application/json",
-          temperature: 0.2
+          responseSchema: INDUSTRY_RESPONSE_SCHEMA,
+          temperature: 0
         }
       })
     });
@@ -102,41 +170,41 @@
     if (!textOut) throw new Error("AI 沒回資料");
 
     const r = JSON.parse(textOut);
+    const confidence = Math.max(0, Math.min(100, Number(r.confidence) || 0));
+    const rawIndustry = INDUSTRY_VALUES.includes(r.industry) ? r.industry : "unknown";
     return {
-      industry: (r.industry || "unknown").toString(),
-      confidence: Number.isFinite(+r.confidence) ? +r.confidence : 0,
+      industry: confidence >= INDUSTRY_CONFIDENCE_THRESHOLD ? rawIndustry : "unknown",
+      confidence,
       reasons: Array.isArray(r.reasons) ? r.reasons.map(String) : [],
       evidence_keywords: Array.isArray(r.evidence_keywords) ? r.evidence_keywords.map(String) : []
     };
   }
 
   // 名片辨識（Vision）
-  async function recognizeBusinessCardByGeminiVision({ apiKey, file, promptText, responseJsonSchema }) {
-    const model = "gemini-3-flash-preview";
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+  async function recognizeBusinessCardByGeminiVision({ apiKey, file, promptText, responseSchema }) {
+    const endpoint = buildModelEndpoint(BUSINESS_CARD_MODEL, apiKey);
 
     const imageBase64 = await fileToBase64(file);
     const mimeType = file.type || "image/jpeg";
 
     const body = {
       contents: [{
+        role: "user",
         parts: [
           { text: promptText },
-          { inline_data: { mime_type: mimeType, data: imageBase64 } }
+          { inlineData: { mimeType, data: imageBase64 } }
         ]
       }],
       generationConfig: {
-        response_mime_type: "application/json",
-        response_json_schema: responseJsonSchema
+        responseMimeType: "application/json",
+        responseSchema,
+        temperature: 0
       }
     };
 
     const res = await fetch(endpoint, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
 

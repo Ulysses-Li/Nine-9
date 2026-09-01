@@ -56,7 +56,7 @@ onAuthStateChanged(auth, async (user) => {
     setManagedStatus(ids.managedSheetNameStatus, sheetName || "尚未設定，預設使用：名片資料");
 
     const missing = [];
-    if (!geminiApiKey) missing.push("Gemini API Key");
+    if (!geminiApiKey) missing.push("Google Cloud Agent Platform API Key");
     if (!gasWebAppUrl) missing.push("名片批次辨識 GAS Web App URL");
     if (!googleSheetUrl) missing.push("名片批次辨識 Google Sheet 連結");
     if (!sheetName) missing.push("名片批次辨識工作表名稱");

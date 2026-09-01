@@ -67,6 +67,12 @@
     return countries.find((country) => source.toLowerCase().includes(country.toLowerCase())) || "";
   }
 
+  function normalizeEmail(v) {
+    const value = String(v || "").trim().toLowerCase().replace(/^mailto:/, "");
+    const match = value.match(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,}/i);
+    return match ? match[0] : "";
+  }
+
   function makeOkResult(o) {
     const country = normalizeRegionToCountry(o.region, o.companyAddr);
     return {
@@ -392,7 +398,7 @@
     const apiKey = el("aiKey").value.trim();
     if (!apiKey) {
       el("mError").style.display = "block";
-      el("mError").textContent = "請先在上面貼上 Gemini API Key";
+      el("mError").textContent = "請先設定 Google Cloud Agent Platform API Key";
       return;
     }
 
@@ -459,7 +465,7 @@
   // ✅ 批次主流程（名片→產業→結果→可寫入Sheet）
   async function runGeminiVision() {
     const apiKey = el("aiKey").value.trim();
-    if (!apiKey) return alert("請先貼上 Gemini API Key");
+    if (!apiKey) return alert("請先設定 Google Cloud Agent Platform API Key");
     if (selectedImageFiles.length === 0) return alert("請先上傳名片圖片（可多張）");
 
     const enableWebsiteCheck = true;
@@ -498,31 +504,30 @@
 - fileName 欄位請輸出 ""（程式會用圖片檔名覆蓋）
 `.trim();
 
-    const responseJsonSchema = {
+    const responseSchema = {
       type: "object",
       properties: {
-        lastName: { type: "string" },
-        firstName: { type: "string" },
-        companyName: { type: "string" },
-        companyTel: { type: "string" },
-        email: { type: "string" },
-        department: { type: "string" },
-        jobTitle: { type: "string" },
-        companyAddr: { type: "string" },
-        companyFax: { type: "string" },
-        mobilePhone: { type: "string" },
-        website: { type: "string" },
-        region: { type: "string" },
-        taxId: { type: "string" },
-        note: { type: "string" },
-        fileName: { type: "string" }
+        lastName: { type: "string", description: "名片持有人的姓氏；無法辨識時輸出空字串。" },
+        firstName: { type: "string", description: "名片持有人的名字；無法辨識時輸出空字串。" },
+        companyName: { type: "string", description: "名片上印製的公司或組織完整名稱。" },
+        companyTel: { type: "string", description: "公司市話或總機，保留國碼與分機。" },
+        email: { type: "string", description: "完整電子郵件地址，統一使用小寫。" },
+        department: { type: "string", description: "名片持有人的部門。" },
+        jobTitle: { type: "string", description: "名片持有人的職稱。" },
+        companyAddr: { type: "string", description: "名片上完整公司地址。" },
+        companyFax: { type: "string", description: "公司傳真號碼，不能與市話或手機混用。" },
+        mobilePhone: { type: "string", description: "名片持有人的手機號碼，保留國碼。" },
+        website: { type: "string", description: "公司網站網址；名片未提供時輸出空字串。" },
+        region: { type: "string", description: "公司所在國家，例如Japan、United States或台灣；不要輸出完整地址或城市。" },
+        taxId: { type: "string", description: "台灣統一編號的八位數字；未出現或不足八碼時輸出空字串。" },
+        note: { type: "string", description: "名片上其他明確文字備註；不要自行推測。" },
+        fileName: { type: "string", description: "固定輸出空字串，由程式填入圖片檔名。" }
       },
       required: [
         "lastName","firstName","companyName","companyTel","email",
         "department","jobTitle","companyAddr","companyFax","mobilePhone",
         "website","region","taxId","note","fileName"
-      ],
-      additionalProperties: false
+      ]
     };
 
     try {
@@ -538,7 +543,7 @@
             apiKey,
             file,
             promptText,
-            responseJsonSchema
+            responseSchema
           });
 
           el("rawAI").value += `\n\n===== ${file.name} =====\n` + (textOut || JSON.stringify(data, null, 2));
@@ -554,7 +559,7 @@
 
           // 正規化
           obj.fileName = file.name;
-          obj.email = (obj.email || "").toLowerCase();
+          obj.email = normalizeEmail(obj.email);
           obj.region = normalizeRegionToCountry(obj.region, obj.companyAddr);
           obj.taxId = normalizeTaxId(obj.taxId);
 

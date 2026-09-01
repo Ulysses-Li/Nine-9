@@ -60,9 +60,9 @@ const managedSettings = [
   {
     group: "共用 AI 設定",
     field: "geminiApiKey",
-    label: "Gemini API Key",
+    label: "Google Cloud Agent Platform API Key",
     type: "password",
-    placeholder: "貼上此會員要使用的 Gemini API Key",
+    placeholder: "貼上此會員要使用的 Google Cloud Agent Platform API Key",
     statusField: "geminiApiKeyRequestStatus",
     requestedAtField: "geminiApiKeyRequestedAt",
     completedAtField: "geminiApiKeyCompletedAt"
